@@ -13,10 +13,9 @@ export const metadata: Metadata = {
 }
 
 export default function ProductLayout({
-    children, productreview
+    children,
 }: {
     children: React.ReactNode;
-    productreview: React.ReactNode;
 }) {
     return (
         <html lang="id">
@@ -46,7 +45,6 @@ export default function ProductLayout({
                     <Nav />
                 </header>
                 {children}
-                {productreview}
                 <footer
                     style={{
                         textAlign: 'center',
