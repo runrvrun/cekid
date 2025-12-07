@@ -25,7 +25,7 @@ export default async function ProductDetail({
         );
     }
 
-    const product = await prisma.products.findUnique({
+    const product = await prisma.product.findUnique({
         where: { id },
     });
 
@@ -42,9 +42,9 @@ export default async function ProductDetail({
         );
     }
 
-    const reviews = await prisma.reviews.findMany({
-        where: { product_id: id },
-        orderBy: { created_at: "desc" },
+    const reviews = await prisma.review.findMany({
+        where: { productId: id },
+        orderBy: { createdAt: "desc" },
         take: 50,
     });
 
@@ -90,9 +90,9 @@ export default async function ProductDetail({
                         <div key={r.id} className="card bg-base-100 shadow w-full">
                             <div className="card-body">
                                 <div className="flex justify-between items-center mb-1">
-                                    <span className="font-semibold">{r.created_by ?? "Pengguna"}</span>
+                                    <span className="font-semibold">{r.userId ?? "Pengguna"}</span>
                                     <span className="text-sm text-gray-400">
-                                        {r.created_at ? new Date(r.created_at).toLocaleDateString() : ""}
+                                        {r.createdAt ? new Date(r.createdAt).toLocaleDateString() : ""}
                                     </span>
                                 </div>
                                 <div className="mb-2 text-yellow-600 font-medium">{r.rating}</div>
