@@ -56,9 +56,9 @@ export default async function ProductDetail({
                 <Image
                     src={product.image ?? "/product-placeholder.png"}
                     alt={product.name ?? "Produk"}
-                    className="w-full h-48 object-cover rounded"
-                    width={200}
-                    height={200}
+                    className="w-full h-96 object-cover rounded"
+                    width={800}
+                    height={800}
                 />
                 <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
                 <div className="text-lg font-semibold text-blue-600 mb-2">
