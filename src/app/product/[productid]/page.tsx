@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import prisma from "@/lib/prisma";
 import Link from "next/link";
+import Image from "next/image";
 
 type Props = {
     params: Promise<{ productid: string }>;
@@ -52,10 +53,12 @@ export default async function ProductDetail({
         <main className="max-w-3xl mx-auto p-6">
             {/* Top section: Product detail */}
             <section className="mb-8 bg-base-100 rounded-lg shadow p-6 flex flex-col items-center">
-                <img
+                <Image
                     src={product.image ?? "/product-placeholder.png"}
                     alt={product.name ?? "Produk"}
                     className="w-full h-48 object-cover rounded"
+                    width={200}
+                    height={200}
                 />
                 <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
                 <div className="text-lg font-semibold text-blue-600 mb-2">

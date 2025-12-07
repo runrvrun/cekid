@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import Image from "next/image";
 
 type Product = {
   id: number;
@@ -49,10 +50,12 @@ export default async function ProductList({ query }: { query?: string }) {
           className="card bg-base-100 shadow hover:shadow-lg transition-shadow"
         >
           <figure>
-            <img
+            <Image
               src={p.image ?? "/product-placeholder.png"}
               alt={p.name}
               className="h-40 w-full object-cover"
+              width={160}
+              height={160}
             />
           </figure>
           <div className="card-body flex items-center justify-between">

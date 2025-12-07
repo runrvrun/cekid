@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { createProduct } from "@/app/actions/createproduct";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function AddProductForm() {
   const router = useRouter();
@@ -114,7 +115,7 @@ export default function AddProductForm() {
           <label className="block text-sm font-medium mb-1">Foto (opsional)</label>
           <input type="file" accept="image/*" onChange={onFileChange} className="file-input" />
           {preview && (
-            <img src={preview} alt="preview" className="mt-2 h-32 w-full object-cover rounded" />
+            <Image width={160} height={160} src={preview} alt="preview" className="mt-2 h-32 w-full object-cover rounded" />
           )}
         </div>
 

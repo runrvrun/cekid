@@ -7,7 +7,7 @@ export default function AddReviewForm({ productId }: { productId: number }) {
   const router = useRouter();
   const [rating, setRating] = useState<number>(5);
   const [review, setReview] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { executeAction } from "@/lib/executeAction";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import Image from "next/image";
 
 const Page = async () => {
   const session = await auth();
@@ -16,9 +17,11 @@ const Page = async () => {
   return (
     <div className="w-full max-w-sm mx-auto space-y-6">
     <Link href="/">
-      <img
+      <Image
         src="/logo.png"
         alt="Cekid Logo"
+        width={120}
+        height={40}
         className="w-32 h-auto mx-auto mb-4"
       />
     </Link>
