@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import Image from "next/image";
+import { Button } from '@/components/ui/button';
 
 type Props = {
     params: Promise<{ productid: string }>;
@@ -75,9 +76,9 @@ export default async function ProductDetail({
             {/* Button to add user's review above the review section */}
             <div className="flex justify-end mb-4">
                 <Link href={`/product/${id}/addreview`}>
-                    <button className="btn btn-primary">
+                    <Button className="btn btn-primary">
                         Beri Review
-                    </button>
+                    </Button>
                 </Link>
             </div>
 

@@ -26,9 +26,9 @@ export default function AddReviewForm({ productId }: { productId: number }) {
 
     try {
       const fd = new FormData();
-      fd.append("product_id", String(productId));
-      fd.append("reviewrating", String(rating));
-      if (review.trim()) fd.append("reviewcomment", review.trim());
+      fd.append("productId", String(productId));
+      fd.append("rating", String(rating));
+      if (review.trim()) fd.append("review", review.trim());
       
       const result = await createReview(fd);
 
