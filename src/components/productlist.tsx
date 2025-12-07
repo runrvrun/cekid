@@ -13,13 +13,10 @@ type Product = {
 export default async function ProductList({ query }: { query?: string }) {
   const where = query
     ? {
-        OR: [
-          { name: { contains: query, mode: "insensitive" } },
-          { upc: { contains: query, mode: "insensitive" } },
-        ],
         AND: [
-          { deletedAt: null }
-        ]
+          { deletedAt: null },
+          { name: { contains: query, mode: "insensitive" as const } },
+        ],
       }
     : { deletedAt: null };
 
