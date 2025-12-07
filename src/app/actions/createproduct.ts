@@ -2,6 +2,7 @@
 import prisma from "@/lib/prisma";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
+import { auth } from "@/lib/auth";
 
 export async function createProduct(formData: FormData) {
   try {
@@ -9,6 +10,8 @@ export async function createProduct(formData: FormData) {
     const upc = formData.get("upc") as string;
     const description = formData.get("description") as string;
     const imageFile = formData.get("image") as File;
+    const session = await auth();
+
 
     if (!name?.trim()) {
       return { success: false, error: "Nama Barang wajib diisi." };
@@ -43,12 +46,13 @@ export async function createProduct(formData: FormData) {
     }
 
     // Create product in database
-    const product = await prisma.products.create({
+    const product = await prisma.product.create({
       data: {
         name: name.trim(),
         upc: upc?.trim() || null,
         description: description?.trim() || null,
         image: imageUrl,
+        userId: session?.user?.id || null,
       },
     });
 

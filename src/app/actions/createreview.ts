@@ -35,7 +35,7 @@ export async function createReview(formData: FormData) {
     // Use interactive transaction so the increment + average calculation is atomic
     const result = await prisma.$transaction(async (tx) => {
       // ensure product exists and not deleted
-      const product = await tx.products.findUnique({
+      const product = await tx.product.findUnique({
         where: { id: productId },
         select: { id: true },
       });
@@ -43,34 +43,34 @@ export async function createReview(formData: FormData) {
         throw new Error("Produk tidak ditemukan");
       }
 
-      const review = await tx.reviews.create({
+      const review = await tx.review.create({
         data: {
-          product_id: productId,
+          productId: productId,
           rating,
           review: reviewComment,
-          created_by: reviewer,
+          userId: reviewer,
         },
       });
 
       // increment counters and get updated sums/counts
-      const updated = await tx.products.update({
+      const updated = await tx.product.update({
         where: { id: productId },
         data: {
-          review_count: { increment: 1 },
-          rating_sum: { increment: rating },
+          reviewCount: { increment: 1 },
+          ratingSum: { increment: rating },
         },
         select: {
           id: true,
-          review_count: true,
-          rating_sum: true,
+          reviewCount: true,
+          ratingSum: true,
         },
       });
 
-      const rc = updated.review_count ?? 0;
-      const rs = updated.rating_sum ?? 0;
+      const rc = updated.reviewCount ?? 0;
+      const rs = updated.ratingSum ?? 0;
       const newRating = rc > 0 ? Number((rs / rc).toFixed(2)) : 0;
 
-      const finalProduct = await tx.products.update({
+      const finalProduct = await tx.product.update({
         where: { id: productId },
         data: {
           rating: newRating,
