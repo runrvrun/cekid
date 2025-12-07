@@ -1,7 +1,6 @@
 "use server";
 import prisma from "@/lib/prisma";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
+import { put } from "@vercel/blob";
 import { auth } from "@/lib/auth";
 
 export async function createProduct(formData: FormData) {
@@ -12,30 +11,29 @@ export async function createProduct(formData: FormData) {
     const imageFile = formData.get("image") as File;
     const session = await auth();
 
-
     if (!name?.trim()) {
       return { success: false, error: "Nama Barang wajib diisi." };
     }
 
     let imageUrl: string | null = null;
 
-    // Handle image upload if provided
+    // Upload image using Vercel Blob
     if (imageFile && imageFile.size > 0) {
       try {
         const timestamp = new Date().toISOString().replace(/[-:.]/g, "_");
-        const fileName = `${timestamp}_${name.replace(/\s+/g, "_")}.jpg`;
-        const uploadDir = join(process.cwd(), "public", "products");
+        const safeName = name.replace(/\s+/g, "_");
+        const fileName = `products/${timestamp}_${safeName}.jpg`;
 
-        // Ensure directory exists
-        await mkdir(uploadDir, { recursive: true });
+        const arrayBuffer = await imageFile.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
 
-        const bytes = await imageFile.arrayBuffer();
-        const buffer = Buffer.from(bytes);
+        const uploaded = await put(fileName, buffer, {
+          contentType: imageFile.type || "image/jpeg",
+          access: "public", // image becomes publicly accessible
+        });
 
-        const filePath = join(uploadDir, fileName);
-        await writeFile(filePath, buffer);
+        imageUrl = uploaded.url; // URL from blob storage
 
-        imageUrl = `/products/${fileName}`;
       } catch (uploadErr) {
         console.error("Image upload failed:", uploadErr);
         return {
@@ -45,7 +43,7 @@ export async function createProduct(formData: FormData) {
       }
     }
 
-    // Create product in database
+    // Save product to database
     const product = await prisma.product.create({
       data: {
         name: name.trim(),
@@ -61,6 +59,7 @@ export async function createProduct(formData: FormData) {
       data: product,
       message: "Produk berhasil ditambahkan",
     };
+
   } catch (err) {
     console.error("createProduct error:", err);
     return {
