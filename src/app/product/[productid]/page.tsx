@@ -5,20 +5,29 @@ import Image from "next/image";
 import { Button } from '@/components/ui/button';
 
 type Props = {
-    params: Promise<{ productid: string }>;
+    params: Promise<{ productid: number }>;
 };
 
 export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
-    const productid = (await params).productid;
+    const id = (await params).productid;
+
+    if (Number.isNaN(id)) {
+        return { title: "Review Produk" };
+    }
+
+    const product = await prisma.product.findUnique({
+        where: { id },
+        select: { name: true },
+    });
+
     return {
-        title: `Review ${productid}`,
+        title: product ? `Review ${product.name}` : "Produk tidak ditemukan",
     };
 };
 
-export default async function ProductDetail({
-    params,
-}: Props) {
-    const id = Number((await params).productid);
+export default async function ProductDetail({ params }: Props) {
+    const id = (await params).productid;
+
     if (Number.isNaN(id)) {
         return (
             <main className="max-w-3xl mx-auto p-6">
@@ -48,11 +57,16 @@ export default async function ProductDetail({
         where: { productId: id },
         orderBy: { createdAt: "desc" },
         take: 50,
+        include: {
+            user: {
+                select: { name: true }
+            }
+        }
     });
 
     return (
         <main className="max-w-3xl mx-auto p-6">
-            {/* Top section: Product detail */}
+            {/* Product detail */}
             <section className="mb-8 bg-base-100 rounded-lg shadow p-6 flex flex-col items-center">
                 <Image
                     src={product.image ?? "/product-placeholder.png"}
@@ -73,7 +87,7 @@ export default async function ProductDetail({
                 )}
             </section>
 
-            {/* Button to add user's review above the review section */}
+            {/* Add review button */}
             <div className="flex justify-end mb-4">
                 <Link href={`/product/${id}/addreview`}>
                     <Button className="btn btn-primary">
@@ -82,7 +96,7 @@ export default async function ProductDetail({
                 </Link>
             </div>
 
-            {/* Bottom section: Reviews */}
+            {/* Reviews */}
             <section>
                 <h2 className="text-xl font-bold mb-4">Reviews</h2>
                 <div className="flex flex-col gap-4">
@@ -94,7 +108,7 @@ export default async function ProductDetail({
                         <div key={r.id} className="card bg-base-100 shadow w-full">
                             <div className="card-body">
                                 <div className="flex justify-between items-center mb-1">
-                                    <span className="font-semibold">{r.userId ?? "Pengguna"}</span>
+                                    <span className="font-semibold">{r.user?.name ?? "Pengguna"}</span>
                                     <span className="text-sm text-gray-400">
                                         {r.createdAt ? new Date(r.createdAt).toLocaleDateString() : ""}
                                     </span>

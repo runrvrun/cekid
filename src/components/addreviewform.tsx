@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { createReview } from "@/app/actions/createreview";
 import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
 
 export default function AddReviewForm({ productId }: { productId: number }) {
   const router = useRouter();
@@ -102,13 +103,13 @@ export default function AddReviewForm({ productId }: { productId: number }) {
           />
         </div>
 
-        <button
+        <Button
           type="submit"
           className="btn btn-primary w-full"
           disabled={rating === 0}
         >
          Beri Nilai
-        </button>
+        </Button>
       </form>
     </div>
   );
