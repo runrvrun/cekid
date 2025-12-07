@@ -7,7 +7,6 @@ export default function AddReviewForm({ productId }: { productId: number }) {
   const router = useRouter();
   const [rating, setRating] = useState<number>(5);
   const [review, setReview] = useState("");
-  const [setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -25,7 +24,6 @@ export default function AddReviewForm({ productId }: { productId: number }) {
       return;
     }
 
-    setLoading(true);
     try {
       const fd = new FormData();
       fd.append("product_id", String(productId));
@@ -55,7 +53,6 @@ export default function AddReviewForm({ productId }: { productId: number }) {
     } catch (err) {
       setError(err instanceof Error ? err.message : "Terjadi kesalahan");
     } finally {
-      setLoading(false);
     }
   };
 

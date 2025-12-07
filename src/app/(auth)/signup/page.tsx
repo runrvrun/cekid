@@ -6,6 +6,7 @@ import Link from "next/link";
 import { GoogleSignIn } from "@/components/google-signin";
 import { GithubSignIn } from "@/components/github-signin";
 import { auth } from "@/lib/auth";
+import Image from "next/image";
 
 const Page = async () => {
   const session = await auth();
@@ -14,7 +15,9 @@ const Page = async () => {
   return (
     <div className="w-full max-w-sm mx-auto space-y-6">
       <Link href="/">
-      <img
+      <Image
+        width={120}
+        height={40}
         src="/logo.png"
         alt="Cekid Logo"
         className="w-32 h-auto mx-auto mb-4"
