@@ -15,7 +15,7 @@ export default async function ProductList({ query }: { query?: string }) {
     ? {
         OR: [
           { name: { contains: query, mode: "insensitive" } },
-          { upc: { contains: query } },
+          { upc: { contains: query, mode: "insensitive" } },
         ],
         AND: [
           { deletedAt: null }
