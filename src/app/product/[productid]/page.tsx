@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from '@/components/ui/button';
+import { auth } from '@/lib/auth';
 
 type Props = {
     params: Promise<{ productid: number }>;
@@ -27,6 +28,7 @@ export const generateMetadata = async ({ params }: Props): Promise<Metadata> => 
 
 export default async function ProductDetail({ params }: Props) {
     const id = (await params).productid;
+    const reviewer = (await auth())?.user?.id;
 
     if (Number.isNaN(id)) {
         return (
@@ -64,6 +66,16 @@ export default async function ProductDetail({ params }: Props) {
         }
     });
 
+    var userreviewed = null;
+
+    const userreview = await prisma.review.findFirst({
+        where: { productId: id, userId: reviewer }, // TODO: replace null with current user ID when auth is implemented
+    });
+
+    if (userreview?.id) {
+        userreviewed = true;
+    }
+
     return (
         <main className="max-w-3xl mx-auto p-6">
             {/* Product detail */}
@@ -87,14 +99,17 @@ export default async function ProductDetail({ params }: Props) {
                 )}
             </section>
 
-            {/* Add review button */}
-            <div className="flex justify-end mb-4">
-                <Link href={`/product/${id}/addreview`}>
-                    <Button className="btn btn-primary">
-                        Beri Review
-                    </Button>
-                </Link>
-            </div>
+            {/* Add review button if user haven't reviewed */}
+            {!userreviewed && (
+                <div className="flex justify-end mb-4">
+                    <Link href={`/product/${id}/addreview`}>
+                        <Button className="btn btn-primary">
+                            Beri Review
+                        </Button>
+                    </Link>
+                </div>
+            )}
+
 
             {/* Reviews */}
             <section>
@@ -108,7 +123,9 @@ export default async function ProductDetail({ params }: Props) {
                         <div key={r.id} className="card bg-base-100 shadow w-full">
                             <div className="card-body">
                                 <div className="flex justify-between items-center mb-1">
-                                    <span className="font-semibold">{r.user?.name ?? "Pengguna"}</span>
+                                    <span className="font-semibold">
+                                        {r.anonymous ? "Pengguna" : (r.user?.name ?? "Pengguna")}
+                                    </span>
                                     <span className="text-sm text-gray-400">
                                         {r.createdAt ? new Date(r.createdAt).toLocaleDateString() : ""}
                                     </span>

@@ -4,10 +4,16 @@ import { createReview } from "@/app/actions/createreview";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 
-export default function AddReviewForm({ productId }: { productId: number }) {
+type Props = {
+  productId: number;
+  name: string;
+};
+
+export default function AddReviewForm({ productId, name }: Props) {
   const router = useRouter();
   const [rating, setRating] = useState<number>(5);
   const [review, setReview] = useState("");
+  const [anonymous, setAnonymous] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -29,8 +35,9 @@ export default function AddReviewForm({ productId }: { productId: number }) {
       const fd = new FormData();
       fd.append("productId", String(productId));
       fd.append("rating", String(rating));
+      fd.append("anonymous", anonymous);
       if (review.trim()) fd.append("review", review.trim());
-      
+
       const result = await createReview(fd);
 
       if (!result.success) {
@@ -38,28 +45,20 @@ export default function AddReviewForm({ productId }: { productId: number }) {
         return;
       }
 
-      const product = result.data;
       setSuccess(result.message || "Review berhasil ditambahkan.");
-
-      // reset local form state
       setRating(5);
       setReview("");
 
-      // redirect back to product detail
-      if (productId) {
-        router.push(`/product/${productId}`);
-        return;
-      }
-      
+      router.push(`/product/${productId}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Terjadi kesalahan");
-    } finally {
     }
   };
 
   return (
     <div className="max-w-md mx-auto p-4 bg-base-100 rounded-lg shadow">
       <h2 className="text-lg font-semibold mb-4">Beri review</h2>
+      <h3 className="text-md mb-4">{name}</h3>
 
       {error && <div className="text-sm text-red-600 mb-3">{error}</div>}
       {success && <div className="text-sm text-green-600 mb-3">{success}</div>}
@@ -103,12 +102,23 @@ export default function AddReviewForm({ productId }: { productId: number }) {
           />
         </div>
 
-        <Button
-          type="submit"
-          className="btn btn-primary w-full"
-          disabled={rating === 0}
-        >
-         Beri Nilai
+        {/* Anonymous */}
+        <div className="form-control">
+          <label className="cursor-pointer label">
+            <input
+              type="checkbox"
+              name="anonymous"
+              onChange={(e) =>
+                setAnonymous(e.target.checked ? "true" : "false")
+              }
+              className="checkbox checkbox-primary"
+            />
+            <span className="label-text">Beri review secara anonim</span>
+          </label>
+        </div>
+
+        <Button type="submit" className="btn btn-primary w-full">
+          Beri Nilai
         </Button>
       </form>
     </div>

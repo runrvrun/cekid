@@ -21,7 +21,13 @@ export async function createReview(formData: FormData) {
     const rawProductId = formData.get("productId");
     const reviewRating = formData.get("rating");
     const reviewComment = (formData.get("review") as string) ?? null;
-    const reviewer = (await auth())?.user?.id || null;
+    const anonymous = formData.get("anonymous") === "true" ? true : false;
+
+    const session = await auth();
+    if (!session?.user?.id) {
+      return { success: false, error: "Anda harus login sebelum memberi review." };
+    }
+    const reviewer = session.user.id; // always defined
 
     const productId = rawProductId === null ? NaN : Number(String(rawProductId));
     const rating = reviewRating === null ? NaN : parseInt(String(reviewRating), 10);
@@ -49,6 +55,7 @@ export async function createReview(formData: FormData) {
           productId: productId,
           rating,
           review: reviewComment,
+          anonymous,
           userId: reviewer,
         },
       });

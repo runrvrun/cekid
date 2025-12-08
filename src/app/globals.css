@@ -212,3 +212,14 @@ body {
   background-color: hsl(var(--muted));
   cursor: not-allowed;
 }
+
+.checkbox {
+  width: 1rem;               /* w-4 */
+  height: 1rem;              /* h-4 */
+  margin-right: 0.5rem;    /* mr-2 */
+  border-radius: 0.25rem;    /* rounded */
+  border-width: 1px;
+  border-color: hsl(var(--input));
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
