@@ -56,9 +56,7 @@ export default function AddReviewForm({ productId, name }: Props) {
   };
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-base-100 rounded-lg shadow">
-      <h2 className="text-lg font-semibold mb-4">Beri review</h2>
-      <h3 className="text-md mb-4">{name}</h3>
+    <div className="max-w-md mx-auto p-4 bg-base-100">
 
       {error && <div className="text-sm text-red-600 mb-3">{error}</div>}
       {success && <div className="text-sm text-green-600 mb-3">{success}</div>}
@@ -95,7 +93,7 @@ export default function AddReviewForm({ productId, name }: Props) {
           <textarea
             name="review"
             className="textarea textarea-bordered w-full"
-            placeholder="Tulis komentar (opsional)"
+            placeholder="Apakah kamu suka produk ini? Berikan reviewmu di sini..."
             value={review}
             onChange={(e) => setReview(e.target.value)}
             rows={3}
@@ -118,7 +116,7 @@ export default function AddReviewForm({ productId, name }: Props) {
         </div>
 
         <Button type="submit" className="btn btn-primary w-full">
-          Beri Nilai
+          Berikan Review
         </Button>
       </form>
     </div>

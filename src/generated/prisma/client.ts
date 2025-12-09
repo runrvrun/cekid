@@ -56,12 +56,12 @@ export type ProductCategory = Prisma.ProductCategoryModel
 export type Product = Prisma.ProductModel
 /**
  * Model Review
- * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+ * 
  */
 export type Review = Prisma.ReviewModel
 /**
  * Model User
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+ * 
  */
 export type User = Prisma.UserModel
 /**

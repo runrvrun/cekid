@@ -50,15 +50,26 @@ export async function createReview(formData: FormData) {
         throw new Error("Produk tidak ditemukan");
       }
 
-      const review = await tx.review.create({
-        data: {
+      const review = await tx.review.upsert({
+      where: {
+         userId_productId: {
+          userId: reviewer,
           productId: productId,
+        },
+      },
+      update: {
+        rating,
+          review: reviewComment,
+          anonymous,
+      },
+      create: {
+        productId: productId,
           rating,
           review: reviewComment,
           anonymous,
           userId: reviewer,
-        },
-      });
+      },
+    });
 
       // increment counters and get updated sums/counts
       const updated = await tx.product.update({

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from '@/components/ui/button';
 import { auth } from '@/lib/auth';
+import AddReviewForm from '@/components/addreviewform';
 
 type Props = {
     params: Promise<{ productid: number }>;
@@ -110,6 +111,7 @@ export default async function ProductDetail({ params }: Props) {
                 </div>
             )}
 
+        <AddReviewForm productId={id} name={product.name} />
 
             {/* Reviews */}
             <section>
