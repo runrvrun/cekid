@@ -123,6 +123,7 @@ export default function AddReviewForm({ productId, name }: Props) {
             <input
               type="checkbox"
               name="anonymous"
+              checked={anonymous}
               onChange={(e) =>
                 setAnonymous(e.target.checked)
               }
