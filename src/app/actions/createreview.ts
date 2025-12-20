@@ -41,63 +41,84 @@ export async function createReview(formData: FormData) {
 
     // Use interactive transaction so the increment + average calculation is atomic
     const result = await prisma.$transaction(async (tx) => {
-      // ensure product exists and not deleted
-      const product = await tx.product.findUnique({
-        where: { id: productId },
-        select: { id: true },
-      });
-      if (!product) {
-        throw new Error("Produk tidak ditemukan");
-      }
+  // ensure product exists
+  const product = await tx.product.findUnique({
+    where: { id: productId },
+    select: { id: true },
+  });
+  if (!product) {
+    throw new Error("Produk tidak ditemukan");
+  }
 
-      const review = await tx.review.upsert({
-      where: {
-         userId_productId: {
-          userId: reviewer,
-          productId: productId,
-        },
-      },
-      update: {
-        rating,
-          review: reviewComment,
-          anonymous,
-      },
-      create: {
+  // check existing review
+  const existingReview = await tx.review.findUnique({
+    where: {
+      userId_productId: {
+        userId: reviewer,
         productId: productId,
-          rating,
-          review: reviewComment,
-          anonymous,
-          userId: reviewer,
       },
-    });
+    },
+    select: { rating: true },
+  });
 
-      // increment counters and get updated sums/counts
-      const updated = await tx.product.update({
-        where: { id: productId },
-        data: {
-          reviewCount: { increment: 1 },
-          ratingSum: { increment: rating },
-        },
-        select: {
-          id: true,
-          reviewCount: true,
-          ratingSum: true,
-        },
-      });
+  // upsert review
+  const review = await tx.review.upsert({
+    where: {
+      userId_productId: {
+        userId: reviewer,
+        productId: productId,
+      },
+    },
+    update: {
+      rating,
+      review: reviewComment,
+      anonymous,
+    },
+    create: {
+      productId,
+      rating,
+      review: reviewComment,
+      anonymous,
+      userId: reviewer,
+    },
+  });
 
-      const rc = updated.reviewCount ?? 0;
-      const rs = updated.ratingSum ?? 0;
-      const newRating = rc > 0 ? Number((rs / rc).toFixed(2)) : 0;
+  // prepare counter adjustments
+  const ratingDelta =
+    rating - (existingReview?.rating ?? 0);
 
-      const finalProduct = await tx.product.update({
-        where: { id: productId },
-        data: {
-          rating: newRating,
-        },
-      });
+  const reviewCountDelta =
+    existingReview ? 0 : 1;
 
-      return { review, product: finalProduct };
-    });
+  // update counters correctly
+  const updated = await tx.product.update({
+    where: { id: productId },
+    data: {
+      reviewCount: reviewCountDelta
+        ? { increment: 1 }
+        : undefined,
+      ratingSum: { increment: ratingDelta },
+    },
+    select: {
+      reviewCount: true,
+      ratingSum: true,
+    },
+  });
+
+  // recompute rating
+  const rc = updated.reviewCount ?? 0;
+  const rs = updated.ratingSum ?? 0;
+  const newRating =
+    rc > 0 ? Number((rs / rc).toFixed(2)) : 0;
+
+  const finalProduct = await tx.product.update({
+    where: { id: productId },
+    data: { rating: newRating },
+  });
+
+  return { review, product: finalProduct };
+});
+
 
     return {
       success: true,
