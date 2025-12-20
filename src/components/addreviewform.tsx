@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createReview } from "@/app/actions/createreview";
+import { getUserReview } from "@/app/actions/getuserreview";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 
@@ -13,9 +14,25 @@ export default function AddReviewForm({ productId, name }: Props) {
   const router = useRouter();
   const [rating, setRating] = useState<number>(5);
   const [review, setReview] = useState("");
-  const [anonymous, setAnonymous] = useState("");
+  const [anonymous, setAnonymous] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [hasExistingReview, setHasExistingReview] = useState(false);
+
+// Load existing review on mount
+  useEffect(() => {
+    const loadReview = async () => {
+      const existing = await getUserReview(productId);
+      if (existing) {
+        setRating(existing.rating);
+        setReview(existing.review ?? "");
+        setAnonymous(existing.anonymous);
+        setHasExistingReview(true);
+      }
+    };
+
+    loadReview();
+  }, [productId]);
 
   const handleStarClick = (star: number) => {
     setRating(star);
@@ -35,7 +52,7 @@ export default function AddReviewForm({ productId, name }: Props) {
       const fd = new FormData();
       fd.append("productId", String(productId));
       fd.append("rating", String(rating));
-      fd.append("anonymous", anonymous);
+      fd.append("anonymous", anonymous ? "true" : "false");
       if (review.trim()) fd.append("review", review.trim());
 
       const result = await createReview(fd);
@@ -107,7 +124,7 @@ export default function AddReviewForm({ productId, name }: Props) {
               type="checkbox"
               name="anonymous"
               onChange={(e) =>
-                setAnonymous(e.target.checked ? "true" : "false")
+                setAnonymous(e.target.checked)
               }
               className="checkbox checkbox-primary"
             />
