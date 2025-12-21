@@ -34,6 +34,7 @@ model Product {
   ratingSum         Int?                 @default(0)
   rating             Decimal?             @default(0) @db.Decimal(2, 1)
   userId         String?
+  embedding   Float[]  // vector embedding for recommendation
   createdAt         DateTime?            @default(now()) @db.Timestamptz(6)
   deletedAt         DateTime?            @db.Timestamptz(6)
   productCategory ProductCategory[]

@@ -2,6 +2,7 @@
 import prisma from "@/lib/prisma";
 import { put } from "@vercel/blob";
 import { auth } from "@/lib/auth";
+import { generateEmbedding } from "@/lib/embeddings";
 
 export async function createProduct(formData: FormData) {
   try {
@@ -43,6 +44,12 @@ export async function createProduct(formData: FormData) {
       }
     }
 
+    // Generate embedding for the product
+     const embedding = await generateEmbedding(
+    name,
+    description
+  );
+
     // Save product to database
     const product = await prisma.product.create({
       data: {
@@ -50,6 +57,7 @@ export async function createProduct(formData: FormData) {
         upc: upc?.trim() || null,
         description: description?.trim() || null,
         image: imageUrl,
+        embedding: embedding,
         userId: session?.user?.id || null,
       },
     });

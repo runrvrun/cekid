@@ -105,6 +105,7 @@ export const ProductScalarFieldEnum = {
   ratingSum: 'ratingSum',
   rating: 'rating',
   userId: 'userId',
+  embedding: 'embedding',
   createdAt: 'createdAt',
   deletedAt: 'deletedAt'
 } as const

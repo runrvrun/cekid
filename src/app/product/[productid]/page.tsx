@@ -1,3 +1,4 @@
+export const runtime = "nodejs";
 import { Metadata } from 'next';
 import prisma from "@/lib/prisma";
 import Link from "next/link";
@@ -57,6 +58,29 @@ export default async function ProductDetail({ params }: Props) {
         );
     }
 
+    const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL ??
+    "http://localhost:3000";
+
+   const res = await fetch(
+  `${baseUrl}/api/recommendations?productId=${product.id}`,
+  { cache: "no-store" }
+);
+
+if (!res.ok) {
+  console.error("Recommendation API failed:", res.status);
+  return [];
+}
+
+const text = await res.text();
+
+if (!text) {
+  console.error("Recommendation API returned empty body");
+  return [];
+}
+
+const similarProducts = JSON.parse(text);
+
     const reviews = await prisma.review.findMany({
         where: { productId: id },
         orderBy: { createdAt: "desc" },
@@ -79,7 +103,7 @@ export default async function ProductDetail({ params }: Props) {
     }
 
     return (
-        <main className="max-w-3xl mx-auto p-6">
+        <main className="max-w-6xl mx-auto p-6">
             {/* Product detail */}
             <section className="mb-8 bg-base-100 p-6 flex flex-col items-center">
                 <Image
@@ -99,16 +123,46 @@ export default async function ProductDetail({ params }: Props) {
                 )}
             </section>
 
-            {/* Add review button if user haven't reviewed */}
-            {!userreviewed && (
-                <div className="flex justify-end mb-4">
-                    <Link href={`/product/${id}/addreview`}>
-                        <Button className="btn btn-primary">
-                            Beri Review
-                        </Button>
-                    </Link>
+            {/* Similar Products */}
+            <section className="mb-8">
+                <h2 className="text-xl font-bold mb-4">Produk Serupa</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    {similarProducts.map((p: any) => (
+                        <Link key={p.id} href={`/product/${p.id}`}>
+                            <div className="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+                                <div className="card-body">
+                                    <Image
+                                        src={p.image ?? "/product-placeholder.png"}
+                                        alt={p.name}
+                                        className="w-full h-48 object-cover rounded"
+                                        width={400}
+                                        height={400}
+                                    />
+                                    <div className="card-body flex items-center justify-between m-2 min-h-[3.5rem]">
+                                                <h3
+                                                  className="
+                                          card-title
+                                          text-base
+                                          leading-snug
+                                          line-clamp-2
+                                          overflow-hidden
+                                          max-w-[70%]
+                                        "
+                                                >
+                                                  {p.name}
+                                                </h3>
+                                    
+                                                <div className="flex items-center gap-1 text-lg shrink-0">
+                                                  {(p.rating ?? 0).toFixed(1)}
+                                                  <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                                                </div>
+                                              </div>
+                                </div>
+                            </div>
+                        </Link>
+                    ))}
                 </div>
-            )}
+            </section>
 
         <AddReviewForm productId={id} name={product.name} />
 

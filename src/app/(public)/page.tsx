@@ -1,3 +1,4 @@
+export const runtime = "nodejs";
 import SearchProduct from "@/components/searchproduct";
 import ProductList from "@/components/productlist";
 import AddProductLink from "@/components/addproductlink";

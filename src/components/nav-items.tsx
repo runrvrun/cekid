@@ -1,18 +1,26 @@
 import Link from "next/link";
 
-const Navitems = async () => {
- const navItems = [
-   { href: "/", label: "Beranda" },
-   { href: "/about", label: "Tentang" },
- ];
+type Props = {
+  onClick?: () => void;
+};
+
+const Navitems = ({ onClick }: Props) => {
+  const navItems = [
+    { href: "/", label: "Beranda" },
+    { href: "/about", label: "Tentang" },
+  ];
 
   return (
     <>
       {navItems.map((item) => (
-        <li key={item.href} style={{ marginRight: '1rem' }}>
-            <Link href={item.href} className="nav-link">
-              {item.label}
-            </Link>
+        <li key={item.href}>
+          <Link
+            href={item.href}
+            className="block py-2 text-base hover:underline"
+            onClick={onClick}
+          >
+            {item.label}
+          </Link>
         </li>
       ))}
     </>

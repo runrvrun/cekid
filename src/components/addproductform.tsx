@@ -94,6 +94,25 @@ export default function AddProductForm() {
       <form onSubmit={handleSubmit} className="space-y-4">
         
         <div>
+          <label className="block text-sm font-medium mb-1">Foto (opsional)</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={onFileChange}
+            className="file-input"
+          />
+
+          {preview && (
+            <Image
+              width={160}
+              height={160}
+              src={preview}
+              alt="preview"
+              className="mt-2 h-32 w-full object-cover rounded"
+            />
+          )}
+        </div>
+        <div>
           <label className="block text-sm font-medium mb-1">Nama Barang *</label>
           <input
             value={name}
@@ -120,26 +139,6 @@ export default function AddProductForm() {
             className="textarea textarea-bordered w-full"
             rows={4}
           />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1">Foto (opsional)</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={onFileChange}
-            className="file-input"
-          />
-
-          {preview && (
-            <Image
-              width={160}
-              height={160}
-              src={preview}
-              alt="preview"
-              className="mt-2 h-32 w-full object-cover rounded"
-            />
-          )}
         </div>
 
         <Button type="submit" className="w-full" disabled={loading}>

@@ -32,6 +32,7 @@ export type ProductAvgAggregateOutputType = {
   reviewCount: number | null
   ratingSum: number | null
   rating: runtime.Decimal | null
+  embedding: number | null
 }
 
 export type ProductSumAggregateOutputType = {
@@ -40,6 +41,7 @@ export type ProductSumAggregateOutputType = {
   reviewCount: number | null
   ratingSum: number | null
   rating: runtime.Decimal | null
+  embedding: number[]
 }
 
 export type ProductMinAggregateOutputType = {
@@ -83,6 +85,7 @@ export type ProductCountAggregateOutputType = {
   ratingSum: number
   rating: number
   userId: number
+  embedding: number
   createdAt: number
   deletedAt: number
   _all: number
@@ -95,6 +98,7 @@ export type ProductAvgAggregateInputType = {
   reviewCount?: true
   ratingSum?: true
   rating?: true
+  embedding?: true
 }
 
 export type ProductSumAggregateInputType = {
@@ -103,6 +107,7 @@ export type ProductSumAggregateInputType = {
   reviewCount?: true
   ratingSum?: true
   rating?: true
+  embedding?: true
 }
 
 export type ProductMinAggregateInputType = {
@@ -146,6 +151,7 @@ export type ProductCountAggregateInputType = {
   ratingSum?: true
   rating?: true
   userId?: true
+  embedding?: true
   createdAt?: true
   deletedAt?: true
   _all?: true
@@ -248,6 +254,7 @@ export type ProductGroupByOutputType = {
   ratingSum: number | null
   rating: runtime.Decimal | null
   userId: string | null
+  embedding: number[]
   createdAt: Date | null
   deletedAt: Date | null
   _count: ProductCountAggregateOutputType | null
@@ -286,6 +293,7 @@ export type ProductWhereInput = {
   ratingSum?: Prisma.IntNullableFilter<"Product"> | number | null
   rating?: Prisma.DecimalNullableFilter<"Product"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   userId?: Prisma.StringNullableFilter<"Product"> | string | null
+  embedding?: Prisma.FloatNullableListFilter<"Product">
   createdAt?: Prisma.DateTimeNullableFilter<"Product"> | Date | string | null
   deletedAt?: Prisma.DateTimeNullableFilter<"Product"> | Date | string | null
   productCategory?: Prisma.ProductCategoryListRelationFilter
@@ -304,6 +312,7 @@ export type ProductOrderByWithRelationInput = {
   ratingSum?: Prisma.SortOrderInput | Prisma.SortOrder
   rating?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  embedding?: Prisma.SortOrder
   createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   productCategory?: Prisma.ProductCategoryOrderByRelationAggregateInput
@@ -325,6 +334,7 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   ratingSum?: Prisma.IntNullableFilter<"Product"> | number | null
   rating?: Prisma.DecimalNullableFilter<"Product"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   userId?: Prisma.StringNullableFilter<"Product"> | string | null
+  embedding?: Prisma.FloatNullableListFilter<"Product">
   createdAt?: Prisma.DateTimeNullableFilter<"Product"> | Date | string | null
   deletedAt?: Prisma.DateTimeNullableFilter<"Product"> | Date | string | null
   productCategory?: Prisma.ProductCategoryListRelationFilter
@@ -343,6 +353,7 @@ export type ProductOrderByWithAggregationInput = {
   ratingSum?: Prisma.SortOrderInput | Prisma.SortOrder
   rating?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  embedding?: Prisma.SortOrder
   createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ProductCountOrderByAggregateInput
@@ -366,6 +377,7 @@ export type ProductScalarWhereWithAggregatesInput = {
   ratingSum?: Prisma.IntNullableWithAggregatesFilter<"Product"> | number | null
   rating?: Prisma.DecimalNullableWithAggregatesFilter<"Product"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   userId?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
+  embedding?: Prisma.FloatNullableListFilter<"Product">
   createdAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Product"> | Date | string | null
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Product"> | Date | string | null
 }
@@ -380,6 +392,7 @@ export type ProductCreateInput = {
   reviewCount?: number | null
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  embedding?: Prisma.ProductCreateembeddingInput | number[]
   createdAt?: Date | string | null
   deletedAt?: Date | string | null
   productCategory?: Prisma.ProductCategoryCreateNestedManyWithoutProductInput
@@ -398,6 +411,7 @@ export type ProductUncheckedCreateInput = {
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   userId?: string | null
+  embedding?: Prisma.ProductCreateembeddingInput | number[]
   createdAt?: Date | string | null
   deletedAt?: Date | string | null
   productCategory?: Prisma.ProductCategoryUncheckedCreateNestedManyWithoutProductInput
@@ -414,6 +428,7 @@ export type ProductUpdateInput = {
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  embedding?: Prisma.ProductUpdateembeddingInput | number[]
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productCategory?: Prisma.ProductCategoryUpdateManyWithoutProductNestedInput
@@ -432,6 +447,7 @@ export type ProductUncheckedUpdateInput = {
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedding?: Prisma.ProductUpdateembeddingInput | number[]
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productCategory?: Prisma.ProductCategoryUncheckedUpdateManyWithoutProductNestedInput
@@ -449,6 +465,7 @@ export type ProductCreateManyInput = {
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   userId?: string | null
+  embedding?: Prisma.ProductCreateembeddingInput | number[]
   createdAt?: Date | string | null
   deletedAt?: Date | string | null
 }
@@ -463,6 +480,7 @@ export type ProductUpdateManyMutationInput = {
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  embedding?: Prisma.ProductUpdateembeddingInput | number[]
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -478,6 +496,7 @@ export type ProductUncheckedUpdateManyInput = {
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedding?: Prisma.ProductUpdateembeddingInput | number[]
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -485,6 +504,14 @@ export type ProductUncheckedUpdateManyInput = {
 export type ProductScalarRelationFilter = {
   is?: Prisma.ProductWhereInput
   isNot?: Prisma.ProductWhereInput
+}
+
+export type FloatNullableListFilter<$PrismaModel = never> = {
+  equals?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
+  has?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
+  hasEvery?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel>
+  hasSome?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
 }
 
 export type ProductCountOrderByAggregateInput = {
@@ -498,6 +525,7 @@ export type ProductCountOrderByAggregateInput = {
   ratingSum?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  embedding?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
@@ -508,6 +536,7 @@ export type ProductAvgOrderByAggregateInput = {
   reviewCount?: Prisma.SortOrder
   ratingSum?: Prisma.SortOrder
   rating?: Prisma.SortOrder
+  embedding?: Prisma.SortOrder
 }
 
 export type ProductMaxOrderByAggregateInput = {
@@ -546,6 +575,7 @@ export type ProductSumOrderByAggregateInput = {
   reviewCount?: Prisma.SortOrder
   ratingSum?: Prisma.SortOrder
   rating?: Prisma.SortOrder
+  embedding?: Prisma.SortOrder
 }
 
 export type ProductListRelationFilter = {
@@ -572,6 +602,10 @@ export type ProductUpdateOneRequiredWithoutProductCategoryNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutProductCategoryInput, Prisma.ProductUpdateWithoutProductCategoryInput>, Prisma.ProductUncheckedUpdateWithoutProductCategoryInput>
 }
 
+export type ProductCreateembeddingInput = {
+  set: number[]
+}
+
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
@@ -590,6 +624,11 @@ export type NullableDecimalFieldUpdateOperationsInput = {
   decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
   multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type ProductUpdateembeddingInput = {
+  set?: number[]
+  push?: number | number[]
 }
 
 export type ProductCreateNestedOneWithoutReviewInput = {
@@ -658,6 +697,7 @@ export type ProductCreateWithoutProductCategoryInput = {
   reviewCount?: number | null
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  embedding?: Prisma.ProductCreateembeddingInput | number[]
   createdAt?: Date | string | null
   deletedAt?: Date | string | null
   review?: Prisma.ReviewCreateNestedManyWithoutProductInput
@@ -675,6 +715,7 @@ export type ProductUncheckedCreateWithoutProductCategoryInput = {
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   userId?: string | null
+  embedding?: Prisma.ProductCreateembeddingInput | number[]
   createdAt?: Date | string | null
   deletedAt?: Date | string | null
   review?: Prisma.ReviewUncheckedCreateNestedManyWithoutProductInput
@@ -706,6 +747,7 @@ export type ProductUpdateWithoutProductCategoryInput = {
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  embedding?: Prisma.ProductUpdateembeddingInput | number[]
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   review?: Prisma.ReviewUpdateManyWithoutProductNestedInput
@@ -723,6 +765,7 @@ export type ProductUncheckedUpdateWithoutProductCategoryInput = {
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedding?: Prisma.ProductUpdateembeddingInput | number[]
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   review?: Prisma.ReviewUncheckedUpdateManyWithoutProductNestedInput
@@ -738,6 +781,7 @@ export type ProductCreateWithoutReviewInput = {
   reviewCount?: number | null
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  embedding?: Prisma.ProductCreateembeddingInput | number[]
   createdAt?: Date | string | null
   deletedAt?: Date | string | null
   productCategory?: Prisma.ProductCategoryCreateNestedManyWithoutProductInput
@@ -755,6 +799,7 @@ export type ProductUncheckedCreateWithoutReviewInput = {
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   userId?: string | null
+  embedding?: Prisma.ProductCreateembeddingInput | number[]
   createdAt?: Date | string | null
   deletedAt?: Date | string | null
   productCategory?: Prisma.ProductCategoryUncheckedCreateNestedManyWithoutProductInput
@@ -786,6 +831,7 @@ export type ProductUpdateWithoutReviewInput = {
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  embedding?: Prisma.ProductUpdateembeddingInput | number[]
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productCategory?: Prisma.ProductCategoryUpdateManyWithoutProductNestedInput
@@ -803,6 +849,7 @@ export type ProductUncheckedUpdateWithoutReviewInput = {
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedding?: Prisma.ProductUpdateembeddingInput | number[]
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productCategory?: Prisma.ProductCategoryUncheckedUpdateManyWithoutProductNestedInput
@@ -818,6 +865,7 @@ export type ProductCreateWithoutUserInput = {
   reviewCount?: number | null
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  embedding?: Prisma.ProductCreateembeddingInput | number[]
   createdAt?: Date | string | null
   deletedAt?: Date | string | null
   productCategory?: Prisma.ProductCategoryCreateNestedManyWithoutProductInput
@@ -834,6 +882,7 @@ export type ProductUncheckedCreateWithoutUserInput = {
   reviewCount?: number | null
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  embedding?: Prisma.ProductCreateembeddingInput | number[]
   createdAt?: Date | string | null
   deletedAt?: Date | string | null
   productCategory?: Prisma.ProductCategoryUncheckedCreateNestedManyWithoutProductInput
@@ -880,6 +929,7 @@ export type ProductScalarWhereInput = {
   ratingSum?: Prisma.IntNullableFilter<"Product"> | number | null
   rating?: Prisma.DecimalNullableFilter<"Product"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   userId?: Prisma.StringNullableFilter<"Product"> | string | null
+  embedding?: Prisma.FloatNullableListFilter<"Product">
   createdAt?: Prisma.DateTimeNullableFilter<"Product"> | Date | string | null
   deletedAt?: Prisma.DateTimeNullableFilter<"Product"> | Date | string | null
 }
@@ -894,6 +944,7 @@ export type ProductCreateManyUserInput = {
   reviewCount?: number | null
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  embedding?: Prisma.ProductCreateembeddingInput | number[]
   createdAt?: Date | string | null
   deletedAt?: Date | string | null
 }
@@ -908,6 +959,7 @@ export type ProductUpdateWithoutUserInput = {
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  embedding?: Prisma.ProductUpdateembeddingInput | number[]
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productCategory?: Prisma.ProductCategoryUpdateManyWithoutProductNestedInput
@@ -924,6 +976,7 @@ export type ProductUncheckedUpdateWithoutUserInput = {
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  embedding?: Prisma.ProductUpdateembeddingInput | number[]
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productCategory?: Prisma.ProductCategoryUncheckedUpdateManyWithoutProductNestedInput
@@ -940,6 +993,7 @@ export type ProductUncheckedUpdateManyWithoutUserInput = {
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  embedding?: Prisma.ProductUpdateembeddingInput | number[]
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -995,6 +1049,7 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   ratingSum?: boolean
   rating?: boolean
   userId?: boolean
+  embedding?: boolean
   createdAt?: boolean
   deletedAt?: boolean
   productCategory?: boolean | Prisma.Product$productCategoryArgs<ExtArgs>
@@ -1014,6 +1069,7 @@ export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   ratingSum?: boolean
   rating?: boolean
   userId?: boolean
+  embedding?: boolean
   createdAt?: boolean
   deletedAt?: boolean
   user?: boolean | Prisma.Product$userArgs<ExtArgs>
@@ -1030,6 +1086,7 @@ export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   ratingSum?: boolean
   rating?: boolean
   userId?: boolean
+  embedding?: boolean
   createdAt?: boolean
   deletedAt?: boolean
   user?: boolean | Prisma.Product$userArgs<ExtArgs>
@@ -1046,11 +1103,12 @@ export type ProductSelectScalar = {
   ratingSum?: boolean
   rating?: boolean
   userId?: boolean
+  embedding?: boolean
   createdAt?: boolean
   deletedAt?: boolean
 }
 
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "status" | "upc" | "image" | "reviewCount" | "ratingSum" | "rating" | "userId" | "createdAt" | "deletedAt", ExtArgs["result"]["product"]>
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "status" | "upc" | "image" | "reviewCount" | "ratingSum" | "rating" | "userId" | "embedding" | "createdAt" | "deletedAt", ExtArgs["result"]["product"]>
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   productCategory?: boolean | Prisma.Product$productCategoryArgs<ExtArgs>
   review?: boolean | Prisma.Product$reviewArgs<ExtArgs>
@@ -1082,6 +1140,7 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     ratingSum: number | null
     rating: runtime.Decimal | null
     userId: string | null
+    embedding: number[]
     createdAt: Date | null
     deletedAt: Date | null
   }, ExtArgs["result"]["product"]>
@@ -1520,6 +1579,7 @@ export interface ProductFieldRefs {
   readonly ratingSum: Prisma.FieldRef<"Product", 'Int'>
   readonly rating: Prisma.FieldRef<"Product", 'Decimal'>
   readonly userId: Prisma.FieldRef<"Product", 'String'>
+  readonly embedding: Prisma.FieldRef<"Product", 'Float[]'>
   readonly createdAt: Prisma.FieldRef<"Product", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"Product", 'DateTime'>
 }
