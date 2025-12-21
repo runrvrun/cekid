@@ -25,8 +25,8 @@ const Page = async () => {
     </Link>
       <h1 className="text-2xl font-bold text-center mb-6">Buat Akun</h1>
 
-      <GoogleSignIn />
-      <GithubSignIn />
+      {/*<GoogleSignIn />*/}
+      {/*<GithubSignIn />*/}
 
       <div className="relative">
         <div className="relative flex justify-center text-sm">
