@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Button } from '@/components/ui/button';
 import { auth } from '@/lib/auth';
 import AddReviewForm from '@/components/addreviewform';
+import { Star } from "lucide-react";
 
 type Props = {
     params: Promise<{ productid: number }>;
@@ -80,7 +81,7 @@ export default async function ProductDetail({ params }: Props) {
     return (
         <main className="max-w-3xl mx-auto p-6">
             {/* Product detail */}
-            <section className="mb-8 bg-base-100 rounded-lg shadow p-6 flex flex-col items-center">
+            <section className="mb-8 bg-base-100 p-6 flex flex-col items-center">
                 <Image
                     src={product.image ?? "/product-placeholder.png"}
                     alt={product.name ?? "Produk"}
@@ -89,14 +90,12 @@ export default async function ProductDetail({ params }: Props) {
                     height={800}
                 />
                 <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
-                <div className="text-lg font-semibold text-blue-600 mb-2">
+            <div className="flex items-center gap-1 text-lg shrink-0">
                     {(product.rating ?? 0).toFixed(1)}
+                    <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                 </div>
                 {product.description && (
                     <p className="text-gray-700 mb-2">{product.description}</p>
-                )}
-                {product.upc && (
-                    <div className="text-sm text-gray-500 mb-2">UPC: {product.upc}</div>
                 )}
             </section>
 
@@ -122,7 +121,7 @@ export default async function ProductDetail({ params }: Props) {
                     )}
 
                     {reviews.map((r) => (
-                        <div key={r.id} className="card bg-base-100 shadow w-full">
+                        <div key={r.id} className="card bg-base-100 w-full">
                             <div className="card-body">
                                 <div className="flex justify-between items-center mb-1">
                                     <span className="font-semibold">

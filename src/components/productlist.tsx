@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import Image from "next/image";
+import { Star } from "lucide-react";
 
 type Product = {
   id: number;
@@ -13,11 +14,11 @@ type Product = {
 export default async function ProductList({ query }: { query?: string }) {
   const where = query
     ? {
-        AND: [
-          { deletedAt: null },
-          { name: { contains: query, mode: "insensitive" as const } },
-        ],
-      }
+      AND: [
+        { deletedAt: null },
+        { name: { contains: query, mode: "insensitive" as const } },
+      ],
+    }
     : { deletedAt: null };
 
   const productsFromDb = await prisma.product.findMany({
@@ -34,8 +35,8 @@ export default async function ProductList({ query }: { query?: string }) {
       typeof p.rating === "number"
         ? p.rating
         : p.rating
-        ? Number(p.rating)
-        : null,
+          ? Number(p.rating)
+          : null,
   }));
 
   return (
@@ -55,12 +56,26 @@ export default async function ProductList({ query }: { query?: string }) {
               height={160}
             />
           </figure>
-          <div className="card-body flex items-center justify-between">
-            <h3 className="card-title text-base">{p.name}</h3>
-            <div className="text-lg font-semibold text-blue-600">
+          <div className="card-body flex items-center justify-between m-2 min-h-[3.5rem]">
+            <h3
+              className="
+      card-title
+      text-base
+      leading-snug
+      line-clamp-2
+      overflow-hidden
+      max-w-[70%]
+    "
+            >
+              {p.name}
+            </h3>
+
+            <div className="flex items-center gap-1 text-lg shrink-0">
               {(p.rating ?? 0).toFixed(1)}
+              <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
             </div>
           </div>
+
         </Link>
       ))}
     </div>
