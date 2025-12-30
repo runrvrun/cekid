@@ -19,7 +19,15 @@ export default function AddReviewForm({ productId, name }: Props) {
   const [success, setSuccess] = useState<string | null>(null);
   const [hasExistingReview, setHasExistingReview] = useState(false);
 
-// Load existing review on mount
+  const ratingLabels: Record<number, string> = {
+    1: "Tidak suka",
+    2: "Kurang suka",
+    3: "Biasa saja",
+    4: "Suka!",
+    5: "Suka sekali!",
+  };
+
+  // Load existing review on mount
   useEffect(() => {
     const loadReview = async () => {
       const existing = await getUserReview(productId);
@@ -74,7 +82,6 @@ export default function AddReviewForm({ productId, name }: Props) {
 
   return (
     <div className="max-w-2xl mx-auto p-4 bg-base-100">
-
       {error && <div className="text-sm text-red-600 mb-3">{error}</div>}
       {success && <div className="text-sm text-green-600 mb-3">{success}</div>}
 
@@ -106,6 +113,11 @@ export default function AddReviewForm({ productId, name }: Props) {
           ))}
         </div>
 
+        {/* Rating label */}
+        <div className="text-center text-sm text-gray-600 mb-3">
+          {ratingLabels[rating] ?? ""}
+        </div>
+
         <div className="form-control">
           <textarea
             name="review"
@@ -124,9 +136,7 @@ export default function AddReviewForm({ productId, name }: Props) {
               type="checkbox"
               name="anonymous"
               checked={anonymous}
-              onChange={(e) =>
-                setAnonymous(e.target.checked)
-              }
+              onChange={(e) => setAnonymous(e.target.checked)}
               className="checkbox checkbox-primary"
             />
             <span className="label-text">Beri review secara anonim</span>
