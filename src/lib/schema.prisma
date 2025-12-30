@@ -57,12 +57,24 @@ model Review {
   @@unique([userId, productId])
 }
 
+enum Role {
+  USER
+  ADMIN
+  MODERATOR
+}
+
+enum UserStatus {
+  INACTIVE
+  ACTIVE
+  SUSPENDED
+}
+
 model User {
   id             String          @id @default(cuid())
   email          String?          @db.VarChar(255)
   password       String?
-  status         Int?             @default(1) @db.SmallInt
-  role           Int?             @default(1) @db.SmallInt
+  role          Role?            @default(USER)
+  status        UserStatus?      @default(ACTIVE)
   name           String?          @default("NA") @db.VarChar(255)
   image          String?         @db.VarChar(255)
   emailVerified DateTime?       @db.Timestamptz(6)
