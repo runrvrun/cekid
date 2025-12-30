@@ -105,9 +105,9 @@ export const ProductScalarFieldEnum = {
   ratingSum: 'ratingSum',
   rating: 'rating',
   userId: 'userId',
-  embedding: 'embedding',
   createdAt: 'createdAt',
-  deletedAt: 'deletedAt'
+  deletedAt: 'deletedAt',
+  embedding: 'embedding'
 } as const
 
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
@@ -120,8 +120,8 @@ export const ReviewScalarFieldEnum = {
   review: 'review',
   status: 'status',
   userId: 'userId',
-  anonymous: 'anonymous',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  anonymous: 'anonymous'
 } as const
 
 export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
@@ -131,12 +131,12 @@ export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
   password: 'password',
-  role: 'role',
-  status: 'status',
   name: 'name',
   image: 'image',
   emailVerified: 'emailVerified',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  status: 'status',
+  role: 'role'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]

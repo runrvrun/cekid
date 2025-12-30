@@ -1,3 +1,9 @@
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN', 'MODERATOR');
+
+-- CreateEnum
+CREATE TYPE "UserStatus" AS ENUM ('INACTIVE', 'ACTIVE', 'SUSPENDED', 'PENDING_VERIFICATION');
+
 -- CreateTable
 CREATE TABLE "Category" (
     "id" BIGSERIAL NOT NULL,
@@ -29,6 +35,7 @@ CREATE TABLE "Product" (
     "userId" TEXT,
     "createdAt" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
     "deletedAt" TIMESTAMPTZ(6),
+    "embedding" DOUBLE PRECISION[],
 
     CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
 );
@@ -40,8 +47,9 @@ CREATE TABLE "Review" (
     "rating" SMALLINT NOT NULL,
     "review" TEXT,
     "status" SMALLINT DEFAULT 1,
-    "userId" TEXT,
+    "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
+    "anonymous" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Review_pkey" PRIMARY KEY ("id")
 );
@@ -51,12 +59,12 @@ CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "email" VARCHAR(255),
     "password" TEXT,
-    "status" SMALLINT DEFAULT 1,
-    "role" SMALLINT DEFAULT 1,
     "name" VARCHAR(255) DEFAULT 'NA',
     "image" VARCHAR(255),
     "emailVerified" TIMESTAMPTZ(6),
     "createdAt" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
+    "status" "UserStatus" NOT NULL DEFAULT 'ACTIVE',
+    "role" "Role" NOT NULL DEFAULT 'USER',
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -99,6 +107,9 @@ CREATE TABLE "verificationTokens" (
     "token" TEXT NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Review_userId_productId_key" ON "Review"("userId", "productId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Account_provider_providerAccountId_key" ON "Account"("provider", "providerAccountId");

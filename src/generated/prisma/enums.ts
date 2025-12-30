@@ -21,7 +21,26 @@ export type Role = (typeof Role)[keyof typeof Role]
 export const UserStatus = {
   INACTIVE: 'INACTIVE',
   ACTIVE: 'ACTIVE',
-  SUSPENDED: 'SUSPENDED'
+  SUSPENDED: 'SUSPENDED',
+  PENDING_VERIFICATION: 'PENDING_VERIFICATION'
 } as const
 
 export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
+
+
+export const ReviewStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type ReviewStatus = (typeof ReviewStatus)[keyof typeof ReviewStatus]
+
+
+export const ProductStatus = {
+  PENDING: 'PENDING',
+  INACTIVE: 'INACTIVE',
+  ACTIVE: 'ACTIVE'
+} as const
+
+export type ProductStatus = (typeof ProductStatus)[keyof typeof ProductStatus]

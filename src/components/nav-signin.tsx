@@ -12,7 +12,12 @@ const Navsignin = async () => {
         </a>
       ) : (
         <span>{session.user?.name}
-        <SignOut />
+            <SignOut />
+        {session.user?.role === "ADMIN" && (
+          <a href="/admin" className="ml-2 text-sm text-blue-500">
+            Admin
+          </a>
+        )}
         </span>
       )}
     </li>

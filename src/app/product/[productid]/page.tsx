@@ -31,7 +31,8 @@ export const generateMetadata = async ({ params }: Props): Promise<Metadata> => 
 
 export default async function ProductDetail({ params }: Props) {
     const id = (await params).productid;
-    const reviewer = (await auth())?.user?.id;
+    const session = await auth();
+    const reviewer = session?.user?.id;
 
     if (Number.isNaN(id)) {
         return (
@@ -114,6 +115,11 @@ const similarProducts = JSON.parse(text);
                     height={800}
                 />
                 <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
+                {session?.user?.role === "ADMIN" && (
+                    <a href={`/product/${product.id}/edit`} className="text-blue-500 hover:underline">
+                        Edit Produk
+                    </a>
+                )}
             <div className="flex items-center gap-1 text-lg shrink-0">
                     {(product.rating ?? 0).toFixed(1)}
                     <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
