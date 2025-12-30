@@ -1,18 +1,37 @@
 "use client";
+
 import React, { useState } from "react";
 import { createProduct } from "@/app/actions/createproduct";
+import { updateProduct } from "@/app/actions/updateproduct";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import imageCompression from "browser-image-compression";
 import { Button } from "./ui/button";
 
-export default function AddProductForm() {
+type Product = {
+  id: bigint;
+  name: string;
+  upc?: string | null;
+  description?: string | null;
+  image?: string | null;
+};
+
+type Props = {
+  mode: "create" | "edit";
+  initialData?: Product;
+};
+
+export default function ProductForm({ mode, initialData }: Props) {
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [upc, setUpc] = useState("");
-  const [description, setDescription] = useState("");
+
+  const [name, setName] = useState(initialData?.name ?? "");
+  const [upc, setUpc] = useState(initialData?.upc ?? "");
+  const [description, setDescription] = useState(initialData?.description ?? "");
   const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(
+    initialData?.image ?? null
+  );
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -20,11 +39,7 @@ export default function AddProductForm() {
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0] ?? null;
     setFile(f);
-    if (f) {
-      setPreview(URL.createObjectURL(f));
-    } else {
-      setPreview(null);
-    }
+    if (f) setPreview(URL.createObjectURL(f));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -45,38 +60,29 @@ export default function AddProductForm() {
       if (upc.trim()) fd.append("upc", upc.trim());
       if (description.trim()) fd.append("description", description.trim());
 
-      // --- 🔥 Compress image BEFORE sending to server ---
       if (file) {
         const compressedFile = await imageCompression(file, {
-          maxSizeMB: 0.8,               // target max size
-          maxWidthOrHeight: 800,     // downscale dimension
+          maxSizeMB: 0.8,
+          maxWidthOrHeight: 800,
           useWebWorker: true,
         });
-
         fd.append("image", compressedFile);
       }
 
-      const result = await createProduct(fd);
+      const result =
+        mode === "create"
+          ? await createProduct(fd)
+          : await updateProduct(initialData!.id, fd);
 
       if (!result.success) {
-        setError(result.error || "Gagal menambah produk");
+        setError(result.error || "Gagal menyimpan produk");
         return;
       }
 
-      const product = result.data;
-      setSuccess(result.message || "Produk berhasil ditambahkan.");
+      setSuccess(result.message || "Produk berhasil disimpan.");
 
-      // Reset form UI
-      setName("");
-      setUpc("");
-      setDescription("");
-      setFile(null);
-      setPreview(null);
-
-      // Redirect
-      const id = product?.id;
-      if (id) router.push(`/product/${id}`);
-
+      const productId = result.data?.id ?? initialData?.id;
+      if (productId) router.push(`/product/${productId}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Terjadi kesalahan");
     } finally {
@@ -86,22 +92,24 @@ export default function AddProductForm() {
 
   return (
     <div className="max-w-md mx-auto p-4 bg-base-100 rounded-lg shadow">
-      <h2 className="text-lg font-semibold mb-4">Tambah Produk</h2>
+      <h2 className="text-lg font-semibold mb-4">
+        {mode === "create" ? "Tambah Produk" : "Edit Produk"}
+      </h2>
 
       {error && <div className="text-sm text-red-600 mb-3">{error}</div>}
       {success && <div className="text-sm text-green-600 mb-3">{success}</div>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        
         <div>
-          <label className="block text-sm font-medium mb-1">Foto (opsional)</label>
+          <label className="block text-sm font-medium mb-1">
+            Foto {mode === "edit" ? "(opsional)" : "(opsional)"}
+          </label>
           <input
             type="file"
             accept="image/*"
             onChange={onFileChange}
             className="file-input"
           />
-
           {preview && (
             <Image
               width={160}
@@ -112,8 +120,11 @@ export default function AddProductForm() {
             />
           )}
         </div>
+
         <div>
-          <label className="block text-sm font-medium mb-1">Nama Barang *</label>
+          <label className="block text-sm font-medium mb-1">
+            Nama Barang *
+          </label>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -142,7 +153,11 @@ export default function AddProductForm() {
         </div>
 
         <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "Menyimpan..." : "Simpan Produk"}
+          {loading
+            ? "Menyimpan..."
+            : mode === "create"
+            ? "Simpan Produk"
+            : "Update Produk"}
         </Button>
       </form>
     </div>
