@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { GoogleSignIn } from "@/components/google-signin";
-import { GithubSignIn } from "@/components/github-signin";
 import { auth } from "@/lib/auth";
 import Image from "next/image";
 
@@ -26,15 +25,6 @@ const Page = async () => {
       <h1 className="text-2xl font-bold text-center mb-6">Buat Akun</h1>
 
       {/*<GoogleSignIn />*/}
-      {/*<GithubSignIn />*/}
-
-      <div className="relative">
-        <div className="relative flex justify-center text-sm">
-          <span className="bg-background px-2 text-muted-foreground">
-            Atau daftar dengan email
-          </span>
-        </div>
-      </div>
 
       {/* Email/Password Sign Up */}
       <form

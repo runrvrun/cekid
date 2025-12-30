@@ -29,13 +29,6 @@ const Page = async () => {
 
       {/*<GoogleSignIn />*/}
       {/*<GithubSignIn />*/}
-      <div className="relative">
-        <div className="relative flex justify-center text-sm">
-          <span className="bg-background px-2 text-muted-foreground">
-           Atau masuk dengan email
-          </span>
-        </div>
-      </div>
 
       {/* Email/Password Sign In */}
       <form

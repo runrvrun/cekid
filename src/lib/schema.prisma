@@ -73,8 +73,8 @@ model User {
   id             String          @id @default(cuid())
   email          String?          @db.VarChar(255)
   password       String?
-  role          Role?            @default(USER)
-  status        UserStatus?      @default(ACTIVE)
+  role          Role            @default(USER)
+  status        UserStatus      @default(ACTIVE)
   name           String?          @default("NA") @db.VarChar(255)
   image          String?         @db.VarChar(255)
   emailVerified DateTime?       @db.Timestamptz(6)
