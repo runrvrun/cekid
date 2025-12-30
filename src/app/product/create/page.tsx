@@ -9,7 +9,7 @@ const Page = async () => {
   return (
     <main className="min-h-screen bg-base-100 flex items-start justify-center p-8">
       <div className="w-full max-w-lg">
-        <AddProductForm />
+        <AddProductForm mode="create" />
       </div>
     </main>
   );
