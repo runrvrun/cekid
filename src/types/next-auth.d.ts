@@ -11,12 +11,19 @@ declare module "next-auth" {
   }
 
   interface User extends DefaultUser {
-    role: Role;
+    role?: Role;
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
     role: Role;
+  }
+}
+
+
+declare module "@auth/core/adapters" {
+  interface AdapterUser {
+    role?: Role;
   }
 }
