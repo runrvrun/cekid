@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import Nav from '../../components/nav';
 import Image from 'next/image';
 import "./../globals.css"
+import Link from 'next/link';
 
 export const metadata: Metadata = {
     title: {
@@ -31,14 +32,17 @@ export default function RootLayout({
                     }}
                 >
                     <div style={{ margin: 0 }}>
-                        <Image 
-                            src="/logo.png" 
-                            alt="Cek.id Logo" 
-                            width={120} 
-                            height={40} 
-                            style={{ objectFit: 'contain' }}
-                            priority
-                        />
+                        <Link href="/">
+                            <Image 
+                                src="/logo.png" 
+                                alt="Cek.id Logo" 
+                                width={120} 
+                                height={40} 
+                                style={{ objectFit: 'contain' }}
+                                priority
+                            />
+                        </Link>
+                    (Beta)
                     </div>
                     
                     <Nav />  

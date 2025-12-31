@@ -42,6 +42,7 @@ export default function ProductLayout({
                                 priority
                             />
                         </Link>
+                    (Beta)
                     </div>
                     <Nav />
                 </header>

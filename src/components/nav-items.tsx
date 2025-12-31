@@ -7,7 +7,8 @@ type Props = {
 const Navitems = ({ onClick }: Props) => {
   const navItems = [
     { href: "/", label: "Beranda" },
-    { href: "/about", label: "Tentang" },
+    { href: "/about", label: "Tentang cek.id" },
+    { href: "/feedback", label: "Beri Feedback" },
   ];
 
   return (
