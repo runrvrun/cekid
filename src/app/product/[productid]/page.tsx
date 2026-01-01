@@ -182,19 +182,31 @@ const similarProducts = JSON.parse(text);
 
                     {reviews.map((r) => (
                         <div key={r.id} className="card bg-base-100 w-full">
-                            <div className="card-body">
-                                <div className="flex justify-between items-center mb-1">
-                                    <span className="font-semibold">
-                                        {r.anonymous ? "Pengguna" : (r.user?.name ?? "Pengguna")}
-                                    </span>
-                                    <span className="text-sm text-gray-400">
-                                        {r.createdAt ? new Date(r.createdAt).toLocaleDateString() : ""}
-                                    </span>
-                                </div>
-                                <div className="mb-2 text-yellow-600 font-medium">{r.rating}</div>
-                                {r.review && <p className="mb-4">{r.review}</p>}
-                            </div>
-                        </div>
+    <div className="card-body">
+      <div className="flex justify-between items-center mb-1">
+        <span className="font-semibold">
+          {r.anonymous ? "Pengguna" : (r.user?.name ?? "Pengguna")}
+        </span>
+        <span className="text-sm text-gray-400">
+          {r.createdAt ? new Date(r.createdAt).toLocaleDateString() : ""}
+        </span>
+      </div>
+
+      {/* replaced numeric rating with stars */}
+      <div className="flex items-center mb-2">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <Star
+            key={star}
+            className="w-4 h-4"
+            fill={star <= (r.rating ?? 0) ? "#facc15" : "#e5e7eb"}
+            stroke="#facc15"
+          />
+        ))}
+      </div>
+
+      {r.review && <p className="mb-4">{r.review}</p>}
+    </div>
+  </div>
                     ))}
                 </div>
             </section>
