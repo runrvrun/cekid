@@ -10,18 +10,32 @@ const signUp = async (formData: FormData) => {
       try {
         const email = formData.get("email");
         const password = formData.get("password");
+        const name = (formData.get("name") as string) ?? "NA";
 
         const validated = schema.parse({ email, password });
 
+        const normalizedEmail = validated.email.toLowerCase();
+
+        // ✅ 1. Check if email already exists
+        const existingUser = await db.user.findFirst({
+          where: { email: normalizedEmail },
+          select: { id: true },
+        });
+
+        if (existingUser) {
+          throw new Error("Email already registered");
+        }
+
+        // ✅ 2. Create user
         await db.user.create({
           data: {
-            email: validated.email.toLowerCase(),
+            email: normalizedEmail,
             password: hashPassword(validated.password),
-            name: (formData.get("name") as string) ?? "NA",
+            name,
           },
         });
       } catch (err) {
-        // Prisma-specific error handling
+        // ✅ Prisma-specific fallback (race condition safety)
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           switch (err.code) {
             case "P2002":
@@ -33,7 +47,6 @@ const signUp = async (formData: FormData) => {
           }
         }
 
-        // Zod validation errors
         if (err instanceof Error) {
           throw err;
         }
