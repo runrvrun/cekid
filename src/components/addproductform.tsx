@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { createProduct } from "@/app/actions/createproduct";
 import { updateProduct } from "@/app/actions/updateproduct";
 import { useRouter } from "next/navigation";
@@ -23,6 +23,7 @@ type Props = {
 
 export default function ProductForm({ mode, initialData }: Props) {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState(initialData?.name ?? "");
   const [upc, setUpc] = useState(initialData?.upc ?? "");
@@ -32,15 +33,34 @@ export default function ProductForm({ mode, initialData }: Props) {
     initialData?.image ?? null
   );
 
+  const [dragActive, setDragActive] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0] ?? null;
+  /* ---------------- IMAGE HANDLING ---------------- */
+
+  const handleFile = (f: File | null) => {
+    if (!f) return;
+    if (!f.type.startsWith("image/")) {
+      setError("File harus berupa gambar.");
+      return;
+    }
     setFile(f);
-    if (f) setPreview(URL.createObjectURL(f));
+    setPreview(URL.createObjectURL(f));
   };
+
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleFile(e.target.files?.[0] ?? null);
+  };
+
+  const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragActive(false);
+    handleFile(e.dataTransfer.files?.[0] ?? null);
+  };
+
+  /* ---------------- SUBMIT ---------------- */
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,6 +110,8 @@ export default function ProductForm({ mode, initialData }: Props) {
     }
   };
 
+  /* ---------------- UI ---------------- */
+
   return (
     <div className="max-w-md mx-auto p-4 bg-base-100 rounded-lg shadow">
       <h2 className="text-lg font-semibold mb-4">
@@ -100,27 +122,54 @@ export default function ProductForm({ mode, initialData }: Props) {
       {success && <div className="text-sm text-green-600 mb-3">{success}</div>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* IMAGE DROP ZONE */}
         <div>
           <label className="block text-sm font-medium mb-1">
-            Foto {mode === "edit" ? "(opsional)" : "(opsional)"}
+            Foto Produk (opsional)
           </label>
+
+          <div
+            onClick={() => fileInputRef.current?.click()}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setDragActive(true);
+            }}
+            onDragLeave={() => setDragActive(false)}
+            onDrop={onDrop}
+            className={`cursor-pointer border-2 border-dashed rounded-lg p-4 text-center transition
+              ${dragActive ? "border-primary bg-primary/10" : "border-base-300"}
+            `}
+          >
+            {preview ? (
+              <Image
+                src={preview}
+                alt="Preview"
+                width={300}
+                height={200}
+                className="mx-auto max-h-48 object-cover rounded"
+              />
+            ) : (
+              <div className="text-sm text-base-content/60">
+                <p className="font-medium">
+                  Drag & drop foto di sini
+                </p>
+                <p>atau klik untuk upload / ambil foto</p>
+              </div>
+            )}
+          </div>
+
+          {/* Hidden input */}
           <input
+            ref={fileInputRef}
             type="file"
             accept="image/*"
+            capture="environment"
             onChange={onFileChange}
-            className="file-input"
+            className="hidden"
           />
-          {preview && (
-            <Image
-              width={160}
-              height={160}
-              src={preview}
-              alt="preview"
-              className="mt-2 h-32 w-full object-cover rounded"
-            />
-          )}
         </div>
 
+        {/* FORM FIELDS */}
         <div>
           <label className="block text-sm font-medium mb-1">
             Nama Barang *
