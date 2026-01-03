@@ -23,11 +23,15 @@ type Props = {
 
 export default function ProductForm({ mode, initialData }: Props) {
   const router = useRouter();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState(initialData?.name ?? "");
   const [upc, setUpc] = useState(initialData?.upc ?? "");
-  const [description, setDescription] = useState(initialData?.description ?? "");
+  const [description, setDescription] = useState(
+    initialData?.description ?? ""
+  );
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(
     initialData?.image ?? null
@@ -42,10 +46,12 @@ export default function ProductForm({ mode, initialData }: Props) {
 
   const handleFile = (f: File | null) => {
     if (!f) return;
+
     if (!f.type.startsWith("image/")) {
       setError("File harus berupa gambar.");
       return;
     }
+
     setFile(f);
     setPreview(URL.createObjectURL(f));
   };
@@ -129,14 +135,13 @@ export default function ProductForm({ mode, initialData }: Props) {
           </label>
 
           <div
-            onClick={() => fileInputRef.current?.click()}
             onDragOver={(e) => {
               e.preventDefault();
               setDragActive(true);
             }}
             onDragLeave={() => setDragActive(false)}
             onDrop={onDrop}
-            className={`cursor-pointer border-2 border-dashed rounded-lg p-4 text-center transition
+            className={`border-2 border-dashed rounded-lg p-4 text-center transition
               ${dragActive ? "border-primary bg-primary/10" : "border-base-300"}
             `}
           >
@@ -149,18 +154,42 @@ export default function ProductForm({ mode, initialData }: Props) {
                 className="mx-auto max-h-48 object-cover rounded"
               />
             ) : (
-              <div className="text-sm text-base-content/60">
-                <p className="font-medium">
-                  Drag & drop foto di sini
-                </p>
-                <p>atau klik untuk upload / ambil foto</p>
+              <div className="space-y-3 text-sm text-base-content/60">
+                <p className="font-medium">Drag & drop foto di sini</p>
+
+                <div className="flex justify-center gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => cameraInputRef.current?.click()}
+                  >
+                    📷 Ambil Foto
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => galleryInputRef.current?.click()}
+                  >
+                    🖼️ Galeri
+                  </Button>
+                </div>
               </div>
             )}
           </div>
 
-          {/* Hidden input */}
+          {/* Hidden inputs */}
           <input
-            ref={fileInputRef}
+            ref={cameraInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            onChange={onFileChange}
+            className="hidden"
+          />
+
+          <input
+            ref={galleryInputRef}
             type="file"
             accept="image/*"
             onChange={onFileChange}
