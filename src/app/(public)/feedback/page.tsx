@@ -5,9 +5,9 @@ export const metadata = {
 export default function About() {
     return (
         <main className="flex flex-col items-center justify-between p-24">
-            <h1 className="text-5xl font-bold mb-1">Beri Saran Untuk cek.id</h1>
+            <h1 className="text-5xl font-bold mb-1">Beri Saran Untuk Kami</h1>
             <p className="text-lg text-center mb-8">
-                Kami sangat menghargai masukan Anda untuk membantu kami meningkatkan layanan cek.id. 
+                Kami sangat menghargai masukan Anda untuk membantu kami meningkatkan layanan kami. 
                 <br/>Silakan berikan saran, kritik, atau ide-ide yang Anda miliki.
             </p>
             <a

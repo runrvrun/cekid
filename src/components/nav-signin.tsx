@@ -8,7 +8,7 @@ const Navsignin = async () => {
     <li>
       {!session ? (
         <a href="/signin" className="btn btn-primary">
-          Masuk
+          Login
         </a>
       ) : (
         <span>{session.user?.name}

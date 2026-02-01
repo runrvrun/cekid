@@ -15,17 +15,23 @@ const Page = async () => {
   if (session) redirect("/");
 
   return (
-    <div className="w-full max-w-sm mx-auto space-y-6">
-    <Link href="/">
-      <Image
-        src="/logo.png"
-        alt="Cekid Logo"
-        width={120}
-        height={40}
-        className="w-32 h-auto mx-auto mb-4"
-      />
-    </Link>
-      <h1 className="text-2xl font-bold text-center mb-6">Masuk</h1>
+    <div className="text-center max-w-sm mx-auto w-full p-10 border rounded-lg shadow">
+    <Link
+        href="/"
+        style={{
+          fontFamily: "'Plus Jakarta Sans', sans-serif",
+          fontWeight: 700,
+          fontSize: "1.5rem",
+          textDecoration: "none",
+            display: "inline-block",
+        }}
+      >
+        <span style={{ color: "#16a34a" }}>enak</span>
+        <span style={{ color: "#f97316" }}>ga</span>
+      </Link>
+       <p className="text-sm text-muted-foreground mb-4">
+          Beli atau skip?
+        </p>
 
       {/*<GoogleSignIn />*/}
       {/*<GithubSignIn />*/}
