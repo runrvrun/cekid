@@ -1,0 +1,2 @@
+-- Migration intentionally left empty.
+-- Database already reflects this migration.

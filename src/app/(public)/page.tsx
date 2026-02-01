@@ -11,14 +11,10 @@ export default async function Home({ searchParams }: HomeProps) {
   const query = (await searchParams)?.q as string;
 
   return (
-    <html lang="id">
-      <body className="min-h-screen bg-base-100">
         <main className="max-w-6xl mx-auto px-4 py-8">
           <SearchProduct />
           <AddProductLink query={query} />
           <ProductList query={query} />
         </main>
-      </body>
-    </html>
   );
 }

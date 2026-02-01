@@ -11,6 +11,7 @@ import { Button } from "./ui/button";
 type Product = {
   id: bigint;
   name: string;
+  slug: string;
   upc?: string | null;
   description?: string | null;
   image?: string | null;
@@ -83,6 +84,7 @@ export default function ProductForm({ mode, initialData }: Props) {
     try {
       const fd = new FormData();
       fd.append("name", name.trim());
+      fd.append("slug", name.trim().toLowerCase().replace(/\s+/g, "-"));
       if (upc.trim()) fd.append("upc", upc.trim());
       if (description.trim()) fd.append("description", description.trim());
 
@@ -94,6 +96,7 @@ export default function ProductForm({ mode, initialData }: Props) {
         });
         fd.append("image", compressedFile);
       }
+
 
       const result =
         mode === "create"
@@ -107,8 +110,8 @@ export default function ProductForm({ mode, initialData }: Props) {
 
       setSuccess(result.message || "Produk berhasil disimpan.");
 
-      const productId = result.data?.id ?? initialData?.id;
-      if (productId) router.push(`/product/${productId}`);
+      const slug = result.data?.slug ?? initialData?.slug;
+      if (slug) router.push(`/${slug}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Terjadi kesalahan");
     } finally {

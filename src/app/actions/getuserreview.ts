@@ -4,7 +4,7 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 
-export async function getUserReview(productId: number) {
+export async function getUserReview(productId: bigint) {
   const session = await auth();
   if (!session?.user?.id) return null;
 

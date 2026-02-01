@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 
 type Props = {
-  productId: number;
+  productId: bigint;
   name: string;
 };
 

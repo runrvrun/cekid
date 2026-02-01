@@ -1,12 +1,12 @@
-import React from "react";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import Image from "next/image";
 import { Star } from "lucide-react";
 
 type Product = {
-  id: number;
+  id: bigint;
   name: string;
+  slug: string;
   image?: string | null;
   rating?: number | null;
 };
@@ -21,15 +21,16 @@ export default async function ProductList({ query }: { query?: string }) {
     }
     : { deletedAt: null };
 
-  const productsFromDb = await prisma.product.findMany({
+ const productsFromDb = await prisma.product.findMany({
     where,
-    take: 12,
     orderBy: { createdAt: "desc" },
+    take: 20,
   });
 
   const products: Product[] = productsFromDb.map((p) => ({
-    id: Number(p.id),
+    id: p.id,
     name: p.name ?? "",
+    slug: p.slug ?? "",
     image: p.image ?? null,
     rating:
       typeof p.rating === "number"
@@ -44,7 +45,7 @@ export default async function ProductList({ query }: { query?: string }) {
       {products.map((p) => (
         <Link
           key={p.id}
-          href={`/product/${p.id}`}
+          href={`/${p.slug}`}
           className="card bg-base-100 shadow hover:shadow-lg transition-shadow"
         >
           <figure>

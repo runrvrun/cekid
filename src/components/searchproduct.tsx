@@ -39,8 +39,8 @@ export default function SearchProduct({
     };
 
     return (
-        <form className="max-w-2xl mx-auto relative" onSubmit={handleSubmit}>
-            <div className="flex item-center gap-2 rounded-xl overflow-hidden bg-white border-2 border-black/10 focus-within:border-blue-500/50">
+        <form className="mx-auto relative" onSubmit={handleSubmit}>
+            <div className="min-w-2xl flex item-center gap-2 rounded-xl overflow-hidden bg-white border-2 border-black/10 focus-within:border-blue-500/50">
                 <div className="flex items-center justify-center pl-4">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
