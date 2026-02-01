@@ -12,7 +12,6 @@ type Product = {
   id: bigint;
   name: string;
   slug: string;
-  upc?: string | null;
   description?: string | null;
   image?: string | null;
 };
@@ -29,7 +28,6 @@ export default function ProductForm({ mode, initialData }: Props) {
   const galleryInputRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState(initialData?.name ?? "");
-  const [upc, setUpc] = useState(initialData?.upc ?? "");
   const [description, setDescription] = useState(
     initialData?.description ?? ""
   );
@@ -85,7 +83,6 @@ export default function ProductForm({ mode, initialData }: Props) {
       const fd = new FormData();
       fd.append("name", name.trim());
       fd.append("slug", name.trim().toLowerCase().replace(/\s+/g, "-"));
-      if (upc.trim()) fd.append("upc", upc.trim());
       if (description.trim()) fd.append("description", description.trim());
 
       if (file) {
@@ -210,15 +207,6 @@ export default function ProductForm({ mode, initialData }: Props) {
             onChange={(e) => setName(e.target.value)}
             className="input input-bordered w-full"
             required
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1">Kode UPC</label>
-          <input
-            value={upc}
-            onChange={(e) => setUpc(e.target.value)}
-            className="input input-bordered w-full"
           />
         </div>
 

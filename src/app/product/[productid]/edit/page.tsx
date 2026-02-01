@@ -11,6 +11,13 @@ const Page = async ({ params }: { params: { productid: bigint } }) => {
   if (session.user?.role !== "ADMIN") redirect("/");
 
    const product = await prisma.product.findUnique({
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      description: true,
+      image: true,
+    },
     where: { id },
   });
 

@@ -39,8 +39,8 @@ export default function SearchProduct({
     };
 
     return (
-        <form className="mx-auto relative" onSubmit={handleSubmit}>
-            <div className="min-w-2xl flex item-center gap-2 rounded-xl overflow-hidden bg-white border-2 border-black/10 focus-within:border-blue-500/50">
+        <form className="mx-auto w-full lg:w-1/2" onSubmit={handleSubmit}>
+            <div className="flex items-center gap-2 rounded-xl overflow-hidden bg-white border-2 border-black/10 focus-within:border-blue-500/50">
                 <div className="flex items-center justify-center pl-4">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -59,14 +59,14 @@ export default function SearchProduct({
                 <input
                     type="text"
                     name="search"
-                    aria-label="Cari nama atau kode produk"
-                    placeholder="Cari nama atau kode produk"
+                    aria-label="Mau beli apa?"
+                    placeholder="Mau beli apa?"
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
-                    className="flex-1 px-3 py-5 border-none focus:outline-none focus-ring-0 text-gray-700 placeholder:text-zinc-400"
+                    className="flex-1 px-3 py-3 border-none focus:outline-none focus-ring-0 text-gray-700 placeholder:text-zinc-400"
                 />
                 <button type="submit"
-                    className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 hover:shadow-inner m-1 rounded-lg">
+                    className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-3 font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 hover:shadow-inner m-1 rounded-lg">
                     Cari
                 </button>
             </div>

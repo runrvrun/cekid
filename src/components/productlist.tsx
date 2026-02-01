@@ -23,8 +23,8 @@ export default async function ProductList({ query }: { query?: string }) {
 
  const productsFromDb = await prisma.product.findMany({
     where,
-    orderBy: { createdAt: "desc" },
     take: 20,
+    orderBy: { reviewCount: "desc" },
   });
 
   const products: Product[] = productsFromDb.map((p) => ({

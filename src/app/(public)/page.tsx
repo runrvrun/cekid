@@ -11,7 +11,7 @@ export default async function Home({ searchParams }: HomeProps) {
   const query = (await searchParams)?.q as string;
 
   return (
-        <main className="max-w-6xl mx-auto px-4 py-8">
+        <main className="mx-auto px-4 pb-8">
           <SearchProduct />
           <AddProductLink query={query} />
           <ProductList query={query} />
