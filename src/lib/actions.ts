@@ -3,6 +3,7 @@ import { schema } from "@/lib/schema";
 import db from "@/lib/prisma";
 import { executeAction } from "@/lib/executeAction";
 import { hashPassword } from "@/lib/hash";
+import { sendAdminNotification } from "./sendadminnotif";
 
 const signUp = async (formData: FormData) => {
   return executeAction({
@@ -33,6 +34,15 @@ const signUp = async (formData: FormData) => {
             password: hashPassword(validated.password),
             name,
           },
+        });
+
+        // send email notification to admin
+         await sendAdminNotification({
+          subject: "New user registered on enakga",
+          message: `
+            User: ${name}<br/>
+            Email: ${normalizedEmail}
+          `,
         });
       } catch (err) {
         // ✅ Prisma-specific fallback (race condition safety)
