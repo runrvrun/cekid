@@ -7,10 +7,11 @@ import { Button } from "./ui/button";
 
 type Props = {
   productId: bigint;
+  slug: string;
   name: string;
 };
 
-export default function AddReviewForm({ productId, name }: Props) {
+export default function AddReviewForm({ productId, slug, name }: Props) {
   const router = useRouter();
   const [rating, setRating] = useState<number>(5);
   const [review, setReview] = useState("");
@@ -20,11 +21,11 @@ export default function AddReviewForm({ productId, name }: Props) {
   const [hasExistingReview, setHasExistingReview] = useState(false);
 
   const ratingLabels: Record<number, string> = {
-    1: "Tidak suka",
-    2: "Kurang suka",
-    3: "Biasa saja",
-    4: "Suka!",
-    5: "Suka sekali!",
+    1: "Skip",
+    2: "Kurang",
+    3: "Oke lah",
+    4: "Enak!",
+    5: "Enak banget!",
   };
 
   // Load existing review on mount
@@ -74,7 +75,7 @@ export default function AddReviewForm({ productId, name }: Props) {
       setRating(5);
       setReview("");
 
-      router.push(`/product/${productId}`);
+      router.push(`/product/${slug}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Terjadi kesalahan");
     }

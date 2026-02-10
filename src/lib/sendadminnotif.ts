@@ -10,7 +10,7 @@ export async function sendAdminNotification({
   message: string;
 }) {
   await resend.emails.send({
-    from: "enakga <noreply@enakga.com>",
+    from: "enakga <noreply@notif.enakga.com>",
     to: ["runrvrun@gmail.com"],
     subject,
     html: `<p>${message}</p>`,

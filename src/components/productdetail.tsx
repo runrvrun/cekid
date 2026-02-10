@@ -139,7 +139,7 @@ export default async function ProductDetail({ product }: { product: Product }) {
                     ))}
                 </div>
             </section>
-             <AddReviewForm productId={product.id} name={product.name} />
+             <AddReviewForm productId={product.id} slug={product.slug} name={product.name} />
             
                         {/* Reviews */}
                         <section>
