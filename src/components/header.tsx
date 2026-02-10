@@ -29,6 +29,7 @@ export default function Header() {
         }}
       >
         <span style={{ color: "#16a34a" }}>enak</span>
+        <span style={{ color: "#666666" }}>/</span>
         <span style={{ color: "#f97316" }}>ga</span>
       </Link>
 
