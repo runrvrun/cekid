@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { put } from "@vercel/blob";
 import { auth } from "@/lib/auth";
 import { generateEmbedding } from "@/lib/embeddings";
+import { sendAdminNotification } from "@/lib/sendadminnotif";
 
 export async function createProduct(formData: FormData) {
   try {
@@ -63,6 +64,15 @@ export async function createProduct(formData: FormData) {
         userId: session?.user?.id || null,
       },
     });
+
+    // send email notification to admin
+             await sendAdminNotification({
+              subject: "New product created on enakga",
+              message: `
+                Product: ${name}<br/>
+                Description: ${description}
+              `,
+            });
 
     return {
       success: true,
