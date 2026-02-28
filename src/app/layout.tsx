@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="id">
-            <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID || ""} />
+            <GoogleTagManager gtmId='G-TQBCKVMPSV' />
             <body className="min-h-screen flex flex-col">
                 <Header />
 
