@@ -72,10 +72,8 @@ export default function AddReviewForm({ productId, slug, name }: Props) {
       }
 
       setSuccess(result.message || "Review berhasil ditambahkan.");
-      setRating(5);
-      setReview("");
 
-      router.push(`/product/${slug}`);
+      router.push(`/${slug}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Terjadi kesalahan");
     }
@@ -123,7 +121,7 @@ export default function AddReviewForm({ productId, slug, name }: Props) {
           <textarea
             name="review"
             className="textarea textarea-bordered w-full"
-            placeholder="Apakah kamu suka produk ini? Berikan reviewmu di sini..."
+            placeholder="Bagaimana rasanya? Worth the price? Akan beli lagi?"
             value={review}
             onChange={(e) => setReview(e.target.value)}
             rows={3}

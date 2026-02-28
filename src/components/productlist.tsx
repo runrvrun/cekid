@@ -9,6 +9,7 @@ type Product = {
   slug: string;
   image?: string | null;
   rating?: number | null;
+  reviewCount?: number | null;
 };
 
 export default async function ProductList({ query }: { query?: string }) {
@@ -32,6 +33,7 @@ export default async function ProductList({ query }: { query?: string }) {
     name: p.name ?? "",
     slug: p.slug ?? "",
     image: p.image ?? null,
+    reviewCount: typeof p.reviewCount === "number" ? p.reviewCount : 0,
     rating:
       typeof p.rating === "number"
         ? p.rating
@@ -72,8 +74,9 @@ export default async function ProductList({ query }: { query?: string }) {
             </h3>
 
             <div className="flex items-center gap-1 text-lg shrink-0">
-              {(p.rating ?? 0).toFixed(1)}
               <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+              {(p.rating ?? 0).toFixed(1)}
+              ({p.reviewCount ?? 0})
             </div>
           </div>
 

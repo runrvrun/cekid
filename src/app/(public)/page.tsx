@@ -1,4 +1,5 @@
 export const runtime = "nodejs";
+import Hero from "@/components/hero";
 import SearchProduct from "@/components/searchproduct";
 import ProductList from "@/components/productlist";
 import AddProductLink from "@/components/addproductlink";
@@ -12,6 +13,7 @@ export default async function Home({ searchParams }: HomeProps) {
 
   return (
         <main className="mx-auto px-4 pb-8">
+          <Hero />
           <SearchProduct />
           <AddProductLink query={query} />
           <ProductList query={query} />

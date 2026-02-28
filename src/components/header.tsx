@@ -15,7 +15,7 @@ export default function Header() {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "1rem 2rem",
+        padding: "0rem 2rem",
         borderBottom: "1px solid #eaeaea",
       }}
     >

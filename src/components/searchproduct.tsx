@@ -40,7 +40,7 @@ export default function SearchProduct({
 
     return (
         <form className="mx-auto w-full lg:w-1/2" onSubmit={handleSubmit}>
-            <div className="flex items-center gap-2 rounded-xl overflow-hidden bg-white border-2 border-black/10 focus-within:border-blue-500/50">
+            <div className="flex items-center gap-2 mt-8 rounded-xl overflow-hidden bg-white border-2 border-black/10 focus-within:border-blue-500/50">
                 <div className="flex items-center justify-center pl-4">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -59,8 +59,8 @@ export default function SearchProduct({
                 <input
                     type="text"
                     name="search"
-                    aria-label="Mau beli apa?"
-                    placeholder="Mau beli apa?"
+                    aria-label="Lagi lihat apa? Cari di sini"
+                    placeholder="Lagi lihat apa? Cari di sini"
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                     className="flex-1 px-3 py-3 border-none focus:outline-none focus-ring-0 text-gray-700 placeholder:text-zinc-400"
