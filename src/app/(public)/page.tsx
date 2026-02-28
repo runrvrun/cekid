@@ -16,7 +16,17 @@ export default async function Home({ searchParams }: HomeProps) {
           <Hero />
           <SearchProduct />
           <AddProductLink query={query} />
-          <ProductList query={query} />
+          { !query && (
+            <div className="mt-4 font-bold">
+              Paling Banyak Direview
+            </div>
+          )}
+          { !query && (
+            <ProductList query={query} />
+          )}
+          { query && (
+            <ProductList query={query} />
+          )}
         </main>
   );
 }
