@@ -81,7 +81,8 @@ export default function ProductForm({ mode, initialData }: Props) {
 
   /* ---------------- BARCODE SCANNING ---------------- */
   const DESIRED_CROP_ASPECT_RATIO = 3 / 2;
-  const CROP_SIZE_FACTOR = 0.4;
+  // enlarge the scan window – previously 0.4 (40% of video)
+  const CROP_SIZE_FACTOR = 0.6;
 
   const startScanning = async () => {
     setError(null);
@@ -418,10 +419,11 @@ export default function ProductForm({ mode, initialData }: Props) {
 
         {scanning && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="relative bg-white p-2 rounded">
+            <div className="relative bg-white p-2 rounded max-w-full">
               <video
                 ref={videoRef}
-                className="w-64 h-48 bg-black"
+                // make the preview larger / responsive
+                className="w-[90vw] max-w-md h-auto bg-black"
                 muted
                 playsInline
               />
