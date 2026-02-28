@@ -117,11 +117,12 @@ export default function AddReviewForm({ productId, slug, name }: Props) {
           {ratingLabels[rating] ?? ""}
         </div>
 
+        <span className="block text-sm text-gray-600 mb-2">Bagaimana rasanya? Worth the price? Akan beli lagi?</span>
         <div className="form-control">
           <textarea
             name="review"
             className="textarea textarea-bordered w-full"
-            placeholder="Bagaimana rasanya? Worth the price? Akan beli lagi?"
+            placeholder="Komentar kamu..."
             value={review}
             onChange={(e) => setReview(e.target.value)}
             rows={3}
