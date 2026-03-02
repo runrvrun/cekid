@@ -389,7 +389,7 @@ export default function ProductForm({ mode, initialData }: Props) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Kode UPC</label>
+          <label className="block text-sm font-medium mb-1">Barcode Produk</label>
           <div className="flex gap-2">
             <input
               value={upc}
@@ -402,7 +402,7 @@ export default function ProductForm({ mode, initialData }: Props) {
               onClick={startScanning}
               disabled={scanning}
             >
-              🔍 Scan
+              Scan 𝄃𝄂𝄀𝄁𝄃𝄂𝄂𝄃
             </Button>
           </div>
         </div>
