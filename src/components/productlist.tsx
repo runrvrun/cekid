@@ -64,7 +64,7 @@ if (query && productsFromDb.length === 0) {
     review_count,
     rating_sum,
          (embedding <=> ${queryEmbedding}::vector) AS distance
-  FROM Product
+  FROM "Product"
   WHERE deleted_at IS NULL
   AND embedding IS NOT NULL
   AND embedding <=> ${queryEmbedding}::vector < 0.35
