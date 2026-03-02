@@ -2,10 +2,12 @@ import Link from "next/link";
 import prisma from "@/lib/prisma";
 import Image from "next/image";
 import { Star } from "lucide-react";
+import { Prisma } from "@prisma/client";
 
 type Product = {
   id: bigint;
   name: string;
+  upc?: string | null;
   slug: string;
   image?: string | null;
   rating?: number | null;
@@ -15,12 +17,23 @@ type Product = {
 export default async function ProductList({ query }: { query?: string }) {
   const where = query
     ? {
-      AND: [
-        { deletedAt: null },
-        { name: { contains: query, mode: "insensitive" as const } },
+      deletedAt: null,
+      OR: [
+        {
+          name: {
+            contains: query,
+            mode: Prisma.QueryMode.insensitive,
+          },
+        },
+        {
+          upc: {
+            contains: query,
+            mode: Prisma.QueryMode.insensitive,
+          },
+        },
       ],
     }
-    : { deletedAt: null };
+  : { deletedAt: null };
 
  const productsFromDb = await prisma.product.findMany({
     where,
@@ -31,6 +44,7 @@ export default async function ProductList({ query }: { query?: string }) {
   const products: Product[] = productsFromDb.map((p) => ({
     id: p.id,
     name: p.name ?? "",
+    upc: p.upc ?? null,
     slug: p.slug ?? "",
     image: p.image ?? null,
     reviewCount: typeof p.reviewCount === "number" ? p.reviewCount : 0,
