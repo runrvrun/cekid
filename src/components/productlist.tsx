@@ -6,6 +6,7 @@ import { Prisma } from "@prisma/client";
 import { Product as DbProduct } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { generateQueryEmbedding } from "@/lib/embeddings";
+import { Button } from "./ui/button";
 
 type Product = {
   id: bigint;
@@ -53,6 +54,9 @@ export default async function ProductList({ query }: { query?: string }) {
 
 if (query && productsFromDb.length === 0) {
   isSemanticFallback = true;
+
+  // does not work because no pgvector extension in prisma, need to switch to self-hosted postgres
+  /*
   const queryEmbedding = await generateQueryEmbedding(query);
 
   const similarProducts = await prisma.$queryRaw<DbProduct[]>`
@@ -73,6 +77,7 @@ if (query && productsFromDb.length === 0) {
 `;
 
   finalProducts = similarProducts;
+  */
 }
 
   const products: Product[] = finalProducts.map((p) => ({
@@ -93,8 +98,8 @@ if (query && productsFromDb.length === 0) {
   return (
     <span>
     {isSemanticFallback && (
-      <p className="col-span-full text-sm text-gray-500">
-        Pencarian tidak ditemukan, apakah yang kamu maksud ada di bawah ini?
+      <p className="col-span-full text-sm text-gray-500 text-center">
+        Pencarian tidak ditemukan, coba gunakan kata kunci lain atau buat produk baru jika belum terdaftar.
         </p>
     )}
     <div className="mt-8 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6">

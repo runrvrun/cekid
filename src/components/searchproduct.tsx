@@ -265,7 +265,7 @@ export default function SearchProduct({
           onClick={startScanning}
           disabled={scanning}
         >
-          🔍 Scan Barcode
+          𝄃𝄂𝄀𝄁𝄃𝄂𝄂𝄃 Scan Barcode 𝄃𝄂𝄀𝄁𝄃𝄂𝄂𝄃
         </Button>
       </div>
         {error && <p className="text-red-500 text-sm">{error}</p>}
