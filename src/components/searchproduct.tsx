@@ -260,6 +260,27 @@ export default function SearchProduct({
         </Button>
       </div>
         {error && <p className="text-red-500 text-sm">{error}</p>}
+        {scanning && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="relative bg-white p-2 rounded max-w-full">
+              <video
+                ref={videoRef}
+                // make the preview larger / responsive
+                className="w-[90vw] max-w-md h-auto bg-black"
+                muted
+                playsInline
+              />
+              <div ref={cropOverlayRef}></div>
+              <canvas ref={displayCroppedCanvasRef} className="hidden" />
+              <button
+                className="absolute top-1 right-1 text-red-500"
+                onClick={stopScanning}
+              >
+                ✖
+              </button>
+            </div>
+          </div>
+        )}
     </form>
   );
 }
