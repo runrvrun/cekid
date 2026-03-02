@@ -3,7 +3,9 @@ import prisma from "@/lib/prisma";
 import Image from "next/image";
 import { Star } from "lucide-react";
 import { Prisma } from "@prisma/client";
+import { Product as DbProduct } from "@prisma/client";
 import { redirect } from "next/navigation";
+import { generateQueryEmbedding } from "@/lib/embeddings";
 
 type Product = {
   id: bigint;
@@ -46,7 +48,34 @@ export default async function ProductList({ query }: { query?: string }) {
     redirect(`/${productsFromDb[0].slug}`);
   }
 
-  const products: Product[] = productsFromDb.map((p) => ({
+  let finalProducts = productsFromDb;
+  let isSemanticFallback = false;
+
+if (query && productsFromDb.length === 0) {
+  isSemanticFallback = true;
+  const queryEmbedding = await generateQueryEmbedding(query);
+
+  const similarProducts = await prisma.$queryRaw<DbProduct[]>`
+  SELECT id,
+    name,
+    slug,
+    upc,
+    image,
+    review_count,
+    rating_sum,
+         (embedding <=> ${queryEmbedding}::vector) AS distance
+  FROM product
+  WHERE deleted_at IS NULL
+  AND embedding IS NOT NULL
+  AND embedding <=> ${queryEmbedding}::vector < 0.35
+  ORDER BY embedding <=> ${queryEmbedding}::vector
+  LIMIT 8
+`;
+
+  finalProducts = similarProducts;
+}
+
+  const products: Product[] = finalProducts.map((p) => ({
     id: p.id,
     name: p.name ?? "",
     upc: p.upc ?? null,
@@ -62,6 +91,12 @@ export default async function ProductList({ query }: { query?: string }) {
   }));
 
   return (
+    <span>
+    {isSemanticFallback && (
+      <p className="col-span-full text-sm text-gray-500">
+        Pencarian tidak ditemukan, apakah yang kamu maksud ada di bawah ini?
+        </p>
+    )}
     <div className="mt-8 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6">
       {products.map((p) => (
         <Link
@@ -102,5 +137,6 @@ export default async function ProductList({ query }: { query?: string }) {
         </Link>
       ))}
     </div>
+    </span>
   );
 }
