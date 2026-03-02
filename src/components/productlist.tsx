@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import Image from "next/image";
 import { Star } from "lucide-react";
 import { Prisma } from "@prisma/client";
+import { redirect } from "next/navigation";
 
 type Product = {
   id: bigint;
@@ -40,6 +41,10 @@ export default async function ProductList({ query }: { query?: string }) {
     take: 20,
     orderBy: { reviewCount: "desc" },
   });
+
+  if (productsFromDb.length === 1) {
+    redirect(`/${productsFromDb[0].slug}`);
+  }
 
   const products: Product[] = productsFromDb.map((p) => ({
     id: p.id,
