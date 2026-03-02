@@ -61,8 +61,8 @@ if (query && productsFromDb.length === 0) {
     slug,
     upc,
     image,
-    review_count,
-    rating_sum,
+    "reviewCount",
+    "ratingSum",
          (embedding <=> ${queryEmbedding}::vector) AS distance
   FROM "Product"
   WHERE deleted_at IS NULL
