@@ -19,6 +19,7 @@ export default function SearchProduct({
   const pathname = usePathname();
   const [value, setValue] = useState(initial);
     const [error, setError] = useState<string | null>(null);
+    const formRef = useRef<HTMLFormElement>(null);
 
     // barcode scanning state
     const [scanning, setScanning] = useState(false);
@@ -158,19 +159,16 @@ export default function SearchProduct({
               displayCanvas
             );
             if (result && result.getText()) {
+              const scanned = result.getText();
               setValue(result.getText());
               stopScanning();
-                // submit the form after a successful scan
-                const formData = new FormData();
-                formData.set("search", result.getText());
-                const fakeEvent = {
-                  currentTarget: {
-                    elements: {
-                      search: { value: result.getText() },
-                    },
-                  },
-                  preventDefault: () => {},
-                } as unknown as React.FormEvent<HTMLFormElement>;
+
+              // submit using scanned value directly
+            const params = new URLSearchParams();
+            params.set("q", scanned);
+
+            router.replace(`${pathname}?${params.toString()}`);
+            onSearch?.({ query: scanned });
             }
           } catch (err: unknown) {
             if (err instanceof Error && err.name !== "NotFoundException") {
@@ -227,7 +225,7 @@ export default function SearchProduct({
   };
 
   return (
-    <form name="searchform" className="mx-auto w-full lg:w-1/2" onSubmit={handleSubmit}>
+    <form name="searchform" ref={formRef} className="mx-auto w-full lg:w-1/2" onSubmit={handleSubmit}>
       <div className="flex items-center gap-2 mt-8 rounded-xl overflow-hidden bg-white border-2 border-black/10 focus-within:border-blue-500/50">
         <div className="flex items-center justify-center pl-4">
           <svg
