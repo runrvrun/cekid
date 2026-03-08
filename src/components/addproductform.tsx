@@ -103,9 +103,8 @@ export default function ProductForm({ mode, initialData }: Props) {
 
     const data = await res.json();
 
-    if (data?.name && !name) {
-      setName(data.name);
-    }
+    if (data?.name && !name) setName(data.name);
+    if (data?.description  && !description) setDescription(data.description);
   } catch (err) {
     console.error("AI detection failed:", err);
   } finally {
@@ -451,6 +450,7 @@ export default function ProductForm({ mode, initialData }: Props) {
         <div>
           <label className="block text-sm font-medium mb-1">Deskripsi</label>
           <textarea
+            name="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="textarea textarea-bordered w-full"

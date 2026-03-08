@@ -26,13 +26,21 @@ export async function POST(req: Request) {
             {
               type: "input_text",
               text: `Look at this product packaging image.
-Return the full product name in this format:
-Brand + Product Name + Variant
+
+              Return JSON with:
+- name: Brand + Product Name + Variant
+- description: a short 1–3 sentence product description in Indonesian.
+
+Rules:
+- Use the brand visible on the package
+- Keep description under 300 characters
+- Do not invent ingredients not visible on packaging
 
 Example:
-Indomie Mi Goreng Rendang
-Indomie Mi Goreng Rasa Ayam Panggang Jumbo
-Indomie Hype Abis Mi Nyemek Banglahdes'e
+{
+"name": "Indomie Mi Goreng Rendang",
+"description": "Indomie Goreng Rendang adalah varian mi instan goreng premium yang menghadirkan cita rasa autentik bumbu rendang khas Padang dengan aroma rempah kuat dan gurih. Produk ini populer karena tekstur mi kenyal, tersedia dalam ukuran reguler (91g) dan jumbo, serta dilengkapi taburan bumbu rendang, menjadikannya salah satu varian favorit."
+}
 
 Common Indonesian brands include:
 Indomie, Mie Sedaap, ABC, Ultra Milk, Teh Botol Sosro, Pocari Sweat, Aqua, Le Minerale, Good Day, Kapal Api, Roma, SilverQueen, Tango, Chitato, Qtela, Terea, Lays, Pringles, Cheetos, Doritos, KitKat, Oreo, Lotte, Glico, Marimas, Energen, Bear Brand, Frisian Flag, Indomilk, Greenfields, Cimory.
@@ -51,8 +59,12 @@ Return ONLY the name.`,
       ],
     });
 
+    const text = response.output_text?.trim() || "";
+    const parsed = JSON.parse(text);
+
     return Response.json({
-      name: response.output_text?.trim(),
+    name: parsed.name,
+    description: parsed.description
     });
   } catch (error) {
     console.error(error);
