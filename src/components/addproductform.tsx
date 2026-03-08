@@ -53,19 +53,25 @@ export default function ProductForm({ mode, initialData }: Props) {
   const intervalRef = useRef<number | null>(null);
   const codeReader = useRef<BrowserMultiFormatReader | null>(null);
 
+  // detect product with AI state
+  const [detectingName, setDetectingName] = useState(false);
+
   /* ---------------- IMAGE HANDLING ---------------- */
 
   const handleFile = (f: File | null) => {
-    if (!f) return;
+  if (!f) return;
 
-    if (!f.type.startsWith("image/")) {
-      setError("File harus berupa gambar.");
-      return;
-    }
+  if (!f.type.startsWith("image/")) {
+    setError("File harus berupa gambar.");
+    return;
+  }
 
-    setFile(f);
-    setPreview(URL.createObjectURL(f));
-  };
+  setFile(f);
+  setPreview(URL.createObjectURL(f));
+
+  // run AI detection
+  detectProductName(f);
+};
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleFile(e.target.files?.[0] ?? null);
@@ -76,6 +82,36 @@ export default function ProductForm({ mode, initialData }: Props) {
     setDragActive(false);
     handleFile(e.dataTransfer.files?.[0] ?? null);
   };
+
+  const detectProductName = async (imageFile: File) => {
+  try {
+    setDetectingName(true);
+
+    const compressed = await imageCompression(imageFile, {
+      maxSizeMB: 0.5,
+      maxWidthOrHeight: 800,
+      useWebWorker: true,
+    });
+
+    const formData = new FormData();
+    formData.append("image", compressed);
+
+    const res = await fetch("/api/product-detect", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+
+    if (data?.name && !name) {
+      setName(data.name);
+    }
+  } catch (err) {
+    console.error("AI detection failed:", err);
+  } finally {
+    setDetectingName(false);
+  }
+};
 
   /* ---------------- SUBMIT ---------------- */
 
@@ -354,6 +390,11 @@ export default function ProductForm({ mode, initialData }: Props) {
                 </div>
               </div>
             )}
+            {detectingName && (
+            <p className="text-xs text-base-content/60 mt-2">
+              🔎 Mendeteksi nama produk...
+            </p>
+          )}
           </div>
 
           {/* Hidden inputs */}

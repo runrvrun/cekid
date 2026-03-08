@@ -1,3 +1,4 @@
+export const runtime = "nodejs";
 import OpenAI from "openai";
 
 const client = new OpenAI({
@@ -6,11 +7,15 @@ const client = new OpenAI({
 
 export async function POST(req: Request) {
   try {
-    const { imageUrl } = await req.json();
+    const formData = await req.formData();
+    const file = formData.get("image") as File;
 
-    if (!imageUrl) {
-      return Response.json({ error: "Missing imageUrl" }, { status: 400 });
+    if (!file) {
+      return Response.json({ error: "No image provided" }, { status: 400 });
     }
+
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const base64 = buffer.toString("base64");
 
     const response = await client.responses.create({
       model: "gpt-4.1-mini",
@@ -20,41 +25,37 @@ export async function POST(req: Request) {
           content: [
             {
               type: "input_text",
-              text: `
-Look at this product packaging image.
-
+              text: `Look at this product packaging image.
 Return the full product name in this format:
 Brand + Product Name + Variant
 
-Examples:
-Indomie Mi Goreng
-Indome Mi Goreng Rasa Ayam Panggang Jumbo
-Indomie Hype Abis Mie Nyemek Ala Banglahdes'e Rasa Kari
-Coca Cola Zero Sugar
-Oreo Chocolate Cream
+Example:
+Indomie Mi Goreng Rendang
+Indomie Mi Goreng Rasa Ayam Panggang Jumbo
+Indomie Hype Abis Mi Nyemek Banglahdes'e
 
-Rules:
-- Use the brand printed on the package
-- Include variant if visible
-- Return ONLY the product name
-`,
+Common Indonesian brands include:
+Indomie, Mie Sedaap, ABC, Ultra Milk, Teh Botol Sosro, Pocari Sweat, Aqua, Le Minerale, Good Day, Kapal Api, Roma, SilverQueen, Tango, Chitato, Qtela, Terea, Lays, Pringles, Cheetos, Doritos, KitKat, Oreo, Lotte, Glico, Marimas, Energen, Bear Brand, Frisian Flag, Indomilk, Greenfields, Cimory.
+
+If a brand from this list appears on the packaging, use it.
+
+Return ONLY the name.`,
             },
             {
               type: "input_image",
-              image_url: imageUrl,
-              detail: "auto",   // REQUIRED by SDK
+              image_url: `data:${file.type};base64,${base64}`,
+              detail: "low",
             },
           ],
         },
       ],
     });
 
-    const name = response.output_text?.trim();
-
-    return Response.json({ name });
-
-  } catch (err) {
-    console.error("product-detect error", err);
+    return Response.json({
+      name: response.output_text?.trim(),
+    });
+  } catch (error) {
+    console.error(error);
     return Response.json({ error: "Detection failed" }, { status: 500 });
   }
 }

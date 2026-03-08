@@ -46,32 +46,6 @@ export async function createProduct(formData: FormData) {
       }
     }
 
-    // ---------- AI product detection ----------
-    if (!name?.trim() && imageUrl) {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/product-detect`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ imageUrl }),
-          }
-        );
-
-        const data = await res.json();
-
-        if (data?.name) {
-          name = data.name;
-        }
-      } catch (aiErr) {
-        console.error("AI detection failed:", aiErr);
-      }
-    }
-
-    if (!name?.trim()) {
-      return { success: false, error: "Nama Barang wajib diisi." };
-    }
-
     // Generate embedding for the product
      const embedding = await generateEmbedding(
     name,
