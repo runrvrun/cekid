@@ -14,7 +14,11 @@ const adapter = PrismaAdapter(prisma);
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter,
   providers: [
-    Google,
+  Google({
+    clientId: process.env.AUTH_GOOGLE_ID!,
+    clientSecret: process.env.AUTH_GOOGLE_SECRET!,
+    allowDangerousEmailAccountLinking: true,
+  }),
     Credentials({
       credentials: {
         email: {},
@@ -31,13 +35,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         });
 
         if (!user) {
-          //throw new Error("Invalid credentials.");
+          return null;
         }
 
         return user;
       },
     }),
   ],
+  pages: {
+    signIn: "/signin",
+  },
   callbacks: {
     async jwt({ token, account }) {
       if (account?.provider === "credentials") {

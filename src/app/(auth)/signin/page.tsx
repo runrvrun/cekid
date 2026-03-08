@@ -1,42 +1,48 @@
 import { auth } from "@/lib/auth";
-
 import { signIn } from "@/lib/auth";
 import { GoogleSignIn } from "@/components/google-signin";
-import { GithubSignIn } from "@/components/github-signin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { executeAction } from "@/lib/executeAction";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import Image from "next/image";
 
-const Page = async () => {
+const Page = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) => {
+  const params = await searchParams;
+  const error = params?.error;
+
   const session = await auth();
   if (session) redirect("/");
 
   return (
     <div className="text-center max-w-sm mx-auto w-full p-10 border rounded-lg shadow">
-    <Link
+      <Link
         href="/"
         style={{
           fontFamily: "'Plus Jakarta Sans', sans-serif",
           fontWeight: 700,
           fontSize: "1.5rem",
           textDecoration: "none",
-            display: "inline-block",
+          display: "inline-block",
         }}
       >
         <span style={{ color: "#16a34a" }}>enak</span>
+        <span style={{ color: "#666666" }}>/</span>
         <span style={{ color: "#f97316" }}>ga</span>
       </Link>
-       <p className="text-sm text-muted-foreground mb-4">
-          Beli atau skip?
-        </p>
 
-      {/*<GoogleSignIn />*/}
-      {/*<GithubSignIn />*/}
+      {error && (
+        <div className="mt-4 mb-4 p-3 text-sm text-red-700 bg-red-100 border border-red-200 rounded">
+          {error === "OAuthAccountNotLinked"
+            ? "Email ini sudah terdaftar menggunakan metode login lain. Silakan login menggunakan email & password untuk menghubungkan akun."
+            : "Terjadi kesalahan saat login. Silakan coba lagi."}
+        </div>
+      )}
 
-      {/* Email/Password Sign In */}
       <form
         className="space-y-4"
         action={async (formData) => {
@@ -72,6 +78,8 @@ const Page = async () => {
           <Link href="/signup">Belum punya akun? Daftar</Link>
         </Button>
       </div>
+
+      <GoogleSignIn />
     </div>
   );
 };

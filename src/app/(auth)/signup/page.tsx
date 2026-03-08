@@ -24,13 +24,11 @@ const Page = async () => {
         }}
       >
         <span style={{ color: "#16a34a" }}>enak</span>
+        <span style={{ color: "#666666" }}>/</span>
         <span style={{ color: "#f97316" }}>ga</span>
       </Link>
-       <p className="text-sm text-muted-foreground mb-4">
-          Beli atau skip?
-        </p>
 
-      {/*<GoogleSignIn />*/}
+      {<GoogleSignIn />}
 
       {/* Email/Password Sign Up */}
       <form
