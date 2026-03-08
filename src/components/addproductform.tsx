@@ -417,18 +417,6 @@ export default function ProductForm({ mode, initialData }: Props) {
 
         {/* FORM FIELDS */}
         <div>
-          <label className="block text-sm font-medium mb-1">
-            Nama Barang *
-          </label>
-          <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="input input-bordered w-full"
-            required
-          />
-        </div>
-
-        <div>
           <label className="block text-sm font-medium mb-1">Barcode Produk</label>
           <div className="flex gap-2">
             <input
@@ -445,6 +433,18 @@ export default function ProductForm({ mode, initialData }: Props) {
               Scan 𝄃𝄂𝄀𝄁𝄃𝄂𝄂𝄃
             </Button>
           </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">
+            Nama Barang *
+          </label>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="input input-bordered w-full"
+            required
+          />
         </div>
 
         <div>

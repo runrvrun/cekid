@@ -33,21 +33,22 @@ export async function POST(req: Request) {
 
 Rules:
 - Use the brand visible on the package
-- Keep description under 300 characters
+- Keep description under 350 characters
 - Do not invent ingredients not visible on packaging
 
 Example:
 {
 "name": "Indomie Mi Goreng Rendang",
-"description": "Indomie Goreng Rendang adalah varian mi instan goreng premium yang menghadirkan cita rasa autentik bumbu rendang khas Padang dengan aroma rempah kuat dan gurih. Produk ini populer karena tekstur mi kenyal, tersedia dalam ukuran reguler (91g) dan jumbo, serta dilengkapi taburan bumbu rendang, menjadikannya salah satu varian favorit."
+"description": "Indomie Goreng Rendang adalah varian mi instan goreng premium yang menghadirkan cita rasa autentik bumbu rendang khas Padang dengan aroma rempah kuat dan gurih. Produk ini populer karena tekstur mi kenyal, serta dilengkapi taburan bumbu rendang, menjadikannya salah satu varian favorit."
 }
 
 Common Indonesian brands include:
 Indomie, Mie Sedaap, ABC, Ultra Milk, Teh Botol Sosro, Pocari Sweat, Aqua, Le Minerale, Good Day, Kapal Api, Roma, SilverQueen, Tango, Chitato, Qtela, Terea, Lays, Pringles, Cheetos, Doritos, KitKat, Oreo, Lotte, Glico, Marimas, Energen, Bear Brand, Frisian Flag, Indomilk, Greenfields, Cimory.
 
-If a brand from this list appears on the packaging, use it.
+If a brand from this list appears on the packaging, use it. If not, use the most visible brand on the packaging.
 
-Return ONLY the name.`,
+Return ONLY valid JSON.
+Do not include explanations or extra text.`,
             },
             {
               type: "input_image",
@@ -60,7 +61,15 @@ Return ONLY the name.`,
     });
 
     const text = response.output_text?.trim() || "";
-    const parsed = JSON.parse(text);
+
+    let parsed = { name: "", description: "" };
+
+    try {
+    const clean = text.replace(/```json|```/g, "").trim();
+    parsed = JSON.parse(clean);
+    } catch (e) {
+    console.error("JSON parse failed:", text);
+    }
 
     return Response.json({
     name: parsed.name,
