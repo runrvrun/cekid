@@ -7,7 +7,7 @@ import { sendAdminNotification } from "@/lib/sendadminnotif";
 
 export async function createProduct(formData: FormData) {
   try {
-    const name = formData.get("name") as string;
+    let name = formData.get("name") as string;
     const slug = formData.get("slug") as string;
     const upc = formData.get("upc") as string;
     const description = formData.get("description") as string;
@@ -44,6 +44,32 @@ export async function createProduct(formData: FormData) {
           error: "Gagal mengunggah gambar",
         };
       }
+    }
+
+    // ---------- AI product detection ----------
+    if (!name?.trim() && imageUrl) {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/product-detect`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ imageUrl }),
+          }
+        );
+
+        const data = await res.json();
+
+        if (data?.name) {
+          name = data.name;
+        }
+      } catch (aiErr) {
+        console.error("AI detection failed:", aiErr);
+      }
+    }
+
+    if (!name?.trim()) {
+      return { success: false, error: "Nama Barang wajib diisi." };
     }
 
     // Generate embedding for the product
