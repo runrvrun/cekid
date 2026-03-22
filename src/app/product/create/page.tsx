@@ -7,10 +7,11 @@ const Page = async () => {
   const session = await auth();
   if (!session) redirect("/signin");
 
-  const categories = await prisma.category.findMany({
+  const rawCategories = await prisma.category.findMany({
     orderBy: { name: "asc" },
     select: { id: true, name: true },
   });
+  const categories = rawCategories.map((c) => ({ id: String(c.id), name: c.name }));
 
   return (
     <main className="min-h-screen bg-base-100 flex items-start justify-center p-8">

@@ -22,7 +22,7 @@ type NewImage = {
 };
 
 type Category = {
-  id: bigint;
+  id: string;
   name: string;
 };
 
@@ -33,7 +33,7 @@ type Product = {
   upc?: string | null;
   description?: string | null;
   images?: ExistingImage[];
-  categoryIds?: bigint[];
+  categoryIds?: string[];
 };
 
 type Props = {
@@ -69,7 +69,7 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
     return null;
   });
 
-  const [selectedCategoryIds, setSelectedCategoryIds] = useState<bigint[]>(
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>(
     initialData?.categoryIds ?? []
   );
   const [categorySearch, setCategorySearch] = useState("");
@@ -86,13 +86,13 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const addCategory = (id: bigint) => {
+  const addCategory = (id: string) => {
     setSelectedCategoryIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
     setCategorySearch("");
     setCategoryDropdownOpen(false);
   };
 
-  const removeCategory = (id: bigint) => {
+  const removeCategory = (id: string) => {
     setSelectedCategoryIds((prev) => prev.filter((c) => c !== id));
   };
 

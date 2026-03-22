@@ -88,7 +88,7 @@ export async function createProduct(formData: FormData) {
       message: `Product: ${name}<br/>Description: ${description}`,
     });
 
-    return { success: true, data: product, message: "Produk berhasil ditambahkan" };
+    return { success: true, data: { slug: product.slug }, message: "Produk berhasil ditambahkan" };
   } catch (err) {
     console.error("createProduct error:", err);
     return {

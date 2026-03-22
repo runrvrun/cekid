@@ -129,7 +129,7 @@ export async function updateProduct(id: BigInt, formData: FormData) {
       });
     });
 
-    return { success: true, data: product, message: "Produk berhasil diubah" };
+    return { success: true, data: { slug: product.slug }, message: "Produk berhasil diubah" };
   } catch (err) {
     console.error("updateProduct error:", err);
     return {

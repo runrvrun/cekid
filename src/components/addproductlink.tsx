@@ -1,14 +1,15 @@
 import Link from "next/link";
-import { Button } from "./ui/button";
 
-export default function AddProductLink({ query }: { query?: string }) {
+export default function AddProductLink() {
   return (
-    <div className="text-center mt-4 text-sm text-gray-500">
-      <Button asChild variant="outline" size="sm">
-        <Link href={`/product/create`}>
-        ➕ Buat produk baru ➕
-        </Link>
-      </Button>
-    </div>
+    <p className="mt-3 text-xs text-white/60">
+      Produk tidak ditemukan?{" "}
+      <Link
+        href="/product/create"
+        className="text-white underline underline-offset-2 hover:text-white/80 transition-colors"
+      >
+        Tambah produk baru
+      </Link>
+    </p>
   );
 }

@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { BrowserMultiFormatReader } from "@zxing/browser";
 import { Result } from "@zxing/library";
 import { useRouter, usePathname } from "next/navigation";
-import { Button } from "./ui/button";
 
 type SearchPayload = { query: string };
 
@@ -225,50 +224,56 @@ export default function SearchProduct({
   };
 
   return (
-    <form name="searchform" ref={formRef} className="mx-auto w-full lg:w-1/2" onSubmit={handleSubmit}>
-      <div className="flex items-center gap-2 mt-8 rounded-xl overflow-hidden bg-white border-2 border-black/10 focus-within:border-blue-500/50">
-        <div className="flex items-center justify-center pl-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-gray-400"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
+    <form name="searchform" ref={formRef} onSubmit={handleSubmit}>
+      <div className="flex items-center rounded-2xl overflow-hidden bg-white shadow-xl">
+        {/* Search icon */}
+        <div className="pl-4 shrink-0 text-gray-400">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
         </div>
+
+        {/* Text input */}
         <input
           type="text"
           name="search"
-          aria-label="Lagi lihat apa? Cari di sini"
-          placeholder="Lagi lihat apa? Cari di sini"
+          aria-label="Cari produk"
+          placeholder="Cari produk di minimarket..."
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          className="flex-1 px-3 py-3 border-none focus:outline-none focus-ring-0 text-gray-700 placeholder:text-zinc-400"
+          className="flex-1 px-3 py-3.5 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none"
         />
+
+        {/* Scan barcode icon button */}
+        <button
+          type="button"
+          onClick={startScanning}
+          disabled={scanning}
+          title="Scan barcode"
+          className="px-4 py-3.5 text-gray-400 hover:text-gray-600 transition-colors shrink-0 border-l border-gray-100 disabled:opacity-40"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-5" fill="currentColor" viewBox="0 0 20 14">
+            <rect x="0"  y="0" width="1.5" height="14" />
+            <rect x="3"  y="0" width="1"   height="14" />
+            <rect x="5.5" y="0" width="2"  height="14" />
+            <rect x="9"  y="0" width="1"   height="14" />
+            <rect x="11.5" y="0" width="1.5" height="14" />
+            <rect x="14.5" y="0" width="1"   height="14" />
+            <rect x="17" y="0" width="1.5" height="14" />
+            <rect x="19.5" y="0" width="0.5" height="14" />
+          </svg>
+        </button>
+
+        {/* Submit button */}
         <button
           type="submit"
-          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-3 font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 hover:shadow-inner m-1 rounded-lg"
+          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-5 py-3.5 text-sm font-semibold shrink-0 hover:opacity-90 transition-opacity"
         >
           Cari
         </button>
       </div>
-      <div className="flex justify-center mt-4">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={startScanning}
-          disabled={scanning}
-        >
-          𝄃𝄂𝄀𝄁𝄃𝄂𝄂𝄃 Scan Barcode 𝄃𝄂𝄀𝄁𝄃𝄂𝄂𝄃
-        </Button>
-      </div>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+      {error && <p className="text-white/80 text-xs mt-2">{error}</p>}
         {scanning && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="relative bg-white p-2 rounded max-w-full">

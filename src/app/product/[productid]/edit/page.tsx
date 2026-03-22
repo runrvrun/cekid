@@ -12,7 +12,7 @@ const Page = async ({ params }: { params: { productid: bigint } }) => {
   const role = session.user?.role;
   if (role !== "ADMIN" && role !== "MODERATOR") redirect("/");
 
-  const [product, categories] = await Promise.all([
+  const [product, rawCategories] = await Promise.all([
     prisma.product.findUnique({
       select: {
         id: true,
@@ -38,6 +38,8 @@ const Page = async ({ params }: { params: { productid: bigint } }) => {
 
   if (!product) redirect("/");
 
+  const categories = rawCategories.map((c) => ({ id: String(c.id), name: c.name }));
+
   const productForForm = {
     id: product.id,
     name: product.name,
@@ -45,7 +47,7 @@ const Page = async ({ params }: { params: { productid: bigint } }) => {
     description: product.description,
     upc: product.upc,
     images: product.productImages,
-    categoryIds: product.productCategory.map((pc) => pc.categoryId),
+    categoryIds: product.productCategory.map((pc) => String(pc.categoryId)),
   };
 
   return (
