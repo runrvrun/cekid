@@ -133,7 +133,11 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
     if (!mainImageKey && existingImages.length === 0) {
       setMainImageKey(`new:${newIndex}`);
     }
-    if (!name) detectProductName(f);
+    const shouldDetect =
+      mode === "create"
+        ? !name
+        : !description || selectedCategoryIds.length === 0;
+    if (shouldDetect) detectProductName(f);
   };
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -200,15 +204,34 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
         maxWidthOrHeight: 800,
         useWebWorker: true,
       });
-      const formData = new FormData();
-      formData.append("image", compressed);
+      const fd = new FormData();
+      fd.append("image", compressed);
+      if (categories.length > 0) {
+        fd.append("categoryNames", categories.map((c) => c.name).join(","));
+      }
       const res = await fetch("/api/product-detect", {
         method: "POST",
-        body: formData,
+        body: fd,
       });
       const data = await res.json();
       if (data?.name && !name) setName(data.name);
       if (data?.description && !description) setDescription(data.description);
+      if (data?.categories?.length) {
+        const matched = (data.categories as string[])
+          .map((suggested: string) =>
+            categories.find(
+              (c) => c.name.toLowerCase() === suggested.toLowerCase()
+            )
+          )
+          .filter((c): c is Category => c !== undefined)
+          .map((c) => c.id);
+        if (matched.length > 0) {
+          setSelectedCategoryIds((prev) => [
+            ...prev,
+            ...matched.filter((id) => !prev.includes(id)),
+          ]);
+        }
+      }
     } catch (err) {
       console.error("AI detection failed:", err);
     } finally {
@@ -410,9 +433,9 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
     overlayDiv.style.pointerEvents = "none";
     overlayDiv.style.boxSizing = "border-box";
 
-    const decodeCanvas = async () => {
+    const decodeCanvas = () => {
       try {
-        const result: Result = await codeReader.current!.decodeFromCanvas(
+        const result: Result = codeReader.current!.decodeFromCanvas(
           displayCanvas
         );
         if (result && result.getText()) {
