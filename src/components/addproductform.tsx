@@ -200,7 +200,7 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
     try {
       setDetectingName(true);
       const compressed = await imageCompression(imageFile, {
-        maxSizeMB: 0.5,
+        maxSizeMB: 0.25,
         maxWidthOrHeight: 800,
         useWebWorker: true,
       });
@@ -267,11 +267,21 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
       const compressedNewImages: File[] = [];
       for (const img of newImages) {
         const compressed = await imageCompression(img.file, {
-          maxSizeMB: 0.8,
+          maxSizeMB: 0.25,
           maxWidthOrHeight: 800,
           useWebWorker: true,
         });
         compressedNewImages.push(compressed);
+      }
+
+      // Pre-flight: catch oversized payloads before hitting the server limit
+      const totalBytes = compressedNewImages.reduce((sum, f) => sum + f.size, 0);
+      if (totalBytes > 7 * 1024 * 1024) {
+        setError(
+          `Ukuran gambar terlalu besar (${(totalBytes / 1024 / 1024).toFixed(1)} MB). Kurangi jumlah atau resolusi gambar.`
+        );
+        setLoading(false);
+        return;
       }
 
       if (mode === "create") {

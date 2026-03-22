@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { PrismaClient } from "../src/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { generateEmbedding } from "../src/lib/embeddings";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
@@ -150,9 +151,9 @@ const PRODUCTS: {
   { name: "Ultra Milk UHT 1L Full Cream", upc: null, categories: ["Minuman Susu RTD"] },
   { name: "Indomilk UHT Full Cream 250ml", upc: null, categories: ["Minuman Susu RTD"] },
   { name: "Indomilk UHT Cokelat 250ml", upc: null, categories: ["Minuman Susu RTD"] },
-  { name: "Bear Brand Susu Steril 140ml", upc: "8850756140013", categories: ["Minuman Susu RTD"] },
+  { name: "Bear Brand Susu Steril 140ml", upc: null, categories: ["Minuman Susu RTD"] },
   { name: "Milo 250ml RTD", upc: null, categories: ["Minuman Susu RTD"] },
-  { name: "Yakult Original 65ml", upc: "4909158100040", categories: ["Minuman Susu RTD"] },
+  { name: "Yakult Original 65ml", upc: null, categories: ["Minuman Susu RTD"] },
   { name: "Cimory Yogurt Drink Strawberry 250ml", upc: null, categories: ["Minuman Susu RTD"] },
   { name: "Cimory Yogurt Drink Blueberry 250ml", upc: null, categories: ["Minuman Susu RTD"] },
   { name: "Cimory Squeeze Yogurt Mango", upc: null, categories: ["Minuman Susu RTD"] },
@@ -243,7 +244,7 @@ const PRODUCTS: {
   { name: "Kacang Garuda Salted 100g", upc: null, categories: ["Snack Puff & Balls"] },
   { name: "Kacang Garuda Pedas 100g", upc: null, categories: ["Snack Puff & Balls"] },
   { name: "Kacang Disco 100g", upc: null, categories: ["Snack Puff & Balls"] },
-  { name: "Snickers Bar 50g", upc: "4011100106303", categories: ["Snack Puff & Balls"] },
+  { name: "Snickers Bar 50g", upc: null, categories: ["Snack Puff & Balls"] },
   { name: "Beng-Beng Share It! 58g", upc: null, categories: ["Snack Puff & Balls"] },
   { name: "Beng-Beng Maxx 38g", upc: null, categories: ["Snack Puff & Balls"] },
   { name: "Happy Tos Tortilla Original 40g", upc: null, categories: ["Snack Puff & Balls"] },
@@ -287,7 +288,7 @@ const PRODUCTS: {
   { name: "M&M's Peanut 80g", upc: null, categories: ["Cokelat & Permen"] },
   { name: "Mars Bar 51g", upc: null, categories: ["Cokelat & Permen"] },
   { name: "Twix Twin 50g", upc: null, categories: ["Cokelat & Permen"] },
-  { name: "Kopiko Coffee Candy 150g", upc: "8999999003542", categories: ["Cokelat & Permen"] },
+  { name: "Kopiko Coffee Candy 150g", upc: null, categories: ["Cokelat & Permen"] },
   { name: "Kopiko Brown Coffee Candy 150g", upc: null, categories: ["Cokelat & Permen"] },
   { name: "Mentos Mint Roll 38g", upc: null, categories: ["Cokelat & Permen"] },
   { name: "Mentos Fruit Roll 38g", upc: null, categories: ["Cokelat & Permen"] },
@@ -421,12 +422,15 @@ async function main() {
       continue;
     }
 
+    const embedding = await generateEmbedding(p.name, "");
+
     await prisma.product.create({
       data: {
         name: p.name,
         slug,
         upc: p.upc ?? undefined,
         status: "ACTIVE",
+        embedding,
         productCategory: {
           create: p.categories
             .map((c) => categoryMap.get(c))
@@ -437,6 +441,7 @@ async function main() {
     });
 
     created++;
+    if (created % 10 === 0) console.log(`   ... ${created} created`);
   }
 
   console.log(`   ✓ ${created} products created, ${skipped} skipped (already exist)`);
