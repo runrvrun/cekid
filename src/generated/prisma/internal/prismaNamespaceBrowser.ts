@@ -57,6 +57,7 @@ export const ModelName = {
   ProductImage: 'ProductImage',
   Review: 'Review',
   User: 'User',
+  Report: 'Report',
   Account: 'Account',
   Session: 'Session',
   verificationTokens: 'verificationTokens'
@@ -152,6 +153,22 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const ReportScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  reason: 'reason',
+  productId: 'productId',
+  reviewId: 'reviewId',
+  reportedBy: 'reportedBy',
+  status: 'status',
+  createdAt: 'createdAt',
+  resolvedAt: 'resolvedAt',
+  resolvedBy: 'resolvedBy'
+} as const
+
+export type ReportScalarFieldEnum = (typeof ReportScalarFieldEnum)[keyof typeof ReportScalarFieldEnum]
 
 
 export const AccountScalarFieldEnum = {

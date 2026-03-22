@@ -41,6 +41,7 @@ model Product {
   productCategory ProductCategory[]
   productImages   ProductImage[]
   review          Review[]
+  reports         Report[]
 }
 
 model ProductImage {
@@ -63,6 +64,7 @@ model Review {
   anonymous Boolean   @default(false)
   product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reports   Report[]
 
   @@unique([userId, productId])
 }
@@ -81,6 +83,25 @@ model User {
   product       Product[]
   review        Review[]
   session       Session[]
+  reportsSubmitted Report[] @relation("ReportedBy")
+  reportsResolved  Report[] @relation("ResolvedBy")
+}
+
+model Report {
+  id         BigInt       @id @default(autoincrement())
+  type       ReportType
+  reason     String       @db.VarChar(500)
+  productId  BigInt?
+  reviewId   BigInt?
+  reportedBy String
+  status     ReportStatus @default(PENDING)
+  createdAt  DateTime     @default(now()) @db.Timestamptz(6)
+  resolvedAt DateTime?    @db.Timestamptz(6)
+  resolvedBy String?
+  product    Product?     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  review     Review?      @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  reporter   User         @relation("ReportedBy", fields: [reportedBy], references: [id], onDelete: Cascade)
+  resolver   User?        @relation("ResolvedBy", fields: [resolvedBy], references: [id])
 }
 
 model Account {
@@ -144,4 +165,14 @@ enum ProductStatus {
   PENDING
   INACTIVE
   ACTIVE
+}
+
+enum ReportType {
+  PRODUCT
+  REVIEW
+}
+
+enum ReportStatus {
+  PENDING
+  RESOLVED
 }

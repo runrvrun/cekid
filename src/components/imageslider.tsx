@@ -38,7 +38,7 @@ export default function ImageSlider({
   if (images.length === 0) {
     return (
       <Image
-        src="/product-placeholder.png"
+        src="/product-placeholder.svg"
         alt={alt}
         className="w-full h-96 object-cover rounded"
         width={800}

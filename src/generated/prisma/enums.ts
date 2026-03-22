@@ -44,3 +44,19 @@ export const ProductStatus = {
 } as const
 
 export type ProductStatus = (typeof ProductStatus)[keyof typeof ProductStatus]
+
+
+export const ReportType = {
+  PRODUCT: 'PRODUCT',
+  REVIEW: 'REVIEW'
+} as const
+
+export type ReportType = (typeof ReportType)[keyof typeof ReportType]
+
+
+export const ReportStatus = {
+  PENDING: 'PENDING',
+  RESOLVED: 'RESOLVED'
+} as const
+
+export type ReportStatus = (typeof ReportStatus)[keyof typeof ReportStatus]

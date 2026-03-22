@@ -48,6 +48,11 @@ export type Review = Prisma.ReviewModel
  */
 export type User = Prisma.UserModel
 /**
+ * Model Report
+ * 
+ */
+export type Report = Prisma.ReportModel
+/**
  * Model Account
  * 
  */

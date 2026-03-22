@@ -123,7 +123,7 @@ if (query && productsFromDb.length === 0) {
         >
           <figure>
             <Image
-              src={p.mainImageUrl ?? "/product-placeholder.png"}
+              src={p.mainImageUrl ?? "/product-placeholder.svg"}
               alt={p.name}
               className="h-40 w-full object-cover"
               width={160}

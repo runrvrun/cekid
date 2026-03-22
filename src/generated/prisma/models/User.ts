@@ -218,6 +218,8 @@ export type UserWhereInput = {
   product?: Prisma.ProductListRelationFilter
   review?: Prisma.ReviewListRelationFilter
   session?: Prisma.SessionListRelationFilter
+  reportsSubmitted?: Prisma.ReportListRelationFilter
+  reportsResolved?: Prisma.ReportListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -234,6 +236,8 @@ export type UserOrderByWithRelationInput = {
   product?: Prisma.ProductOrderByRelationAggregateInput
   review?: Prisma.ReviewOrderByRelationAggregateInput
   session?: Prisma.SessionOrderByRelationAggregateInput
+  reportsSubmitted?: Prisma.ReportOrderByRelationAggregateInput
+  reportsResolved?: Prisma.ReportOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -253,6 +257,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   product?: Prisma.ProductListRelationFilter
   review?: Prisma.ReviewListRelationFilter
   session?: Prisma.SessionListRelationFilter
+  reportsSubmitted?: Prisma.ReportListRelationFilter
+  reportsResolved?: Prisma.ReportListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -299,6 +305,8 @@ export type UserCreateInput = {
   product?: Prisma.ProductCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewCreateNestedManyWithoutUserInput
   session?: Prisma.SessionCreateNestedManyWithoutUserInput
+  reportsSubmitted?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsResolved?: Prisma.ReportCreateNestedManyWithoutResolverInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -315,6 +323,8 @@ export type UserUncheckedCreateInput = {
   product?: Prisma.ProductUncheckedCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   session?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  reportsSubmitted?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsResolved?: Prisma.ReportUncheckedCreateNestedManyWithoutResolverInput
 }
 
 export type UserUpdateInput = {
@@ -331,6 +341,8 @@ export type UserUpdateInput = {
   product?: Prisma.ProductUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   session?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  reportsSubmitted?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsResolved?: Prisma.ReportUpdateManyWithoutResolverNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -347,6 +359,8 @@ export type UserUncheckedUpdateInput = {
   product?: Prisma.ProductUncheckedUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   session?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  reportsSubmitted?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsResolved?: Prisma.ReportUncheckedUpdateManyWithoutResolverNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -469,6 +483,36 @@ export type EnumRoleFieldUpdateOperationsInput = {
   set?: $Enums.Role
 }
 
+export type UserCreateNestedOneWithoutReportsSubmittedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReportsSubmittedInput, Prisma.UserUncheckedCreateWithoutReportsSubmittedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReportsSubmittedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutReportsResolvedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReportsResolvedInput, Prisma.UserUncheckedCreateWithoutReportsResolvedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReportsResolvedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutReportsSubmittedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReportsSubmittedInput, Prisma.UserUncheckedCreateWithoutReportsSubmittedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReportsSubmittedInput
+  upsert?: Prisma.UserUpsertWithoutReportsSubmittedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReportsSubmittedInput, Prisma.UserUpdateWithoutReportsSubmittedInput>, Prisma.UserUncheckedUpdateWithoutReportsSubmittedInput>
+}
+
+export type UserUpdateOneWithoutReportsResolvedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReportsResolvedInput, Prisma.UserUncheckedCreateWithoutReportsResolvedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReportsResolvedInput
+  upsert?: Prisma.UserUpsertWithoutReportsResolvedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReportsResolvedInput, Prisma.UserUpdateWithoutReportsResolvedInput>, Prisma.UserUncheckedUpdateWithoutReportsResolvedInput>
+}
+
 export type UserCreateNestedOneWithoutAccountInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAccountInput, Prisma.UserUncheckedCreateWithoutAccountInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAccountInput
@@ -510,6 +554,8 @@ export type UserCreateWithoutProductInput = {
   account?: Prisma.AccountCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewCreateNestedManyWithoutUserInput
   session?: Prisma.SessionCreateNestedManyWithoutUserInput
+  reportsSubmitted?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsResolved?: Prisma.ReportCreateNestedManyWithoutResolverInput
 }
 
 export type UserUncheckedCreateWithoutProductInput = {
@@ -525,6 +571,8 @@ export type UserUncheckedCreateWithoutProductInput = {
   account?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   session?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  reportsSubmitted?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsResolved?: Prisma.ReportUncheckedCreateNestedManyWithoutResolverInput
 }
 
 export type UserCreateOrConnectWithoutProductInput = {
@@ -556,6 +604,8 @@ export type UserUpdateWithoutProductInput = {
   account?: Prisma.AccountUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   session?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  reportsSubmitted?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsResolved?: Prisma.ReportUpdateManyWithoutResolverNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProductInput = {
@@ -571,6 +621,8 @@ export type UserUncheckedUpdateWithoutProductInput = {
   account?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   session?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  reportsSubmitted?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsResolved?: Prisma.ReportUncheckedUpdateManyWithoutResolverNestedInput
 }
 
 export type UserCreateWithoutReviewInput = {
@@ -586,6 +638,8 @@ export type UserCreateWithoutReviewInput = {
   account?: Prisma.AccountCreateNestedManyWithoutUserInput
   product?: Prisma.ProductCreateNestedManyWithoutUserInput
   session?: Prisma.SessionCreateNestedManyWithoutUserInput
+  reportsSubmitted?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsResolved?: Prisma.ReportCreateNestedManyWithoutResolverInput
 }
 
 export type UserUncheckedCreateWithoutReviewInput = {
@@ -601,6 +655,8 @@ export type UserUncheckedCreateWithoutReviewInput = {
   account?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   product?: Prisma.ProductUncheckedCreateNestedManyWithoutUserInput
   session?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  reportsSubmitted?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsResolved?: Prisma.ReportUncheckedCreateNestedManyWithoutResolverInput
 }
 
 export type UserCreateOrConnectWithoutReviewInput = {
@@ -632,6 +688,8 @@ export type UserUpdateWithoutReviewInput = {
   account?: Prisma.AccountUpdateManyWithoutUserNestedInput
   product?: Prisma.ProductUpdateManyWithoutUserNestedInput
   session?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  reportsSubmitted?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsResolved?: Prisma.ReportUpdateManyWithoutResolverNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReviewInput = {
@@ -647,6 +705,176 @@ export type UserUncheckedUpdateWithoutReviewInput = {
   account?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   product?: Prisma.ProductUncheckedUpdateManyWithoutUserNestedInput
   session?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  reportsSubmitted?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsResolved?: Prisma.ReportUncheckedUpdateManyWithoutResolverNestedInput
+}
+
+export type UserCreateWithoutReportsSubmittedInput = {
+  id?: string
+  email?: string | null
+  password?: string | null
+  name?: string | null
+  image?: string | null
+  emailVerified?: Date | string | null
+  createdAt?: Date | string | null
+  status?: $Enums.UserStatus
+  role?: $Enums.Role
+  account?: Prisma.AccountCreateNestedManyWithoutUserInput
+  product?: Prisma.ProductCreateNestedManyWithoutUserInput
+  review?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  session?: Prisma.SessionCreateNestedManyWithoutUserInput
+  reportsResolved?: Prisma.ReportCreateNestedManyWithoutResolverInput
+}
+
+export type UserUncheckedCreateWithoutReportsSubmittedInput = {
+  id?: string
+  email?: string | null
+  password?: string | null
+  name?: string | null
+  image?: string | null
+  emailVerified?: Date | string | null
+  createdAt?: Date | string | null
+  status?: $Enums.UserStatus
+  role?: $Enums.Role
+  account?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  product?: Prisma.ProductUncheckedCreateNestedManyWithoutUserInput
+  review?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  session?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  reportsResolved?: Prisma.ReportUncheckedCreateNestedManyWithoutResolverInput
+}
+
+export type UserCreateOrConnectWithoutReportsSubmittedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReportsSubmittedInput, Prisma.UserUncheckedCreateWithoutReportsSubmittedInput>
+}
+
+export type UserCreateWithoutReportsResolvedInput = {
+  id?: string
+  email?: string | null
+  password?: string | null
+  name?: string | null
+  image?: string | null
+  emailVerified?: Date | string | null
+  createdAt?: Date | string | null
+  status?: $Enums.UserStatus
+  role?: $Enums.Role
+  account?: Prisma.AccountCreateNestedManyWithoutUserInput
+  product?: Prisma.ProductCreateNestedManyWithoutUserInput
+  review?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  session?: Prisma.SessionCreateNestedManyWithoutUserInput
+  reportsSubmitted?: Prisma.ReportCreateNestedManyWithoutReporterInput
+}
+
+export type UserUncheckedCreateWithoutReportsResolvedInput = {
+  id?: string
+  email?: string | null
+  password?: string | null
+  name?: string | null
+  image?: string | null
+  emailVerified?: Date | string | null
+  createdAt?: Date | string | null
+  status?: $Enums.UserStatus
+  role?: $Enums.Role
+  account?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  product?: Prisma.ProductUncheckedCreateNestedManyWithoutUserInput
+  review?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  session?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  reportsSubmitted?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+}
+
+export type UserCreateOrConnectWithoutReportsResolvedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReportsResolvedInput, Prisma.UserUncheckedCreateWithoutReportsResolvedInput>
+}
+
+export type UserUpsertWithoutReportsSubmittedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReportsSubmittedInput, Prisma.UserUncheckedUpdateWithoutReportsSubmittedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReportsSubmittedInput, Prisma.UserUncheckedCreateWithoutReportsSubmittedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReportsSubmittedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReportsSubmittedInput, Prisma.UserUncheckedUpdateWithoutReportsSubmittedInput>
+}
+
+export type UserUpdateWithoutReportsSubmittedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  account?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  product?: Prisma.ProductUpdateManyWithoutUserNestedInput
+  review?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  session?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  reportsResolved?: Prisma.ReportUpdateManyWithoutResolverNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReportsSubmittedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  account?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  product?: Prisma.ProductUncheckedUpdateManyWithoutUserNestedInput
+  review?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
+  session?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  reportsResolved?: Prisma.ReportUncheckedUpdateManyWithoutResolverNestedInput
+}
+
+export type UserUpsertWithoutReportsResolvedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReportsResolvedInput, Prisma.UserUncheckedUpdateWithoutReportsResolvedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReportsResolvedInput, Prisma.UserUncheckedCreateWithoutReportsResolvedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReportsResolvedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReportsResolvedInput, Prisma.UserUncheckedUpdateWithoutReportsResolvedInput>
+}
+
+export type UserUpdateWithoutReportsResolvedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  account?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  product?: Prisma.ProductUpdateManyWithoutUserNestedInput
+  review?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  session?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  reportsSubmitted?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReportsResolvedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  account?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  product?: Prisma.ProductUncheckedUpdateManyWithoutUserNestedInput
+  review?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
+  session?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  reportsSubmitted?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
 }
 
 export type UserCreateWithoutAccountInput = {
@@ -662,6 +890,8 @@ export type UserCreateWithoutAccountInput = {
   product?: Prisma.ProductCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewCreateNestedManyWithoutUserInput
   session?: Prisma.SessionCreateNestedManyWithoutUserInput
+  reportsSubmitted?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsResolved?: Prisma.ReportCreateNestedManyWithoutResolverInput
 }
 
 export type UserUncheckedCreateWithoutAccountInput = {
@@ -677,6 +907,8 @@ export type UserUncheckedCreateWithoutAccountInput = {
   product?: Prisma.ProductUncheckedCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   session?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  reportsSubmitted?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsResolved?: Prisma.ReportUncheckedCreateNestedManyWithoutResolverInput
 }
 
 export type UserCreateOrConnectWithoutAccountInput = {
@@ -708,6 +940,8 @@ export type UserUpdateWithoutAccountInput = {
   product?: Prisma.ProductUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   session?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  reportsSubmitted?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsResolved?: Prisma.ReportUpdateManyWithoutResolverNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountInput = {
@@ -723,6 +957,8 @@ export type UserUncheckedUpdateWithoutAccountInput = {
   product?: Prisma.ProductUncheckedUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   session?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  reportsSubmitted?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsResolved?: Prisma.ReportUncheckedUpdateManyWithoutResolverNestedInput
 }
 
 export type UserCreateWithoutSessionInput = {
@@ -738,6 +974,8 @@ export type UserCreateWithoutSessionInput = {
   account?: Prisma.AccountCreateNestedManyWithoutUserInput
   product?: Prisma.ProductCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  reportsSubmitted?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsResolved?: Prisma.ReportCreateNestedManyWithoutResolverInput
 }
 
 export type UserUncheckedCreateWithoutSessionInput = {
@@ -753,6 +991,8 @@ export type UserUncheckedCreateWithoutSessionInput = {
   account?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   product?: Prisma.ProductUncheckedCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  reportsSubmitted?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsResolved?: Prisma.ReportUncheckedCreateNestedManyWithoutResolverInput
 }
 
 export type UserCreateOrConnectWithoutSessionInput = {
@@ -784,6 +1024,8 @@ export type UserUpdateWithoutSessionInput = {
   account?: Prisma.AccountUpdateManyWithoutUserNestedInput
   product?: Prisma.ProductUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  reportsSubmitted?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsResolved?: Prisma.ReportUpdateManyWithoutResolverNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionInput = {
@@ -799,6 +1041,8 @@ export type UserUncheckedUpdateWithoutSessionInput = {
   account?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   product?: Prisma.ProductUncheckedUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
+  reportsSubmitted?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsResolved?: Prisma.ReportUncheckedUpdateManyWithoutResolverNestedInput
 }
 
 
@@ -811,6 +1055,8 @@ export type UserCountOutputType = {
   product: number
   review: number
   session: number
+  reportsSubmitted: number
+  reportsResolved: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -818,6 +1064,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   product?: boolean | UserCountOutputTypeCountProductArgs
   review?: boolean | UserCountOutputTypeCountReviewArgs
   session?: boolean | UserCountOutputTypeCountSessionArgs
+  reportsSubmitted?: boolean | UserCountOutputTypeCountReportsSubmittedArgs
+  reportsResolved?: boolean | UserCountOutputTypeCountReportsResolvedArgs
 }
 
 /**
@@ -858,6 +1106,20 @@ export type UserCountOutputTypeCountSessionArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.SessionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReportsSubmittedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReportWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReportsResolvedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReportWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -873,6 +1135,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   product?: boolean | Prisma.User$productArgs<ExtArgs>
   review?: boolean | Prisma.User$reviewArgs<ExtArgs>
   session?: boolean | Prisma.User$sessionArgs<ExtArgs>
+  reportsSubmitted?: boolean | Prisma.User$reportsSubmittedArgs<ExtArgs>
+  reportsResolved?: boolean | Prisma.User$reportsResolvedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -918,6 +1182,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   product?: boolean | Prisma.User$productArgs<ExtArgs>
   review?: boolean | Prisma.User$reviewArgs<ExtArgs>
   session?: boolean | Prisma.User$sessionArgs<ExtArgs>
+  reportsSubmitted?: boolean | Prisma.User$reportsSubmittedArgs<ExtArgs>
+  reportsResolved?: boolean | Prisma.User$reportsResolvedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -930,6 +1196,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     product: Prisma.$ProductPayload<ExtArgs>[]
     review: Prisma.$ReviewPayload<ExtArgs>[]
     session: Prisma.$SessionPayload<ExtArgs>[]
+    reportsSubmitted: Prisma.$ReportPayload<ExtArgs>[]
+    reportsResolved: Prisma.$ReportPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1339,6 +1607,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   product<T extends Prisma.User$productArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$productArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   review<T extends Prisma.User$reviewArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   session<T extends Prisma.User$sessionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reportsSubmitted<T extends Prisma.User$reportsSubmittedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reportsSubmittedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reportsResolved<T extends Prisma.User$reportsResolvedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reportsResolvedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1858,6 +2128,54 @@ export type User$sessionArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.SessionScalarFieldEnum | Prisma.SessionScalarFieldEnum[]
+}
+
+/**
+ * User.reportsSubmitted
+ */
+export type User$reportsSubmittedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Report
+   */
+  select?: Prisma.ReportSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Report
+   */
+  omit?: Prisma.ReportOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReportInclude<ExtArgs> | null
+  where?: Prisma.ReportWhereInput
+  orderBy?: Prisma.ReportOrderByWithRelationInput | Prisma.ReportOrderByWithRelationInput[]
+  cursor?: Prisma.ReportWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReportScalarFieldEnum | Prisma.ReportScalarFieldEnum[]
+}
+
+/**
+ * User.reportsResolved
+ */
+export type User$reportsResolvedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Report
+   */
+  select?: Prisma.ReportSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Report
+   */
+  omit?: Prisma.ReportOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReportInclude<ExtArgs> | null
+  where?: Prisma.ReportWhereInput
+  orderBy?: Prisma.ReportOrderByWithRelationInput | Prisma.ReportOrderByWithRelationInput[]
+  cursor?: Prisma.ReportWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReportScalarFieldEnum | Prisma.ReportScalarFieldEnum[]
 }
 
 /**

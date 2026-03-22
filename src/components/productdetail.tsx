@@ -5,6 +5,7 @@ import prisma from "@/lib/prisma";
 import Link from "next/link";
 import AddReviewForm from '@/components/addreviewform';
 import ImageSlider from '@/components/imageslider';
+import ReportModal from '@/components/reportmodal';
 import { Decimal } from "@prisma/client/runtime/client";
 
 type ProductImage = {
@@ -96,11 +97,16 @@ export default async function ProductDetail({ product }: { product: Product }) {
                             alt={product.name ?? "Produk"}
                         />
                         <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
-                        {(session?.user?.role === "ADMIN" || session?.user?.role === "MODERATOR") && (
-                            <a href={`/product/${product.id}/edit`} className="text-blue-500 hover:underline">
-                                Edit Produk
-                            </a>
-                        )}
+                        <div className="flex items-center gap-3">
+                          {(session?.user?.role === "ADMIN" || session?.user?.role === "MODERATOR") && (
+                              <a href={`/product/${product.id}/edit`} className="text-blue-500 hover:underline text-sm">
+                                  Edit Produk
+                              </a>
+                          )}
+                          {session?.user && (
+                            <ReportModal type="PRODUCT" productId={String(product.id)} />
+                          )}
+                        </div>
                     <div className="flex items-center gap-1 text-lg shrink-0">
                             {(product.rating ?? 0).toFixed(1)}
                             <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
@@ -130,7 +136,7 @@ export default async function ProductDetail({ product }: { product: Product }) {
                             <div className="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
                                 <div className="card-body">
                                     <Image
-                                        src={p.image ?? "/product-placeholder.png"}
+                                        src={p.image ?? "/product-placeholder.svg"}
                                         alt={p.name}
                                         className="w-full h-48 object-cover rounded"
                                         width={400}
@@ -195,7 +201,14 @@ export default async function ProductDetail({ product }: { product: Product }) {
                     ))}
                   </div>
             
-                  {r.review && <p className="mb-4">{r.review}</p>}
+                  {r.review && <p className="mb-3">{r.review}</p>}
+                  {session?.user && (
+                    <ReportModal
+                      type="REVIEW"
+                      reviewId={String(r.id)}
+                      productId={String(product.id)}
+                    />
+                  )}
                 </div>
               </div>
                                 ))}

@@ -34,9 +34,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           },
         });
 
-        if (!user) {
-          return null;
-        }
+        if (!user) return null;
+        if (user.status === "SUSPENDED") return null;
 
         return user;
       },
@@ -46,6 +45,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/signin",
   },
   callbacks: {
+    async signIn({ user }) {
+      const dbUser = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { status: true },
+      });
+      if (dbUser?.status === "SUSPENDED") return false;
+      return true;
+    },
     async jwt({ token, account }) {
       if (account?.provider === "credentials") {
         token.credentials = true;
