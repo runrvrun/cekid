@@ -10,21 +10,33 @@ import Image from "next/image";
 import imageCompression from "browser-image-compression";
 import { Button } from "./ui/button";
 
+type ExistingImage = {
+  id: bigint;
+  url: string;
+  isMain: boolean;
+};
+
+type NewImage = {
+  file: File;
+  previewUrl: string;
+};
+
 type Product = {
   id: bigint;
   name: string;
   slug: string;
   upc?: string | null;
   description?: string | null;
-  image?: string | null;
+  images?: ExistingImage[];
 };
 
 type Props = {
   mode: "create" | "edit";
   initialData?: Product;
+  canEditMain?: boolean; // true for ADMIN/MODERATOR in edit mode
 };
 
-export default function ProductForm({ mode, initialData }: Props) {
+export default function ProductForm({ mode, initialData, canEditMain = true }: Props) {
   const router = useRouter();
 
   const cameraInputRef = useRef<HTMLInputElement>(null);
@@ -32,13 +44,23 @@ export default function ProductForm({ mode, initialData }: Props) {
 
   const [name, setName] = useState(initialData?.name ?? "");
   const [upc, setUpc] = useState(initialData?.upc ?? "");
-  const [description, setDescription] = useState(
-    initialData?.description ?? ""
+  const [description, setDescription] = useState(initialData?.description ?? "");
+
+  // Multi-image state
+  const [existingImages, setExistingImages] = useState<ExistingImage[]>(
+    initialData?.images ?? []
   );
-  const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(
-    initialData?.image ?? null
-  );
+  const [newImages, setNewImages] = useState<NewImage[]>([]);
+  const [deletedImageIds, setDeletedImageIds] = useState<bigint[]>([]);
+  // "existing:{id}" | "new:{index}" | null
+  const [mainImageKey, setMainImageKey] = useState<string | null>(() => {
+    if (initialData?.images?.length) {
+      const main =
+        initialData.images.find((img) => img.isMain) ?? initialData.images[0];
+      return `existing:${main.id}`;
+    }
+    return null;
+  });
 
   const [dragActive, setDragActive] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -59,64 +81,172 @@ export default function ProductForm({ mode, initialData }: Props) {
   /* ---------------- IMAGE HANDLING ---------------- */
 
   const handleFile = (f: File | null) => {
-  if (!f) return;
-
-  if (!f.type.startsWith("image/")) {
-    setError("File harus berupa gambar.");
-    return;
-  }
-
-  setFile(f);
-  setPreview(URL.createObjectURL(f));
-
-  // run AI detection
-  detectProductName(f);
-};
+    if (!f) return;
+    if (!f.type.startsWith("image/")) {
+      setError("File harus berupa gambar.");
+      return;
+    }
+    const previewUrl = URL.createObjectURL(f);
+    const newIndex = newImages.length;
+    setNewImages((prev) => [...prev, { file: f, previewUrl }]);
+    // Auto-set as main if no main image yet
+    if (!mainImageKey && existingImages.length === 0) {
+      setMainImageKey(`new:${newIndex}`);
+    }
+    if (!name) detectProductName(f);
+  };
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleFile(e.target.files?.[0] ?? null);
+    e.target.value = "";
+  };
+
+  const onMultipleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    Array.from(e.target.files ?? []).forEach((f) => handleFile(f));
+    e.target.value = "";
   };
 
   const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragActive(false);
-    handleFile(e.dataTransfer.files?.[0] ?? null);
+    Array.from(e.dataTransfer.files)
+      .filter((f) => f.type.startsWith("image/"))
+      .forEach((f) => handleFile(f));
+  };
+
+  const removeExistingImage = (id: bigint) => {
+    const remaining = existingImages.filter((img) => img.id !== id);
+    setExistingImages(remaining);
+    setDeletedImageIds((prev) => [...prev, id]);
+    if (mainImageKey === `existing:${id}`) {
+      // Pick new main
+      if (remaining.length > 0) {
+        setMainImageKey(`existing:${remaining[0].id}`);
+      } else if (newImages.length > 0) {
+        setMainImageKey("new:0");
+      } else {
+        setMainImageKey(null);
+      }
+    }
+  };
+
+  const removeNewImage = (index: number) => {
+    const isMain = mainImageKey === `new:${index}`;
+    const currentMainIdx =
+      mainImageKey?.startsWith("new:")
+        ? parseInt(mainImageKey.slice("new:".length))
+        : -1;
+    const updatedNewImages = newImages.filter((_, i) => i !== index);
+    setNewImages(updatedNewImages);
+
+    if (isMain) {
+      if (existingImages.length > 0) {
+        setMainImageKey(`existing:${existingImages[0].id}`);
+      } else if (updatedNewImages.length > 0) {
+        setMainImageKey("new:0");
+      } else {
+        setMainImageKey(null);
+      }
+    } else if (currentMainIdx > index) {
+      setMainImageKey(`new:${currentMainIdx - 1}`);
+    }
   };
 
   const detectProductName = async (imageFile: File) => {
-  try {
-    setDetectingName(true);
-
-    const compressed = await imageCompression(imageFile, {
-      maxSizeMB: 0.5,
-      maxWidthOrHeight: 800,
-      useWebWorker: true,
-    });
-
-    const formData = new FormData();
-    formData.append("image", compressed);
-
-    const res = await fetch("/api/product-detect", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await res.json();
-
-    if (data?.name && !name) setName(data.name);
-    if (data?.description  && !description) setDescription(data.description);
-  } catch (err) {
-    console.error("AI detection failed:", err);
-  } finally {
-    setDetectingName(false);
-  }
-};
+    try {
+      setDetectingName(true);
+      const compressed = await imageCompression(imageFile, {
+        maxSizeMB: 0.5,
+        maxWidthOrHeight: 800,
+        useWebWorker: true,
+      });
+      const formData = new FormData();
+      formData.append("image", compressed);
+      const res = await fetch("/api/product-detect", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (data?.name && !name) setName(data.name);
+      if (data?.description && !description) setDescription(data.description);
+    } catch (err) {
+      console.error("AI detection failed:", err);
+    } finally {
+      setDetectingName(false);
+    }
+  };
 
   /* ---------------- SUBMIT ---------------- */
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSuccess(null);
+
+    if (!name.trim()) {
+      setError("Nama Barang wajib diisi.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const fd = new FormData();
+      fd.append("name", name.trim());
+      fd.append("slug", name.trim().toLowerCase().replace(/\s+/g, "-"));
+      if (upc.trim()) fd.append("upc", upc.trim());
+      if (description.trim()) fd.append("description", description.trim());
+
+      // Compress and append all new images
+      const compressedNewImages: File[] = [];
+      for (const img of newImages) {
+        const compressed = await imageCompression(img.file, {
+          maxSizeMB: 0.8,
+          maxWidthOrHeight: 800,
+          useWebWorker: true,
+        });
+        compressedNewImages.push(compressed);
+      }
+
+      if (mode === "create") {
+        for (const compressed of compressedNewImages) {
+          fd.append("images", compressed);
+        }
+        if (mainImageKey?.startsWith("new:")) {
+          fd.append("mainImageIndex", mainImageKey.slice("new:".length));
+        }
+      } else {
+        for (const compressed of compressedNewImages) {
+          fd.append("newImages", compressed);
+        }
+        if (mainImageKey) fd.append("mainImageKey", mainImageKey);
+        for (const id of deletedImageIds) {
+          fd.append("deleteImageId", id.toString());
+        }
+      }
+
+      const result =
+        mode === "create"
+          ? await createProduct(fd)
+          : await updateProduct(initialData!.id, fd);
+
+      if (!result.success) {
+        setError(result.error || "Gagal menyimpan produk");
+        return;
+      }
+
+      setSuccess(result.message || "Produk berhasil disimpan.");
+      const slug = result.data?.slug ?? initialData?.slug;
+      if (slug) router.push(`/${slug}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Terjadi kesalahan");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   /* ---------------- BARCODE SCANNING ---------------- */
   const DESIRED_CROP_ASPECT_RATIO = 3 / 2;
-  // enlarge the scan window – previously 0.4 (40% of video)
   const CROP_SIZE_FACTOR = 0.6;
 
   const startScanning = async () => {
@@ -140,7 +270,6 @@ export default function ProductForm({ mode, initialData }: Props) {
       }
     } catch (err) {
       console.error("Camera error:", err);
-      // give user a friendly reason if we can
       if (err instanceof DOMException) {
         switch (err.name) {
           case "NotAllowedError":
@@ -279,57 +408,9 @@ export default function ProductForm({ mode, initialData }: Props) {
     };
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setSuccess(null);
-
-    if (!name.trim()) {
-      setError("Nama Barang wajib diisi.");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const fd = new FormData();
-      fd.append("name", name.trim());
-      fd.append("slug", name.trim().toLowerCase().replace(/\s+/g, "-"));
-      if (upc.trim()) fd.append("upc", upc.trim());
-      if (description.trim()) fd.append("description", description.trim());
-
-      if (file) {
-        const compressedFile = await imageCompression(file, {
-          maxSizeMB: 0.8,
-          maxWidthOrHeight: 800,
-          useWebWorker: true,
-        });
-        fd.append("image", compressedFile);
-      }
-
-
-      const result =
-        mode === "create"
-          ? await createProduct(fd)
-          : await updateProduct(initialData!.id, fd);
-
-      if (!result.success) {
-        setError(result.error || "Gagal menyimpan produk");
-        return;
-      }
-
-      setSuccess(result.message || "Produk berhasil disimpan.");
-
-      const slug = result.data?.slug ?? initialData?.slug;
-      if (slug) router.push(`/${slug}`);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Terjadi kesalahan");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   /* ---------------- UI ---------------- */
+
+  const hasImages = existingImages.length > 0 || newImages.length > 0;
 
   return (
     <div className="max-w-md mx-auto p-4 bg-base-100 rounded-lg shadow">
@@ -341,12 +422,86 @@ export default function ProductForm({ mode, initialData }: Props) {
       {success && <div className="text-sm text-green-600 mb-3">{success}</div>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* IMAGE DROP ZONE */}
+        {/* IMAGE SECTION */}
         <div>
-          <label className="block text-sm font-medium mb-1">
+          <label className="block text-sm font-medium mb-2">
             Foto Produk (opsional)
           </label>
 
+          {/* Thumbnails */}
+          {hasImages && (
+            <div className="flex flex-wrap gap-2 mb-3">
+              {existingImages.map((img) => {
+                const isMain = mainImageKey === `existing:${img.id}`;
+                return (
+                  <div key={String(img.id)} className="relative w-24 h-24 flex-shrink-0">
+                    <Image
+                      src={img.url}
+                      alt="Foto produk"
+                      fill
+                      className="object-cover rounded-lg"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeExistingImage(img.id)}
+                      className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center z-10 leading-none"
+                    >
+                      ×
+                    </button>
+                    {isMain ? (
+                      <div className="absolute bottom-0 left-0 right-0 bg-primary/80 text-white text-xs text-center py-0.5 rounded-b-lg">
+                        Utama
+                      </div>
+                    ) : canEditMain ? (
+                      <button
+                        type="button"
+                        onClick={() => setMainImageKey(`existing:${img.id}`)}
+                        className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs text-center py-0.5 rounded-b-lg hover:bg-black/70"
+                      >
+                        Set Utama
+                      </button>
+                    ) : null}
+                  </div>
+                );
+              })}
+
+              {newImages.map((img, i) => {
+                const isMain = mainImageKey === `new:${i}`;
+                return (
+                  <div key={`new-${i}`} className="relative w-24 h-24 flex-shrink-0">
+                    <Image
+                      src={img.previewUrl}
+                      alt="Preview"
+                      fill
+                      className="object-cover rounded-lg"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeNewImage(i)}
+                      className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center z-10 leading-none"
+                    >
+                      ×
+                    </button>
+                    {isMain ? (
+                      <div className="absolute bottom-0 left-0 right-0 bg-primary/80 text-white text-xs text-center py-0.5 rounded-b-lg">
+                        Utama
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setMainImageKey(`new:${i}`)}
+                        className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs text-center py-0.5 rounded-b-lg hover:bg-black/70"
+                      >
+                        Set Utama
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Drop zone */}
           <div
             onDragOver={(e) => {
               e.preventDefault();
@@ -358,42 +513,32 @@ export default function ProductForm({ mode, initialData }: Props) {
               ${dragActive ? "border-primary bg-primary/10" : "border-base-300"}
             `}
           >
-            {preview ? (
-              <Image
-                src={preview}
-                alt="Preview"
-                width={300}
-                height={200}
-                className="mx-auto max-h-48 object-cover rounded"
-              />
-            ) : (
-              <div className="space-y-3 text-sm text-base-content/60">
-                <p className="font-medium">Drag & drop foto di sini</p>
-
-                <div className="flex justify-center gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => cameraInputRef.current?.click()}
-                  >
-                    📷 Ambil Foto
-                  </Button>
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => galleryInputRef.current?.click()}
-                  >
-                    🖼️ Galeri
-                  </Button>
-                </div>
+            <div className="space-y-3 text-sm text-base-content/60">
+              <p className="font-medium">
+                {hasImages ? "Tambah foto lagi" : "Drag & drop foto di sini"}
+              </p>
+              <div className="flex justify-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => cameraInputRef.current?.click()}
+                >
+                  📷 Ambil Foto
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => galleryInputRef.current?.click()}
+                >
+                  🖼️ Galeri
+                </Button>
               </div>
-            )}
+            </div>
             {detectingName && (
-            <p className="text-xs text-base-content/60 mt-2">
-              🔎 Mendeteksi nama produk...
-            </p>
-          )}
+              <p className="text-xs text-base-content/60 mt-2">
+                🔎 Mendeteksi nama produk...
+              </p>
+            )}
           </div>
 
           {/* Hidden inputs */}
@@ -405,12 +550,12 @@ export default function ProductForm({ mode, initialData }: Props) {
             onChange={onFileChange}
             className="hidden"
           />
-
           <input
             ref={galleryInputRef}
             type="file"
             accept="image/*"
-            onChange={onFileChange}
+            multiple
+            onChange={onMultipleFileChange}
             className="hidden"
           />
         </div>
@@ -463,7 +608,6 @@ export default function ProductForm({ mode, initialData }: Props) {
             <div className="relative bg-white p-2 rounded max-w-full">
               <video
                 ref={videoRef}
-                // make the preview larger / responsive
                 className="w-[90vw] max-w-md h-auto bg-black"
                 muted
                 playsInline

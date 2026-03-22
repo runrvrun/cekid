@@ -86,7 +86,7 @@ export default async function ProductDetail({ product }: { product: Product }) {
                             height={800}
                         />
                         <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
-                        {session?.user?.role === "ADMIN" && (
+                        {(session?.user?.role === "ADMIN" || session?.user?.role === "MODERATOR") && (
                             <a href={`/product/${product.id}/edit`} className="text-blue-500 hover:underline">
                                 Edit Produk
                             </a>

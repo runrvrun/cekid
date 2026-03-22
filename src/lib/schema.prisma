@@ -30,7 +30,7 @@ model Product {
   description     String?
   status          ProductStatus   @default(PENDING)
   upc             String?           @db.VarChar(15)
-  image           String?           @db.VarChar(255)
+  image           String?           @db.VarChar(500)
   reviewCount     Int?              @default(0)
   ratingSum       Int?              @default(0)
   rating          Decimal?          @default(0) @db.Decimal(2, 1)
@@ -40,7 +40,17 @@ model Product {
   embedding       Float[]
   user            User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
   productCategory ProductCategory[]
+  productImages   ProductImage[]
   review          Review[]
+}
+
+model ProductImage {
+  id        BigInt    @id @default(autoincrement())
+  productId BigInt
+  url       String    @db.VarChar(500)
+  isMain    Boolean   @default(false)
+  createdAt DateTime? @default(now()) @db.Timestamptz(6)
+  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Review {

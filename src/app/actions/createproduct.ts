@@ -5,81 +5,82 @@ import { auth } from "@/lib/auth";
 import { generateEmbedding } from "@/lib/embeddings";
 import { sendAdminNotification } from "@/lib/sendadminnotif";
 
+async function uploadImageToBlob(file: File, productName: string): Promise<string> {
+  const timestamp = new Date().toISOString().replace(/[-:.]/g, "_");
+  const safeName = productName.replace(/\s+/g, "_");
+  const fileName = `products/${timestamp}_${safeName}.jpg`;
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const uploaded = await put(fileName, buffer, {
+    contentType: file.type || "image/jpeg",
+    access: "public",
+  });
+  return uploaded.url;
+}
+
 export async function createProduct(formData: FormData) {
   try {
-    let name = formData.get("name") as string;
+    const name = (formData.get("name") as string)?.trim();
     const slug = formData.get("slug") as string;
     const upc = formData.get("upc") as string;
     const description = formData.get("description") as string;
-    const imageFile = formData.get("image") as File;
+    const imageFiles = formData.getAll("images") as File[];
+    const mainImageIndex = parseInt((formData.get("mainImageIndex") as string) ?? "0") || 0;
     const session = await auth();
 
-    if (!name?.trim()) {
+    if (!name) {
       return { success: false, error: "Nama Barang wajib diisi." };
     }
 
-    let imageUrl: string | null = null;
-
-    // Upload image using Vercel Blob
-    if (imageFile && imageFile.size > 0) {
-      try {
-        const timestamp = new Date().toISOString().replace(/[-:.]/g, "_");
-        const safeName = name.replace(/\s+/g, "_");
-        const fileName = `products/${timestamp}_${safeName}.jpg`;
-
-        const arrayBuffer = await imageFile.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-
-        const uploaded = await put(fileName, buffer, {
-          contentType: imageFile.type || "image/jpeg",
-          access: "public", // image becomes publicly accessible
-        });
-
-        imageUrl = uploaded.url; // URL from blob storage
-
-      } catch (uploadErr) {
-        console.error("Image upload failed:", uploadErr);
-        return {
-          success: false,
-          error: "Gagal mengunggah gambar",
-        };
+    // Upload all images
+    const imageUrls: string[] = [];
+    for (const file of imageFiles) {
+      if (file && file.size > 0) {
+        try {
+          imageUrls.push(await uploadImageToBlob(file, name));
+        } catch {
+          return { success: false, error: "Gagal mengunggah gambar" };
+        }
       }
     }
 
-    // Generate embedding for the product
-     const embedding = await generateEmbedding(
-    name,
-    description
-  );
+    const safeMainIndex = imageUrls.length > 0
+      ? Math.min(mainImageIndex, imageUrls.length - 1)
+      : 0;
+    const mainImageUrl = imageUrls[safeMainIndex] ?? null;
+    const embedding = await generateEmbedding(name, description);
 
-    // Save product to database
-    const product = await prisma.product.create({
-      data: {
-        name: name.trim(),
-        slug: slug,
-        upc: upc?.trim() || null,
-        description: description?.trim() || null,
-        image: imageUrl,
-        embedding: embedding,
-        userId: session?.user?.id || null,
-      },
+    const product = await prisma.$transaction(async (tx) => {
+      const p = await tx.product.create({
+        data: {
+          name,
+          slug,
+          upc: upc?.trim() || null,
+          description: description?.trim() || null,
+          image: mainImageUrl,
+          embedding,
+          userId: session?.user?.id || null,
+        },
+      });
+
+      if (imageUrls.length > 0) {
+        await tx.productImage.createMany({
+          data: imageUrls.map((url, i) => ({
+            productId: p.id,
+            url,
+            isMain: i === safeMainIndex,
+          })),
+        });
+      }
+
+      return p;
     });
 
-    // send email notification to admin
-             await sendAdminNotification({
-              subject: "New product created on enakga",
-              message: `
-                Product: ${name}<br/>
-                Description: ${description}
-              `,
-            });
+    await sendAdminNotification({
+      subject: "New product created on enakga",
+      message: `Product: ${name}<br/>Description: ${description}`,
+    });
 
-    return {
-      success: true,
-      data: product,
-      message: "Produk berhasil ditambahkan",
-    };
-
+    return { success: true, data: product, message: "Produk berhasil ditambahkan" };
   } catch (err) {
     console.error("createProduct error:", err);
     return {

@@ -2,8 +2,7 @@ import Link from "next/link";
 import prisma from "@/lib/prisma";
 import Image from "next/image";
 import { Star } from "lucide-react";
-import { Prisma } from "@prisma/client";
-import { Product as DbProduct } from "@prisma/client";
+import { Prisma, Product as DbProduct } from "@/generated/prisma/client";
 import { redirect } from "next/navigation";
 import { generateQueryEmbedding } from "@/lib/embeddings";
 import { Button } from "./ui/button";
@@ -41,6 +40,15 @@ export default async function ProductList({ query }: { query?: string }) {
 
  const productsFromDb = await prisma.product.findMany({
     where,
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      upc: true,
+      image: true,
+      reviewCount: true,
+      rating: true,
+    },
     take: 20,
     orderBy: { reviewCount: "desc" },
   });
