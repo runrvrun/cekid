@@ -26,6 +26,9 @@ export async function updateProduct(id: BigInt, formData: FormData) {
     // "existing:{id}" | "new:{index}" | null
     const mainImageKey = formData.get("mainImageKey") as string | null;
     const deleteImageIds = (formData.getAll("deleteImageId") as string[]).map((s) => BigInt(s));
+    const categoryIds = (formData.getAll("categoryId") as string[])
+      .map((s) => BigInt(s))
+      .filter(Boolean);
     const session = await auth();
     const productId = BigInt(String(id));
 
@@ -62,11 +65,8 @@ export async function updateProduct(id: BigInt, formData: FormData) {
         });
       }
 
-      // Determine and set the main image
-      let mainImageUrl: string | null = null;
-
+      // Update isMain flags on ProductImage
       if (mainImageKey) {
-        // Clear all main flags for this product
         await tx.productImage.updateMany({
           where: { productId },
           data: { isMain: false },
@@ -74,41 +74,46 @@ export async function updateProduct(id: BigInt, formData: FormData) {
 
         if (mainImageKey.startsWith("existing:")) {
           const existingId = BigInt(mainImageKey.slice("existing:".length));
-          const img = await tx.productImage.update({
+          await tx.productImage.update({
             where: { id: existingId },
             data: { isMain: true },
           });
-          mainImageUrl = img.url;
         } else if (mainImageKey.startsWith("new:")) {
           const newIdx = parseInt(mainImageKey.slice("new:".length));
-          mainImageUrl = newImageUrls[newIdx] ?? null;
-          if (mainImageUrl) {
+          const mainUrl = newImageUrls[newIdx];
+          if (mainUrl) {
             await tx.productImage.updateMany({
-              where: { productId, url: mainImageUrl },
+              where: { productId, url: mainUrl },
               data: { isMain: true },
             });
           }
         }
       } else {
-        // No main key sent: keep current main, or fall back to first image
-        const existingMain = await tx.productImage.findFirst({
+        // No main key: ensure at least one image is marked main
+        const hasMain = await tx.productImage.findFirst({
           where: { productId, isMain: true },
         });
-        if (existingMain) {
-          mainImageUrl = existingMain.url;
-        } else {
-          const firstImage = await tx.productImage.findFirst({
+        if (!hasMain) {
+          const first = await tx.productImage.findFirst({
             where: { productId },
             orderBy: { id: "asc" },
           });
-          if (firstImage) {
-            mainImageUrl = firstImage.url;
+          if (first) {
             await tx.productImage.update({
-              where: { id: firstImage.id },
+              where: { id: first.id },
               data: { isMain: true },
             });
           }
         }
+      }
+
+      // Sync categories: delete existing then re-create
+      await tx.productCategory.deleteMany({ where: { productId } });
+      if (categoryIds.length > 0) {
+        await tx.productCategory.createMany({
+          data: categoryIds.map((categoryId) => ({ productId, categoryId })),
+          skipDuplicates: true,
+        });
       }
 
       return tx.product.update({
@@ -118,7 +123,6 @@ export async function updateProduct(id: BigInt, formData: FormData) {
           slug: slug?.trim(),
           upc: upc?.trim() || null,
           description: description?.trim() || null,
-          image: mainImageUrl,
           embedding,
           userId: session?.user?.id || null,
         },

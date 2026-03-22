@@ -1,6 +1,16 @@
+import { auth } from "@/lib/auth";
 import NavShell from "@/components/nav-shell";
-import Navsignin from "@/components/nav-signin";
 
 export default async function Nav() {
-  return <NavShell signinSlot={<Navsignin />} />;
+  const session = await auth();
+
+  const user = session?.user
+    ? {
+        name: session.user.name ?? session.user.email ?? "User",
+        email: session.user.email ?? null,
+        role: session.user.role ?? "USER",
+      }
+    : null;
+
+  return <NavShell user={user} />;
 }

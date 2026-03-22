@@ -25,6 +25,9 @@ export async function createProduct(formData: FormData) {
     const description = formData.get("description") as string;
     const imageFiles = formData.getAll("images") as File[];
     const mainImageIndex = parseInt((formData.get("mainImageIndex") as string) ?? "0") || 0;
+    const categoryIds = (formData.getAll("categoryId") as string[])
+      .map((s) => BigInt(s))
+      .filter(Boolean);
     const session = await auth();
 
     if (!name) {
@@ -46,7 +49,6 @@ export async function createProduct(formData: FormData) {
     const safeMainIndex = imageUrls.length > 0
       ? Math.min(mainImageIndex, imageUrls.length - 1)
       : 0;
-    const mainImageUrl = imageUrls[safeMainIndex] ?? null;
     const embedding = await generateEmbedding(name, description);
 
     const product = await prisma.$transaction(async (tx) => {
@@ -56,7 +58,6 @@ export async function createProduct(formData: FormData) {
           slug,
           upc: upc?.trim() || null,
           description: description?.trim() || null,
-          image: mainImageUrl,
           embedding,
           userId: session?.user?.id || null,
         },
@@ -69,6 +70,13 @@ export async function createProduct(formData: FormData) {
             url,
             isMain: i === safeMainIndex,
           })),
+        });
+      }
+
+      if (categoryIds.length > 0) {
+        await tx.productCategory.createMany({
+          data: categoryIds.map((categoryId) => ({ productId: p.id, categoryId })),
+          skipDuplicates: true,
         });
       }
 

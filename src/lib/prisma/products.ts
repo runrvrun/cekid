@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/prisma/client";
 import { z } from "zod";
 import prisma from "@/lib/prisma";
 
@@ -8,6 +8,15 @@ const getProductBySlug = async (slug: string) => {
     const validatedSlug = slugSchema.parse(slug);
     const product = await prisma.product.findUnique({
       where: { slug: validatedSlug },
+      include: {
+        productImages: {
+          select: { id: true, url: true, isMain: true },
+          orderBy: [{ isMain: "desc" }, { id: "asc" }],
+        },
+        productCategory: {
+          select: { category: { select: { id: true, name: true } } },
+        },
+      },
     });
     return product;
   } catch (err) {
@@ -26,7 +35,7 @@ const getProductBySlug = async (slug: string) => {
       throw err;
     }
     throw new Error("Unexpected error occurred");
-    }
+  }
 };
 
 export { getProductBySlug };

@@ -12,20 +12,29 @@ const Page = async ({ params }: { params: { productid: bigint } }) => {
   const role = session.user?.role;
   if (role !== "ADMIN" && role !== "MODERATOR") redirect("/");
 
-  const product = await prisma.product.findUnique({
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-      description: true,
-      upc: true,
-      productImages: {
-        select: { id: true, url: true, isMain: true },
-        orderBy: { id: "asc" },
+  const [product, categories] = await Promise.all([
+    prisma.product.findUnique({
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        upc: true,
+        productImages: {
+          select: { id: true, url: true, isMain: true },
+          orderBy: { id: "asc" },
+        },
+        productCategory: {
+          select: { categoryId: true },
+        },
       },
-    },
-    where: { id },
-  });
+      where: { id },
+    }),
+    prisma.category.findMany({
+      orderBy: { name: "asc" },
+      select: { id: true, name: true },
+    }),
+  ]);
 
   if (!product) redirect("/");
 
@@ -36,6 +45,7 @@ const Page = async ({ params }: { params: { productid: bigint } }) => {
     description: product.description,
     upc: product.upc,
     images: product.productImages,
+    categoryIds: product.productCategory.map((pc) => pc.categoryId),
   };
 
   return (
@@ -45,6 +55,7 @@ const Page = async ({ params }: { params: { productid: bigint } }) => {
           mode="edit"
           initialData={productForForm}
           canEditMain={true}
+          categories={categories}
         />
       </div>
     </main>

@@ -49,7 +49,6 @@ export type ProductMinAggregateOutputType = {
   description: string | null
   status: $Enums.ProductStatus | null
   upc: string | null
-  image: string | null
   reviewCount: number | null
   ratingSum: number | null
   rating: runtime.Decimal | null
@@ -65,7 +64,6 @@ export type ProductMaxAggregateOutputType = {
   description: string | null
   status: $Enums.ProductStatus | null
   upc: string | null
-  image: string | null
   reviewCount: number | null
   ratingSum: number | null
   rating: runtime.Decimal | null
@@ -81,7 +79,6 @@ export type ProductCountAggregateOutputType = {
   description: number
   status: number
   upc: number
-  image: number
   reviewCount: number
   ratingSum: number
   rating: number
@@ -116,7 +113,6 @@ export type ProductMinAggregateInputType = {
   description?: true
   status?: true
   upc?: true
-  image?: true
   reviewCount?: true
   ratingSum?: true
   rating?: true
@@ -132,7 +128,6 @@ export type ProductMaxAggregateInputType = {
   description?: true
   status?: true
   upc?: true
-  image?: true
   reviewCount?: true
   ratingSum?: true
   rating?: true
@@ -148,7 +143,6 @@ export type ProductCountAggregateInputType = {
   description?: true
   status?: true
   upc?: true
-  image?: true
   reviewCount?: true
   ratingSum?: true
   rating?: true
@@ -252,7 +246,6 @@ export type ProductGroupByOutputType = {
   description: string | null
   status: $Enums.ProductStatus
   upc: string | null
-  image: string | null
   reviewCount: number | null
   ratingSum: number | null
   rating: runtime.Decimal | null
@@ -292,7 +285,6 @@ export type ProductWhereInput = {
   description?: Prisma.StringNullableFilter<"Product"> | string | null
   status?: Prisma.EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
   upc?: Prisma.StringNullableFilter<"Product"> | string | null
-  image?: Prisma.StringNullableFilter<"Product"> | string | null
   reviewCount?: Prisma.IntNullableFilter<"Product"> | number | null
   ratingSum?: Prisma.IntNullableFilter<"Product"> | number | null
   rating?: Prisma.DecimalNullableFilter<"Product"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -313,7 +305,6 @@ export type ProductOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   upc?: Prisma.SortOrderInput | Prisma.SortOrder
-  image?: Prisma.SortOrderInput | Prisma.SortOrder
   reviewCount?: Prisma.SortOrderInput | Prisma.SortOrder
   ratingSum?: Prisma.SortOrderInput | Prisma.SortOrder
   rating?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -337,7 +328,6 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"Product"> | string | null
   status?: Prisma.EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
   upc?: Prisma.StringNullableFilter<"Product"> | string | null
-  image?: Prisma.StringNullableFilter<"Product"> | string | null
   reviewCount?: Prisma.IntNullableFilter<"Product"> | number | null
   ratingSum?: Prisma.IntNullableFilter<"Product"> | number | null
   rating?: Prisma.DecimalNullableFilter<"Product"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -358,7 +348,6 @@ export type ProductOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   upc?: Prisma.SortOrderInput | Prisma.SortOrder
-  image?: Prisma.SortOrderInput | Prisma.SortOrder
   reviewCount?: Prisma.SortOrderInput | Prisma.SortOrder
   ratingSum?: Prisma.SortOrderInput | Prisma.SortOrder
   rating?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -383,7 +372,6 @@ export type ProductScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
   status?: Prisma.EnumProductStatusWithAggregatesFilter<"Product"> | $Enums.ProductStatus
   upc?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
-  image?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
   reviewCount?: Prisma.IntNullableWithAggregatesFilter<"Product"> | number | null
   ratingSum?: Prisma.IntNullableWithAggregatesFilter<"Product"> | number | null
   rating?: Prisma.DecimalNullableWithAggregatesFilter<"Product"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -400,7 +388,6 @@ export type ProductCreateInput = {
   description?: string | null
   status?: $Enums.ProductStatus
   upc?: string | null
-  image?: string | null
   reviewCount?: number | null
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -420,7 +407,6 @@ export type ProductUncheckedCreateInput = {
   description?: string | null
   status?: $Enums.ProductStatus
   upc?: string | null
-  image?: string | null
   reviewCount?: number | null
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -440,7 +426,6 @@ export type ProductUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
   upc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -460,7 +445,6 @@ export type ProductUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
   upc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -480,7 +464,6 @@ export type ProductCreateManyInput = {
   description?: string | null
   status?: $Enums.ProductStatus
   upc?: string | null
-  image?: string | null
   reviewCount?: number | null
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -497,7 +480,6 @@ export type ProductUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
   upc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -513,7 +495,6 @@ export type ProductUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
   upc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -543,7 +524,6 @@ export type ProductCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   status?: Prisma.SortOrder
   upc?: Prisma.SortOrder
-  image?: Prisma.SortOrder
   reviewCount?: Prisma.SortOrder
   ratingSum?: Prisma.SortOrder
   rating?: Prisma.SortOrder
@@ -568,7 +548,6 @@ export type ProductMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   status?: Prisma.SortOrder
   upc?: Prisma.SortOrder
-  image?: Prisma.SortOrder
   reviewCount?: Prisma.SortOrder
   ratingSum?: Prisma.SortOrder
   rating?: Prisma.SortOrder
@@ -584,7 +563,6 @@ export type ProductMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   status?: Prisma.SortOrder
   upc?: Prisma.SortOrder
-  image?: Prisma.SortOrder
   reviewCount?: Prisma.SortOrder
   ratingSum?: Prisma.SortOrder
   rating?: Prisma.SortOrder
@@ -735,7 +713,6 @@ export type ProductCreateWithoutProductCategoryInput = {
   description?: string | null
   status?: $Enums.ProductStatus
   upc?: string | null
-  image?: string | null
   reviewCount?: number | null
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -754,7 +731,6 @@ export type ProductUncheckedCreateWithoutProductCategoryInput = {
   description?: string | null
   status?: $Enums.ProductStatus
   upc?: string | null
-  image?: string | null
   reviewCount?: number | null
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -789,7 +765,6 @@ export type ProductUpdateWithoutProductCategoryInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
   upc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -808,7 +783,6 @@ export type ProductUncheckedUpdateWithoutProductCategoryInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
   upc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -827,7 +801,6 @@ export type ProductCreateWithoutProductImagesInput = {
   description?: string | null
   status?: $Enums.ProductStatus
   upc?: string | null
-  image?: string | null
   reviewCount?: number | null
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -846,7 +819,6 @@ export type ProductUncheckedCreateWithoutProductImagesInput = {
   description?: string | null
   status?: $Enums.ProductStatus
   upc?: string | null
-  image?: string | null
   reviewCount?: number | null
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -881,7 +853,6 @@ export type ProductUpdateWithoutProductImagesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
   upc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -900,7 +871,6 @@ export type ProductUncheckedUpdateWithoutProductImagesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
   upc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -919,7 +889,6 @@ export type ProductCreateWithoutReviewInput = {
   description?: string | null
   status?: $Enums.ProductStatus
   upc?: string | null
-  image?: string | null
   reviewCount?: number | null
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -938,7 +907,6 @@ export type ProductUncheckedCreateWithoutReviewInput = {
   description?: string | null
   status?: $Enums.ProductStatus
   upc?: string | null
-  image?: string | null
   reviewCount?: number | null
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -973,7 +941,6 @@ export type ProductUpdateWithoutReviewInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
   upc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -992,7 +959,6 @@ export type ProductUncheckedUpdateWithoutReviewInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
   upc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1011,7 +977,6 @@ export type ProductCreateWithoutUserInput = {
   description?: string | null
   status?: $Enums.ProductStatus
   upc?: string | null
-  image?: string | null
   reviewCount?: number | null
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1030,7 +995,6 @@ export type ProductUncheckedCreateWithoutUserInput = {
   description?: string | null
   status?: $Enums.ProductStatus
   upc?: string | null
-  image?: string | null
   reviewCount?: number | null
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1078,7 +1042,6 @@ export type ProductScalarWhereInput = {
   description?: Prisma.StringNullableFilter<"Product"> | string | null
   status?: Prisma.EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
   upc?: Prisma.StringNullableFilter<"Product"> | string | null
-  image?: Prisma.StringNullableFilter<"Product"> | string | null
   reviewCount?: Prisma.IntNullableFilter<"Product"> | number | null
   ratingSum?: Prisma.IntNullableFilter<"Product"> | number | null
   rating?: Prisma.DecimalNullableFilter<"Product"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1095,7 +1058,6 @@ export type ProductCreateManyUserInput = {
   description?: string | null
   status?: $Enums.ProductStatus
   upc?: string | null
-  image?: string | null
   reviewCount?: number | null
   ratingSum?: number | null
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1111,7 +1073,6 @@ export type ProductUpdateWithoutUserInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
   upc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1130,7 +1091,6 @@ export type ProductUncheckedUpdateWithoutUserInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
   upc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1149,7 +1109,6 @@ export type ProductUncheckedUpdateManyWithoutUserInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
   upc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1214,7 +1173,6 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   description?: boolean
   status?: boolean
   upc?: boolean
-  image?: boolean
   reviewCount?: boolean
   ratingSum?: boolean
   rating?: boolean
@@ -1236,7 +1194,6 @@ export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   description?: boolean
   status?: boolean
   upc?: boolean
-  image?: boolean
   reviewCount?: boolean
   ratingSum?: boolean
   rating?: boolean
@@ -1254,7 +1211,6 @@ export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   description?: boolean
   status?: boolean
   upc?: boolean
-  image?: boolean
   reviewCount?: boolean
   ratingSum?: boolean
   rating?: boolean
@@ -1272,7 +1228,6 @@ export type ProductSelectScalar = {
   description?: boolean
   status?: boolean
   upc?: boolean
-  image?: boolean
   reviewCount?: boolean
   ratingSum?: boolean
   rating?: boolean
@@ -1282,7 +1237,7 @@ export type ProductSelectScalar = {
   embedding?: boolean
 }
 
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "description" | "status" | "upc" | "image" | "reviewCount" | "ratingSum" | "rating" | "userId" | "createdAt" | "deletedAt" | "embedding", ExtArgs["result"]["product"]>
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "description" | "status" | "upc" | "reviewCount" | "ratingSum" | "rating" | "userId" | "createdAt" | "deletedAt" | "embedding", ExtArgs["result"]["product"]>
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.Product$userArgs<ExtArgs>
   productCategory?: boolean | Prisma.Product$productCategoryArgs<ExtArgs>
@@ -1312,7 +1267,6 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     description: string | null
     status: $Enums.ProductStatus
     upc: string | null
-    image: string | null
     reviewCount: number | null
     ratingSum: number | null
     rating: runtime.Decimal | null
@@ -1753,7 +1707,6 @@ export interface ProductFieldRefs {
   readonly description: Prisma.FieldRef<"Product", 'String'>
   readonly status: Prisma.FieldRef<"Product", 'ProductStatus'>
   readonly upc: Prisma.FieldRef<"Product", 'String'>
-  readonly image: Prisma.FieldRef<"Product", 'String'>
   readonly reviewCount: Prisma.FieldRef<"Product", 'Int'>
   readonly ratingSum: Prisma.FieldRef<"Product", 'Int'>
   readonly rating: Prisma.FieldRef<"Product", 'Decimal'>

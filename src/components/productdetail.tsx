@@ -4,15 +4,28 @@ import { auth } from '@/lib/auth';
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import AddReviewForm from '@/components/addreviewform';
+import ImageSlider from '@/components/imageslider';
 import { Decimal } from "@prisma/client/runtime/client";
+
+type ProductImage = {
+  id: bigint;
+  url: string;
+  isMain: boolean;
+};
+
+type Category = {
+  id: bigint;
+  name: string;
+};
 
 type Product = {
   id: bigint;
   name: string;
-  image?: string | null;
   rating?: Decimal | null;
   slug: string;
   description?: string | null;
+  productImages?: ProductImage[];
+  productCategory?: { category: Category }[];
 };
 
 export default async function ProductDetail({ product }: { product: Product }) {
@@ -78,12 +91,9 @@ export default async function ProductDetail({ product }: { product: Product }) {
     <main className="max-w-3xl mx-auto p-6">
         {/* Product detail */}
                     <section className="mb-8 bg-base-100 p-6 flex flex-col items-center">
-                        <Image
-                            src={product.image ?? "/product-placeholder.png"}
+                        <ImageSlider
+                            images={product.productImages ?? []}
                             alt={product.name ?? "Produk"}
-                            className="w-full h-96 object-cover rounded"
-                            width={800}
-                            height={800}
                         />
                         <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
                         {(session?.user?.role === "ADMIN" || session?.user?.role === "MODERATOR") && (
@@ -97,6 +107,18 @@ export default async function ProductDetail({ product }: { product: Product }) {
                         </div>
                         {product.description && (
                             <p className="text-gray-700 mb-2">{product.description}</p>
+                        )}
+                        {product.productCategory && product.productCategory.length > 0 && (
+                            <div className="flex flex-wrap gap-1.5 mt-2">
+                                {product.productCategory.map(({ category }) => (
+                                    <span
+                                        key={String(category.id)}
+                                        className="text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 text-gray-600"
+                                    >
+                                        {category.name}
+                                    </span>
+                                ))}
+                            </div>
                         )}
                     </section>
                     {/* Similar Products */}

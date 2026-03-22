@@ -21,6 +21,11 @@ type NewImage = {
   previewUrl: string;
 };
 
+type Category = {
+  id: bigint;
+  name: string;
+};
+
 type Product = {
   id: bigint;
   name: string;
@@ -28,15 +33,17 @@ type Product = {
   upc?: string | null;
   description?: string | null;
   images?: ExistingImage[];
+  categoryIds?: bigint[];
 };
 
 type Props = {
   mode: "create" | "edit";
   initialData?: Product;
   canEditMain?: boolean; // true for ADMIN/MODERATOR in edit mode
+  categories?: Category[];
 };
 
-export default function ProductForm({ mode, initialData, canEditMain = true }: Props) {
+export default function ProductForm({ mode, initialData, canEditMain = true, categories = [] }: Props) {
   const router = useRouter();
 
   const cameraInputRef = useRef<HTMLInputElement>(null);
@@ -61,6 +68,39 @@ export default function ProductForm({ mode, initialData, canEditMain = true }: P
     }
     return null;
   });
+
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<bigint[]>(
+    initialData?.categoryIds ?? []
+  );
+  const [categorySearch, setCategorySearch] = useState("");
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+  const categoryRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (categoryRef.current && !categoryRef.current.contains(e.target as Node)) {
+        setCategoryDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  const addCategory = (id: bigint) => {
+    setSelectedCategoryIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
+    setCategorySearch("");
+    setCategoryDropdownOpen(false);
+  };
+
+  const removeCategory = (id: bigint) => {
+    setSelectedCategoryIds((prev) => prev.filter((c) => c !== id));
+  };
+
+  const filteredCategories = categories.filter(
+    (c) =>
+      !selectedCategoryIds.includes(c.id) &&
+      c.name.toLowerCase().includes(categorySearch.toLowerCase())
+  );
 
   const [dragActive, setDragActive] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -196,6 +236,9 @@ export default function ProductForm({ mode, initialData, canEditMain = true }: P
       fd.append("slug", name.trim().toLowerCase().replace(/\s+/g, "-"));
       if (upc.trim()) fd.append("upc", upc.trim());
       if (description.trim()) fd.append("description", description.trim());
+      for (const id of selectedCategoryIds) {
+        fd.append("categoryId", id.toString());
+      }
 
       // Compress and append all new images
       const compressedNewImages: File[] = [];
@@ -602,6 +645,74 @@ export default function ProductForm({ mode, initialData, canEditMain = true }: P
             rows={4}
           />
         </div>
+
+        {categories.length > 0 && (
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              Kategori <span className="text-gray-400 font-normal">(opsional)</span>
+            </label>
+
+            {/* Selected chips */}
+            {selectedCategoryIds.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mb-2">
+                {selectedCategoryIds.map((id) => {
+                  const cat = categories.find((c) => c.id === id);
+                  if (!cat) return null;
+                  return (
+                    <span
+                      key={String(id)}
+                      className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full bg-green-50 text-green-700 border border-green-200"
+                    >
+                      {cat.name}
+                      <button
+                        type="button"
+                        onClick={() => removeCategory(id)}
+                        className="hover:text-green-900 leading-none"
+                        aria-label={`Hapus ${cat.name}`}
+                      >
+                        ×
+                      </button>
+                    </span>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Search input + dropdown */}
+            <div ref={categoryRef} className="relative">
+              <input
+                type="text"
+                value={categorySearch}
+                onChange={(e) => {
+                  setCategorySearch(e.target.value);
+                  setCategoryDropdownOpen(true);
+                }}
+                onFocus={() => setCategoryDropdownOpen(true)}
+                onClick={() => setCategoryDropdownOpen(true)}
+                placeholder="Cari kategori..."
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              />
+              {categoryDropdownOpen && filteredCategories.length > 0 && (
+                <ul className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-52 overflow-y-auto">
+                  {filteredCategories.map((cat) => (
+                    <li key={String(cat.id)}>
+                      <button
+                        type="button"
+                        onMouseDown={(e) => {
+                          e.preventDefault(); // prevent input blur before click fires
+                          addCategory(cat.id);
+                        }}
+                        className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors"
+                      >
+                        {cat.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        )}
 
         {scanning && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

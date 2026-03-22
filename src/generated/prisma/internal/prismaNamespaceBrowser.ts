@@ -102,7 +102,6 @@ export const ProductScalarFieldEnum = {
   description: 'description',
   status: 'status',
   upc: 'upc',
-  image: 'image',
   reviewCount: 'reviewCount',
   ratingSum: 'ratingSum',
   rating: 'rating',

@@ -12,7 +12,7 @@ type Product = {
   name: string;
   upc?: string | null;
   slug: string;
-  image?: string | null;
+  mainImageUrl?: string | null;
   rating?: number | null;
   reviewCount?: number | null;
 };
@@ -45,9 +45,13 @@ export default async function ProductList({ query }: { query?: string }) {
       name: true,
       slug: true,
       upc: true,
-      image: true,
       reviewCount: true,
       rating: true,
+      productImages: {
+        where: { isMain: true },
+        select: { url: true },
+        take: 1,
+      },
     },
     take: 20,
     orderBy: { reviewCount: "desc" },
@@ -93,7 +97,7 @@ if (query && productsFromDb.length === 0) {
     name: p.name ?? "",
     upc: p.upc ?? null,
     slug: p.slug ?? "",
-    image: p.image ?? null,
+    mainImageUrl: p.productImages[0]?.url ?? null,
     reviewCount: typeof p.reviewCount === "number" ? p.reviewCount : 0,
     rating:
       typeof p.rating === "number"
@@ -119,7 +123,7 @@ if (query && productsFromDb.length === 0) {
         >
           <figure>
             <Image
-              src={p.image ?? "/product-placeholder.png"}
+              src={p.mainImageUrl ?? "/product-placeholder.png"}
               alt={p.name}
               className="h-40 w-full object-cover"
               width={160}

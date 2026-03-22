@@ -31,6 +31,17 @@ export async function GET(req: Request) {
       where: {
         id: { not: productId },
       },
+      select: {
+        id: true,
+        name: true,
+        rating: true,
+        embedding: true,
+        productImages: {
+          where: { isMain: true },
+          select: { url: true },
+          take: 1,
+        },
+      },
       take: 100,
     });
 
@@ -44,10 +55,10 @@ export async function GET(req: Request) {
         const score = cosineSimilarity(product.embedding!, p.embedding);
 
         return {
-          id: Number(p.id), // ✅ BigInt → number
+          id: Number(p.id),
           name: p.name,
-          image: p.image,
-          rating: p.rating ? Number(p.rating) : null, // ✅ Decimal → number
+          image: p.productImages[0]?.url ?? null,
+          rating: p.rating ? Number(p.rating) : null,
           score,
         };
       })
