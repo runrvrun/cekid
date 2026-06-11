@@ -126,8 +126,8 @@ async function RenderContent({ content }: { content: string }) {
 }
 
 async function ProductSnippetCard({ slug }: { slug: string }) {
-  const product = await prisma.product.findUnique({
-    where: { slug, deletedAt: null },
+  const product = await prisma.product.findFirst({
+    where: { slug, status: "ACTIVE", deletedAt: null },
     select: {
       name: true,
       slug: true,

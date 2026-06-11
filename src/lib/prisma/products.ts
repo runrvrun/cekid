@@ -6,8 +6,8 @@ const getProductBySlug = async (slug: string) => {
   try {
     const slugSchema = z.string().min(1);
     const validatedSlug = slugSchema.parse(slug);
-    const product = await prisma.product.findUnique({
-      where: { slug: validatedSlug },
+    const product = await prisma.product.findFirst({
+      where: { slug: validatedSlug, status: "ACTIVE", deletedAt: null },
       include: {
         productImages: {
           select: { id: true, url: true, isMain: true },

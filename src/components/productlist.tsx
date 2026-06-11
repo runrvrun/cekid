@@ -20,6 +20,7 @@ type Product = {
 export default async function ProductList({ query }: { query?: string }) {
   const where = query
     ? {
+      status: "ACTIVE" as const,
       deletedAt: null,
       OR: [
         {
@@ -36,7 +37,7 @@ export default async function ProductList({ query }: { query?: string }) {
         },
       ],
     }
-  : { deletedAt: null };
+  : { status: "ACTIVE" as const, deletedAt: null };
 
  const productsFromDb = await prisma.product.findMany({
     where,

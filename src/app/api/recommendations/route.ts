@@ -30,6 +30,8 @@ export async function GET(req: Request) {
     const candidates = await prisma.product.findMany({
       where: {
         id: { not: productId },
+        status: "ACTIVE",
+        deletedAt: null,
       },
       select: {
         id: true,
