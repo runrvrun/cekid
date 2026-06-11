@@ -60,3 +60,11 @@ export const ReportStatus = {
 } as const
 
 export type ReportStatus = (typeof ReportStatus)[keyof typeof ReportStatus]
+
+
+export const UlasanStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED'
+} as const
+
+export type UlasanStatus = (typeof UlasanStatus)[keyof typeof UlasanStatus]

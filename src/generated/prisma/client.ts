@@ -72,6 +72,11 @@ export type Review = Prisma.ReviewModel
  */
 export type User = Prisma.UserModel
 /**
+ * Model Ulasan
+ * 
+ */
+export type Ulasan = Prisma.UlasanModel
+/**
  * Model Report
  * 
  */

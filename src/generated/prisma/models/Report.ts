@@ -665,10 +665,6 @@ export type EnumReportStatusFieldUpdateOperationsInput = {
   set?: $Enums.ReportStatus
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
-}
-
 export type NullableBigIntFieldUpdateOperationsInput = {
   set?: bigint | number | null
   increment?: bigint | number

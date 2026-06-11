@@ -3,7 +3,7 @@ export const runtime = "nodejs";
 import { Metadata } from 'next';
 import "./globals.css";
 import Header from '../components/header';
-import { GoogleTagManager } from "@next/third-parties/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
     title: {
@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="id">
-            <GoogleTagManager gtmId='G-TQBCKVMPSV' />
+            <GoogleAnalytics gaId='G-TQBCKVMPSV' />
             <body className="min-h-screen flex flex-col">
                 <Header />
 

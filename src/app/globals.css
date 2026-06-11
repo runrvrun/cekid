@@ -223,3 +223,77 @@ body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
 }
+
+/* -----------------------------------------
+   Ulasan / Blog post prose styles
+   ----------------------------------------- */
+.ulasan-content h1,
+.ulasan-content h2,
+.ulasan-content h3,
+.ulasan-content h4 {
+  font-weight: 700;
+  color: #111827;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+.ulasan-content h2 { font-size: 1.375rem; }
+.ulasan-content h3 { font-size: 1.125rem; }
+.ulasan-content h4 { font-size: 1rem; }
+
+.ulasan-content p {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  line-height: 1.75;
+}
+
+.ulasan-content a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+.ulasan-content a:hover { color: #1d4ed8; }
+
+.ulasan-content strong { font-weight: 700; }
+.ulasan-content em { font-style: italic; }
+
+.ulasan-content ul,
+.ulasan-content ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.ulasan-content ul { list-style-type: disc; }
+.ulasan-content ol { list-style-type: decimal; }
+.ulasan-content li { margin-bottom: 0.375rem; line-height: 1.75; }
+
+.ulasan-content blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 1.25rem;
+  margin: 1.5rem 0;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.ulasan-content img,
+.ulasan-content .ulasan-img {
+  max-width: 100%;
+  border-radius: 0.75rem;
+  margin: 1.5rem 0;
+}
+
+.ulasan-content code {
+  background-color: #f3f4f6;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  font-family: monospace;
+}
+
+.ulasan-content pre {
+  background-color: #1f2937;
+  color: #f9fafb;
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  margin: 1.5rem 0;
+}

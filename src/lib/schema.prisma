@@ -85,6 +85,21 @@ model User {
   session       Session[]
   reportsSubmitted Report[] @relation("ReportedBy")
   reportsResolved  Report[] @relation("ResolvedBy")
+  ulasan        Ulasan[]
+}
+
+model Ulasan {
+  id              BigInt       @id @default(autoincrement())
+  title           String       @db.VarChar(255)
+  permalink       String       @unique @db.VarChar(255)
+  content         String       @default("") @db.Text
+  metaDescription String?      @db.VarChar(160)
+  status          UlasanStatus @default(DRAFT)
+  authorId        String
+  author          User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt       DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime     @updatedAt @db.Timestamptz(6)
+  publishedAt     DateTime?    @db.Timestamptz(6)
 }
 
 model Report {
@@ -175,4 +190,9 @@ enum ReportType {
 enum ReportStatus {
   PENDING
   RESOLVED
+}
+
+enum UlasanStatus {
+  DRAFT
+  PUBLISHED
 }

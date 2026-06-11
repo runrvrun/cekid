@@ -390,6 +390,7 @@ export const ModelName = {
   ProductImage: 'ProductImage',
   Review: 'Review',
   User: 'User',
+  Ulasan: 'Ulasan',
   Report: 'Report',
   Account: 'Account',
   Session: 'Session',
@@ -409,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "category" | "productCategory" | "product" | "productImage" | "review" | "user" | "report" | "account" | "session" | "verificationTokens"
+    modelProps: "category" | "productCategory" | "product" | "productImage" | "review" | "user" | "ulasan" | "report" | "account" | "session" | "verificationTokens"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -857,6 +858,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Ulasan: {
+      payload: Prisma.$UlasanPayload<ExtArgs>
+      fields: Prisma.UlasanFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UlasanFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UlasanPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UlasanFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UlasanPayload>
+        }
+        findFirst: {
+          args: Prisma.UlasanFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UlasanPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UlasanFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UlasanPayload>
+        }
+        findMany: {
+          args: Prisma.UlasanFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UlasanPayload>[]
+        }
+        create: {
+          args: Prisma.UlasanCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UlasanPayload>
+        }
+        createMany: {
+          args: Prisma.UlasanCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UlasanCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UlasanPayload>[]
+        }
+        delete: {
+          args: Prisma.UlasanDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UlasanPayload>
+        }
+        update: {
+          args: Prisma.UlasanUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UlasanPayload>
+        }
+        deleteMany: {
+          args: Prisma.UlasanDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UlasanUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UlasanUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UlasanPayload>[]
+        }
+        upsert: {
+          args: Prisma.UlasanUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UlasanPayload>
+        }
+        aggregate: {
+          args: Prisma.UlasanAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUlasan>
+        }
+        groupBy: {
+          args: Prisma.UlasanGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UlasanGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UlasanCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UlasanCountAggregateOutputType> | number
+        }
+      }
+    }
     Report: {
       payload: Prisma.$ReportPayload<ExtArgs>
       fields: Prisma.ReportFieldRefs
@@ -1268,6 +1343,22 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const UlasanScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  permalink: 'permalink',
+  content: 'content',
+  metaDescription: 'metaDescription',
+  status: 'status',
+  authorId: 'authorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  publishedAt: 'publishedAt'
+} as const
+
+export type UlasanScalarFieldEnum = (typeof UlasanScalarFieldEnum)[keyof typeof UlasanScalarFieldEnum]
+
+
 export const ReportScalarFieldEnum = {
   id: 'id',
   type: 'type',
@@ -1503,6 +1594,20 @@ export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'UlasanStatus'
+ */
+export type EnumUlasanStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UlasanStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'UlasanStatus[]'
+ */
+export type ListEnumUlasanStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UlasanStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'ReportType'
  */
 export type EnumReportTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReportType'>
@@ -1630,6 +1735,7 @@ export type GlobalOmitConfig = {
   productImage?: Prisma.ProductImageOmit
   review?: Prisma.ReviewOmit
   user?: Prisma.UserOmit
+  ulasan?: Prisma.UlasanOmit
   report?: Prisma.ReportOmit
   account?: Prisma.AccountOmit
   session?: Prisma.SessionOmit
