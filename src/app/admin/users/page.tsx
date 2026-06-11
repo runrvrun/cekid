@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import ChangeRoleButton from "./changerolebtn";
 import BanModal from "./banmodal";
+import EditNameBtn from "./editnamebtn";
 
 export default async function AdminUsersPage({
   searchParams,
@@ -153,9 +154,7 @@ export default async function AdminUsersPage({
                         </div>
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5">
-                            <p className="font-medium text-gray-900 truncate max-w-[140px]">
-                              {u.name ?? "—"}
-                            </p>
+                            <EditNameBtn userId={u.id} name={u.name ?? ""} />
                             <span
                               className={`text-xs font-semibold px-1.5 py-0.5 rounded-full shrink-0 ${roleColor[u.role] ?? "bg-gray-100 text-gray-500"}`}
                             >
