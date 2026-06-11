@@ -25,9 +25,6 @@ export default async function Home({ searchParams }: HomeProps) {
         </div>
       </div>
 
-      {/* Ulasan section — hidden when user is searching */}
-      {!query && <UlasanSection />}
-
       {/* Product list */}
       <div className="px-4 mt-10 max-w-screen-xl mx-auto">
         {!query && (
@@ -35,6 +32,9 @@ export default async function Home({ searchParams }: HomeProps) {
         )}
         <ProductList query={query} />
       </div>
+
+      {/* Ulasan section — hidden when user is searching */}
+      {!query && <UlasanSection />}
     </main>
   );
 }
