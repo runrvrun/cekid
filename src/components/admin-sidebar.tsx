@@ -9,6 +9,7 @@ import {
   Flag,
   Package,
   BookOpen,
+  Tag,
 } from "lucide-react";
 
 const nav = [
@@ -16,6 +17,7 @@ const nav = [
   { href: "/admin/analytics", label: "Analytics", icon: BarChart2, exact: false },
   { href: "/admin/users", label: "Pengguna", icon: Users, exact: false },
   { href: "/admin/products", label: "Produk", icon: Package, exact: false },
+  { href: "/admin/categories", label: "Kategori", icon: Tag, exact: false },
   { href: "/admin/ulasan", label: "Ulasan", icon: BookOpen, exact: false },
   { href: "/admin/reports", label: "Laporan", icon: Flag, exact: false },
 ];

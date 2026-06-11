@@ -3,6 +3,7 @@ import Hero from "@/components/hero";
 import SearchProduct from "@/components/searchproduct";
 import ProductList from "@/components/productlist";
 import AddProductLink from "@/components/addproductlink";
+import UlasanSection from "@/components/ulasansection";
 
 type HomeProps = {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -24,8 +25,11 @@ export default async function Home({ searchParams }: HomeProps) {
         </div>
       </div>
 
+      {/* Ulasan section — hidden when user is searching */}
+      {!query && <UlasanSection />}
+
       {/* Product list */}
-      <div className="px-4 mt-8 max-w-screen-xl mx-auto">
+      <div className="px-4 mt-10 max-w-screen-xl mx-auto">
         {!query && (
           <div className="font-bold mb-4">Paling Banyak Direview</div>
         )}
