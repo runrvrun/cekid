@@ -27,7 +27,7 @@ export const generateMetadata = async ({ params }:  { params: { slug: string } }
   if (!product) notFound();
 
   return {
-    title: `Review ${product.name}`,
+    title: { absolute: `Review ${product.name} - Enak Ga?` },
   };
 };
 

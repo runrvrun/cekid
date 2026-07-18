@@ -7,10 +7,10 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
     title: {
-        default: 'enakga',
-        template: '%s | enakga',
+        default: 'Enak Ga? Cek review sebelum beli',
+        template: '%s - Enak Ga?',
     },
-    description: 'Barang beneran, review beneran',
+    description: 'Mau beli snack atau minuman di minimarket tapi ragu enak apa nggak? Cek dulu reviewnya di sini.',
 };
 
 export default function RootLayout({
