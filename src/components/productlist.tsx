@@ -15,12 +15,14 @@ type Product = {
   mainImageUrl?: string | null;
   rating?: number | null;
   reviewCount?: number | null;
+  status?: string;
 };
 
 export default async function ProductList({ query }: { query?: string }) {
+  const statusFilter = { in: ["ACTIVE", "PENDING"] as ("ACTIVE" | "PENDING")[] };
   const where = query
     ? {
-      status: "ACTIVE" as const,
+      status: statusFilter,
       deletedAt: null,
       OR: [
         {
@@ -37,7 +39,7 @@ export default async function ProductList({ query }: { query?: string }) {
         },
       ],
     }
-  : { status: "ACTIVE" as const, deletedAt: null };
+  : { status: statusFilter, deletedAt: null };
 
  const productsFromDb = await prisma.product.findMany({
     where,
@@ -48,6 +50,7 @@ export default async function ProductList({ query }: { query?: string }) {
       upc: true,
       reviewCount: true,
       rating: true,
+      status: true,
       productImages: {
         where: { isMain: true },
         select: { url: true },
@@ -106,6 +109,7 @@ if (query && productsFromDb.length === 0) {
         : p.rating
           ? Number(p.rating)
           : null,
+    status: p.status,
   }));
 
   return (
@@ -131,6 +135,11 @@ if (query && productsFromDb.length === 0) {
               height={160}
             />
           </figure>
+          {p.status === "PENDING" && (
+            <span className="mx-2 mt-2 inline-block w-fit text-xs font-medium px-2.5 py-1 rounded-full text-orange-700 bg-orange-50 border border-orange-200">
+              Menunggu moderasi admin
+            </span>
+          )}
           <div className="card-body flex items-center justify-between m-2 min-h-[3.5rem]">
             <h3
               className="

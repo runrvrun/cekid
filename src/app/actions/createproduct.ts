@@ -50,6 +50,8 @@ export async function createProduct(formData: FormData) {
       ? Math.min(mainImageIndex, imageUrls.length - 1)
       : 0;
     const embedding = await generateEmbedding(name, description);
+    const isAdmin =
+      session?.user?.role === "ADMIN" || session?.user?.role === "MODERATOR";
 
     const product = await prisma.$transaction(async (tx) => {
       const p = await tx.product.create({
@@ -60,6 +62,7 @@ export async function createProduct(formData: FormData) {
           description: description?.trim() || null,
           embedding,
           userId: session?.user?.id || null,
+          status: isAdmin ? "ACTIVE" : "PENDING",
         },
       });
 

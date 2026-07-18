@@ -22,5 +22,6 @@ export async function changeProductStatus(
   });
 
   revalidatePath("/admin/products");
+  revalidatePath("/[slug]", "page");
   return { success: true };
 }

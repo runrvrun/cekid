@@ -6,6 +6,7 @@ import Link from "next/link";
 import AddReviewForm from '@/components/addreviewform';
 import ImageSlider from '@/components/imageslider';
 import ReportModal from '@/components/reportmodal';
+import ApproveProductButton from '@/components/approveproductbutton';
 import { Decimal } from "@prisma/client/runtime/client";
 
 type ProductImage = {
@@ -25,6 +26,7 @@ type Product = {
   rating?: Decimal | null;
   slug: string;
   description?: string | null;
+  status?: string;
   productImages?: ProductImage[];
   productCategory?: { category: Category }[];
 };
@@ -97,11 +99,19 @@ export default async function ProductDetail({ product }: { product: Product }) {
                             alt={product.name ?? "Produk"}
                         />
                         <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
+                        {product.status === "PENDING" && (
+                            <span className="mb-2 inline-block w-fit text-xs font-medium px-2.5 py-1 rounded-full text-orange-700 bg-orange-50 border border-orange-200">
+                                Menunggu moderasi admin
+                            </span>
+                        )}
                         <div className="flex items-center gap-3">
                           {(session?.user?.role === "ADMIN" || session?.user?.role === "MODERATOR") && (
                               <a href={`/product/${product.id}/edit`} className="text-blue-500 hover:underline text-sm">
                                   Edit Produk
                               </a>
+                          )}
+                          {(session?.user?.role === "ADMIN" || session?.user?.role === "MODERATOR") && product.status === "PENDING" && (
+                              <ApproveProductButton productId={String(product.id)} />
                           )}
                           {session?.user && (
                             <ReportModal type="PRODUCT" productId={String(product.id)} />

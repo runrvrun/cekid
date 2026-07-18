@@ -239,7 +239,7 @@ export default function SearchProduct({
           type="text"
           name="search"
           aria-label="Cari produk"
-          placeholder="Cari produk di minimarket..."
+          placeholder="Cari nama barang atau scan barcode..."
           value={value}
           onChange={(e) => setValue(e.target.value)}
           className="flex-1 px-3 py-3.5 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none"
