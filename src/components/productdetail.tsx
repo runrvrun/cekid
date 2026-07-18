@@ -105,7 +105,7 @@ export default async function ProductDetail({ product }: { product: Product }) {
                             alt={product.name ?? "Produk"}
                         />
                         <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
-                        <ProductBarcode productId={String(product.id)} upc={product.upc} />
+                        <ProductBarcode productId={String(product.id)} upc={product.upc} isSignedIn={!!session?.user} />
                         {product.status === "PENDING" && (
                             <span className="mb-2 inline-block w-fit text-xs font-medium px-2.5 py-1 rounded-full text-orange-700 bg-orange-50 border border-orange-200">
                                 Menunggu moderasi admin

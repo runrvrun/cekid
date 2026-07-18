@@ -10,9 +10,11 @@ import { addProductUpc } from "@/app/actions/addproductupc";
 export default function ProductBarcode({
   productId,
   upc,
+  isSignedIn,
 }: {
   productId: string;
   upc?: string | null;
+  isSignedIn: boolean;
 }) {
   const router = useRouter();
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -223,6 +225,10 @@ export default function ProductBarcode({
         <span className="text-xs text-gray-500 font-mono">{upc}</span>
       </div>
     );
+  }
+
+  if (!isSignedIn) {
+    return null;
   }
 
   return (
