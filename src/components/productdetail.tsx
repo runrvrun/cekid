@@ -7,7 +7,9 @@ import AddReviewForm from '@/components/addreviewform';
 import ImageSlider from '@/components/imageslider';
 import ReportModal from '@/components/reportmodal';
 import ApproveProductButton from '@/components/approveproductbutton';
+import { getUlasanForProduct } from '@/lib/prisma/products';
 import { Decimal } from "@prisma/client/runtime/client";
+import { BookOpen } from "lucide-react";
 
 type ProductImage = {
   id: bigint;
@@ -89,6 +91,8 @@ export default async function ProductDetail({ product }: { product: Product }) {
     if (userreview?.id) {
         userreviewed = true;
     }
+
+    const article = await getUlasanForProduct(product.slug);
 
   return (
     <main className="max-w-3xl mx-auto p-6">
@@ -178,7 +182,29 @@ export default async function ProductDetail({ product }: { product: Product }) {
                 </div>
             </section>
              <AddReviewForm productId={product.id} slug={product.slug} name={product.name} />
-            
+
+                        {/* Related Article */}
+                        {article && (
+                            <section className="mb-8">
+                                <Link
+                                    href={`/r/${article.permalink}`}
+                                    className="group flex flex-col gap-2 bg-white border border-gray-100 rounded-xl p-4 hover:border-gray-300 hover:shadow-sm transition-all"
+                                >
+                                    <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center shrink-0">
+                                        <BookOpen className="w-4 h-4 text-indigo-500" />
+                                    </div>
+                                    <h3 className="font-semibold text-sm text-gray-900 leading-snug group-hover:text-indigo-600 transition-colors">
+                                        {article.title}
+                                    </h3>
+                                    {article.metaDescription && (
+                                        <p className="text-xs text-gray-500 leading-relaxed">
+                                            {article.metaDescription}
+                                        </p>
+                                    )}
+                                </Link>
+                            </section>
+                        )}
+
                         {/* Reviews */}
                         <section>
                             <h2 className="text-xl font-bold mb-4">Reviews</h2>

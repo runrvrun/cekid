@@ -38,4 +38,34 @@ const getProductBySlug = async (slug: string) => {
   }
 };
 
-export { getProductBySlug };
+const getUlasanForProduct = async (productSlug: string) => {
+  const candidates = await prisma.ulasan.findMany({
+    where: {
+      status: "PUBLISHED",
+      content: { contains: `slug=${productSlug}` },
+    },
+    select: {
+      title: true,
+      permalink: true,
+      metaDescription: true,
+      publishedAt: true,
+      content: true,
+    },
+    orderBy: { publishedAt: "desc" },
+  });
+
+  const shortcodeRegex = /\[product slug=([^\]]+)\]/g;
+  for (const post of candidates) {
+    const matchesThisProduct = [...post.content.matchAll(shortcodeRegex)].some(
+      (match) => match[1].trim() === productSlug
+    );
+    if (matchesThisProduct) {
+      const { content, ...rest } = post;
+      return rest;
+    }
+  }
+
+  return null;
+};
+
+export { getProductBySlug, getUlasanForProduct };
