@@ -501,8 +501,11 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
         {/* IMAGE SECTION */}
         <div>
           <label className="block text-sm font-medium mb-2">
-            Foto Produk (opsional)
+            Foto
           </label>
+          <p className="text-xs text-gray-400 mb-2">
+            Detail produk akan otomatis terisi dengan AI setelah foto diunggah.
+          </p>
 
           {/* Thumbnails */}
           {hasImages && (
@@ -638,7 +641,7 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
 
         {/* FORM FIELDS */}
         <div>
-          <label className="block text-sm font-medium mb-1">Barcode Produk</label>
+          <label className="block text-sm font-medium mb-1">Barcode</label>
           <div className="flex gap-2">
             <input
               value={upc}

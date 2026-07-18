@@ -7,6 +7,7 @@ import AddReviewForm from '@/components/addreviewform';
 import ImageSlider from '@/components/imageslider';
 import ReportModal from '@/components/reportmodal';
 import ApproveProductButton from '@/components/approveproductbutton';
+import ProductBarcode from '@/components/productbarcode';
 import { getUlasanForProduct } from '@/lib/prisma/products';
 import { Decimal } from "@prisma/client/runtime/client";
 import { BookOpen } from "lucide-react";
@@ -29,6 +30,7 @@ type Product = {
   slug: string;
   description?: string | null;
   status?: string;
+  upc?: string | null;
   productImages?: ProductImage[];
   productCategory?: { category: Category }[];
 };
@@ -103,6 +105,7 @@ export default async function ProductDetail({ product }: { product: Product }) {
                             alt={product.name ?? "Produk"}
                         />
                         <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
+                        <ProductBarcode productId={String(product.id)} upc={product.upc} />
                         {product.status === "PENDING" && (
                             <span className="mb-2 inline-block w-fit text-xs font-medium px-2.5 py-1 rounded-full text-orange-700 bg-orange-50 border border-orange-200">
                                 Menunggu moderasi admin

@@ -2,14 +2,16 @@ import Link from "next/link";
 
 export default function AddProductLink() {
   return (
-    <p className="mt-3 text-xs text-white/60">
-      Produk tidak ditemukan?{" "}
+    <div className="mt-4 flex flex-col items-center gap-3">
+      <p className="text-xs text-white/60 text-center">
+        Barang yang kamu cari belum ada? Yuk bantu pembeli lain dengan nambahin reviewnya.
+      </p>
       <Link
         href="/product/create"
-        className="text-white underline underline-offset-2 hover:text-white/80 transition-colors"
+        className="inline-flex items-center justify-center rounded-full bg-white text-indigo-600 text-sm font-semibold px-5 py-2.5 hover:bg-white/90 transition-colors"
       >
-        Tambah produk baru
+        Buat Barang dan Review
       </Link>
-    </p>
+    </div>
   );
 }

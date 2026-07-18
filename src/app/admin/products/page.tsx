@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Prisma } from "@/generated/prisma/client";
 import ProductStatusButton from "./statusbtn";
+import { Upload } from "lucide-react";
 
 const STATUS_OPTIONS = [
   { value: "", label: "Semua Status" },
@@ -82,15 +83,24 @@ export default async function AdminProductsPage({
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Produk</h1>
-        {pendingCount > 0 && (
-          <a
-            href={buildHref({ status: "PENDING", page: "1" })}
-            className="flex items-center gap-2 text-sm text-orange-700 bg-orange-50 border border-orange-200 px-3 py-1.5 rounded-lg hover:bg-orange-100 transition"
+        <div className="flex items-center gap-2">
+          {pendingCount > 0 && (
+            <a
+              href={buildHref({ status: "PENDING", page: "1" })}
+              className="flex items-center gap-2 text-sm text-orange-700 bg-orange-50 border border-orange-200 px-3 py-1.5 rounded-lg hover:bg-orange-100 transition"
+            >
+              <span className="font-bold">{pendingCount}</span> produk menunggu
+              persetujuan
+            </a>
+          )}
+          <Link
+            href="/admin/products/bulk"
+            className="flex items-center gap-2 text-sm text-white bg-gray-900 px-3 py-1.5 rounded-lg hover:bg-gray-700 transition"
           >
-            <span className="font-bold">{pendingCount}</span> produk menunggu
-            persetujuan
-          </a>
-        )}
+            <Upload className="w-4 h-4" />
+            Bulk Upload
+          </Link>
+        </div>
       </div>
 
       {/* Filters */}
