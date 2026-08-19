@@ -1081,33 +1081,37 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
           {extraItems.length > 0 && (
             <div className="space-y-2 mb-2">
               {extraItems.map((item, i) => (
-                <div key={i} className="flex gap-1.5 items-center">
-                  <input
-                    value={item.label}
-                    onChange={(e) => updateExtraItem(i, { label: e.target.value })}
-                    placeholder="Label (mis. Energi)"
-                    className="input input-bordered flex-1 text-sm"
-                  />
-                  <input
-                    value={item.value}
-                    onChange={(e) => updateExtraItem(i, { value: e.target.value })}
-                    placeholder="Nilai"
-                    className="input input-bordered w-20 text-sm"
-                  />
-                  <input
-                    value={item.unit}
-                    onChange={(e) => updateExtraItem(i, { unit: e.target.value })}
-                    placeholder="Unit"
-                    className="input input-bordered w-16 text-sm"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeExtraItem(i)}
-                    className="text-red-500 hover:text-red-700 text-sm leading-none px-1"
-                    aria-label="Hapus"
-                  >
-                    ×
-                  </button>
+                <div key={i} className="border border-gray-200 rounded-lg p-2 space-y-1.5">
+                  <div className="flex gap-1.5 items-center">
+                    <input
+                      value={item.label}
+                      onChange={(e) => updateExtraItem(i, { label: e.target.value })}
+                      placeholder="Label (mis. Energi)"
+                      className="input input-bordered flex-1 min-w-0 text-sm"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeExtraItem(i)}
+                      className="text-red-500 hover:text-red-700 text-sm leading-none px-1 shrink-0"
+                      aria-label="Hapus"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  <div className="flex gap-1.5">
+                    <input
+                      value={item.value}
+                      onChange={(e) => updateExtraItem(i, { value: e.target.value })}
+                      placeholder="Nilai"
+                      className="input input-bordered flex-1 min-w-0 text-sm"
+                    />
+                    <input
+                      value={item.unit}
+                      onChange={(e) => updateExtraItem(i, { unit: e.target.value })}
+                      placeholder="Unit"
+                      className="input input-bordered w-20 shrink-0 text-sm"
+                    />
+                  </div>
                 </div>
               ))}
             </div>
