@@ -14,6 +14,7 @@ type ExistingImage = {
   id: bigint;
   url: string;
   isMain: boolean;
+  kind?: "PHOTO" | "NUTRITION_LABEL";
 };
 
 type NewImage = {
@@ -26,6 +27,24 @@ type Category = {
   name: string;
 };
 
+type ExtraNutritionItem = {
+  label: string;
+  value: string;
+  unit: string;
+};
+
+type NutritionData = {
+  servingSizeValue?: number | null;
+  servingSizeUnit?: string | null;
+  sugarPerServing?: number | null;
+  sodiumPerServing?: number | null;
+  saturatedFatPerServing?: number | null;
+  sugarPer100?: number | null;
+  sodiumPer100?: number | null;
+  saturatedFatPer100?: number | null;
+  extra?: unknown;
+} | null;
+
 type Product = {
   id: bigint;
   name: string;
@@ -34,6 +53,7 @@ type Product = {
   description?: string | null;
   images?: ExistingImage[];
   categoryIds?: string[];
+  nutrition?: NutritionData;
 };
 
 type Props = {
@@ -53,9 +73,9 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
   const [upc, setUpc] = useState(initialData?.upc ?? "");
   const [description, setDescription] = useState(initialData?.description ?? "");
 
-  // Multi-image state
+  // Multi-image state (general product photos only; nutrition label photo is tracked separately below)
   const [existingImages, setExistingImages] = useState<ExistingImage[]>(
-    initialData?.images ?? []
+    (initialData?.images ?? []).filter((img) => img.kind !== "NUTRITION_LABEL")
   );
   const [newImages, setNewImages] = useState<NewImage[]>([]);
   const [deletedImageIds, setDeletedImageIds] = useState<bigint[]>([]);
@@ -101,6 +121,136 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
       !selectedCategoryIds.includes(c.id) &&
       c.name.toLowerCase().includes(categorySearch.toLowerCase())
   );
+
+  /* ---------------- NUTRITION STATE ---------------- */
+  const existingNutritionImage =
+    (initialData?.images ?? []).find((img) => img.kind === "NUTRITION_LABEL") ?? null;
+
+  const nutritionImageInputRef = useRef<HTMLInputElement>(null);
+  const [nutritionImage, setNutritionImage] = useState<NewImage | null>(null);
+  const [removedNutritionImageId, setRemovedNutritionImageId] = useState<bigint | null>(null);
+  const [detectingNutrition, setDetectingNutrition] = useState(false);
+
+  const [servingSizeValue, setServingSizeValue] = useState(
+    initialData?.nutrition?.servingSizeValue != null
+      ? String(initialData.nutrition.servingSizeValue)
+      : ""
+  );
+  const [servingSizeUnit, setServingSizeUnit] = useState(
+    initialData?.nutrition?.servingSizeUnit ?? "g"
+  );
+  const [sugarPerServing, setSugarPerServing] = useState(
+    initialData?.nutrition?.sugarPerServing != null
+      ? String(initialData.nutrition.sugarPerServing)
+      : ""
+  );
+  const [sodiumPerServing, setSodiumPerServing] = useState(
+    initialData?.nutrition?.sodiumPerServing != null
+      ? String(initialData.nutrition.sodiumPerServing)
+      : ""
+  );
+  const [saturatedFatPerServing, setSaturatedFatPerServing] = useState(
+    initialData?.nutrition?.saturatedFatPerServing != null
+      ? String(initialData.nutrition.saturatedFatPerServing)
+      : ""
+  );
+  // Populated only via AI detection (when the label prints a per-100 reference column);
+  // not directly editable, but carried through to submission for more accurate grading.
+  const [per100, setPer100] = useState<{
+    sugar: number | null;
+    sodium: number | null;
+    saturatedFat: number | null;
+  }>({
+    sugar: initialData?.nutrition?.sugarPer100 ?? null,
+    sodium: initialData?.nutrition?.sodiumPer100 ?? null,
+    saturatedFat: initialData?.nutrition?.saturatedFatPer100 ?? null,
+  });
+  const [extraItems, setExtraItems] = useState<ExtraNutritionItem[]>(() => {
+    const raw = initialData?.nutrition?.extra;
+    if (Array.isArray(raw)) {
+      return raw.map((item) => ({
+        label: String((item as Record<string, unknown>)?.label ?? ""),
+        value: String((item as Record<string, unknown>)?.value ?? ""),
+        unit: String((item as Record<string, unknown>)?.unit ?? ""),
+      }));
+    }
+    return [];
+  });
+
+  const onNutritionImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0] ?? null;
+    e.target.value = "";
+    if (!f) return;
+    if (!f.type.startsWith("image/")) {
+      setError("File harus berupa gambar.");
+      return;
+    }
+    setNutritionImage({ file: f, previewUrl: URL.createObjectURL(f) });
+    detectNutrition(f);
+  };
+
+  const removeNutritionImage = () => {
+    if (nutritionImage) {
+      setNutritionImage(null);
+    } else if (existingNutritionImage) {
+      setRemovedNutritionImageId(existingNutritionImage.id);
+    }
+  };
+
+  const detectNutrition = async (imageFile: File) => {
+    try {
+      setDetectingNutrition(true);
+      const compressed = await imageCompression(imageFile, {
+        maxSizeMB: 0.25,
+        maxWidthOrHeight: 800,
+        useWebWorker: true,
+      });
+      const fd = new FormData();
+      fd.append("image", compressed);
+      const res = await fetch("/api/nutrition-detect", {
+        method: "POST",
+        body: fd,
+      });
+      const data = await res.json();
+      if (data?.servingSizeValue != null) setServingSizeValue(String(data.servingSizeValue));
+      if (data?.servingSizeUnit) setServingSizeUnit(data.servingSizeUnit);
+      if (data?.sugarPerServing != null) setSugarPerServing(String(data.sugarPerServing));
+      if (data?.sodiumPerServing != null) setSodiumPerServing(String(data.sodiumPerServing));
+      if (data?.saturatedFatPerServing != null)
+        setSaturatedFatPerServing(String(data.saturatedFatPerServing));
+      setPer100({
+        sugar: data?.sugarPer100 ?? null,
+        sodium: data?.sodiumPer100 ?? null,
+        saturatedFat: data?.saturatedFatPer100 ?? null,
+      });
+      if (Array.isArray(data?.other) && data.other.length > 0) {
+        setExtraItems((prev) => [
+          ...prev,
+          ...data.other.map((o: { label?: string; value?: string | number; unit?: string }) => ({
+            label: String(o.label ?? ""),
+            value: String(o.value ?? ""),
+            unit: String(o.unit ?? ""),
+          })),
+        ]);
+      }
+    } catch (err) {
+      console.error("Nutrition AI detection failed:", err);
+    } finally {
+      setDetectingNutrition(false);
+    }
+  };
+
+  const addExtraItem = () => {
+    setExtraItems((prev) => [...prev, { label: "", value: "", unit: "" }]);
+  };
+
+  const updateExtraItem = (index: number, patch: Partial<ExtraNutritionItem>) => {
+    setExtraItems((prev) => prev.map((item, i) => (i === index ? { ...item, ...patch } : item)));
+  };
+
+  const removeExtraItem = (index: number) => {
+    setExtraItems((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const [dragActive, setDragActive] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -274,8 +424,20 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
         compressedNewImages.push(compressed);
       }
 
+      // Compress nutrition label photo, if any
+      let compressedNutritionImage: File | null = null;
+      if (nutritionImage) {
+        compressedNutritionImage = await imageCompression(nutritionImage.file, {
+          maxSizeMB: 0.25,
+          maxWidthOrHeight: 800,
+          useWebWorker: true,
+        });
+      }
+
       // Pre-flight: catch oversized payloads before hitting the server limit
-      const totalBytes = compressedNewImages.reduce((sum, f) => sum + f.size, 0);
+      const totalBytes =
+        compressedNewImages.reduce((sum, f) => sum + f.size, 0) +
+        (compressedNutritionImage?.size ?? 0);
       if (totalBytes > 7 * 1024 * 1024) {
         setError(
           `Ukuran gambar terlalu besar (${(totalBytes / 1024 / 1024).toFixed(1)} MB). Kurangi jumlah atau resolusi gambar.`
@@ -299,6 +461,28 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
         for (const id of deletedImageIds) {
           fd.append("deleteImageId", id.toString());
         }
+        if (removedNutritionImageId) {
+          fd.append("deleteImageId", removedNutritionImageId.toString());
+        }
+      }
+
+      // Nutrition info (all optional)
+      if (compressedNutritionImage) {
+        fd.append("nutritionImage", compressedNutritionImage);
+      }
+      if (servingSizeValue.trim()) fd.append("nutritionServingSizeValue", servingSizeValue.trim());
+      if (servingSizeUnit) fd.append("nutritionServingSizeUnit", servingSizeUnit);
+      if (sugarPerServing.trim()) fd.append("nutritionSugarPerServing", sugarPerServing.trim());
+      if (sodiumPerServing.trim()) fd.append("nutritionSodiumPerServing", sodiumPerServing.trim());
+      if (saturatedFatPerServing.trim())
+        fd.append("nutritionSaturatedFatPerServing", saturatedFatPerServing.trim());
+      if (per100.sugar != null) fd.append("nutritionSugarPer100", String(per100.sugar));
+      if (per100.sodium != null) fd.append("nutritionSodiumPer100", String(per100.sodium));
+      if (per100.saturatedFat != null)
+        fd.append("nutritionSaturatedFatPer100", String(per100.saturatedFat));
+      const cleanExtraItems = extraItems.filter((item) => item.label.trim() && item.value.trim());
+      if (cleanExtraItems.length > 0) {
+        fd.append("nutritionExtra", JSON.stringify(cleanExtraItems));
       }
 
       const result =
@@ -749,6 +933,171 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
             </div>
           </div>
         )}
+
+        {/* NUTRITION SECTION */}
+        <div className="border-t pt-4">
+          <label className="block text-sm font-medium mb-1">
+            Informasi Gizi <span className="text-gray-400 font-normal">(opsional)</span>
+          </label>
+          <p className="text-xs text-gray-400 mb-2">
+            Unggah foto label gizi kemasan untuk deteksi otomatis, atau isi manual. Foto ini juga
+            akan tampil di galeri foto produk.
+          </p>
+
+          {/* Nutrition label photo */}
+          <div className="mb-3">
+            {nutritionImage ? (
+              <div className="relative w-24 h-24">
+                <Image
+                  src={nutritionImage.previewUrl}
+                  alt="Foto label gizi"
+                  fill
+                  className="object-cover rounded-lg"
+                />
+                <button
+                  type="button"
+                  onClick={removeNutritionImage}
+                  className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center z-10 leading-none"
+                >
+                  ×
+                </button>
+              </div>
+            ) : existingNutritionImage && !removedNutritionImageId ? (
+              <div className="relative w-24 h-24">
+                <Image
+                  src={existingNutritionImage.url}
+                  alt="Foto label gizi"
+                  fill
+                  className="object-cover rounded-lg"
+                />
+                <button
+                  type="button"
+                  onClick={removeNutritionImage}
+                  className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center z-10 leading-none"
+                >
+                  ×
+                </button>
+              </div>
+            ) : (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => nutritionImageInputRef.current?.click()}
+              >
+                🏷️ Foto Label Gizi
+              </Button>
+            )}
+            <input
+              ref={nutritionImageInputRef}
+              type="file"
+              accept="image/*"
+              onChange={onNutritionImageChange}
+              className="hidden"
+            />
+            {detectingNutrition && (
+              <p className="text-xs text-base-content/60 mt-2">
+                🔎 Mendeteksi informasi gizi...
+              </p>
+            )}
+          </div>
+
+          {/* Manual fields */}
+          <div className="grid grid-cols-2 gap-3 mb-3">
+            <div>
+              <label className="block text-xs font-medium mb-1">Ukuran Saji</label>
+              <div className="flex gap-1">
+                <input
+                  type="number"
+                  step="any"
+                  value={servingSizeValue}
+                  onChange={(e) => setServingSizeValue(e.target.value)}
+                  className="input input-bordered w-full"
+                  placeholder="30"
+                />
+                <select
+                  value={servingSizeUnit}
+                  onChange={(e) => setServingSizeUnit(e.target.value)}
+                  className="input input-bordered"
+                >
+                  <option value="g">g</option>
+                  <option value="ml">ml</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className="block text-xs font-medium mb-1">Gula per saji (g)</label>
+              <input
+                type="number"
+                step="any"
+                value={sugarPerServing}
+                onChange={(e) => setSugarPerServing(e.target.value)}
+                className="input input-bordered w-full"
+                placeholder="5"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium mb-1">Natrium per saji (mg)</label>
+              <input
+                type="number"
+                step="any"
+                value={sodiumPerServing}
+                onChange={(e) => setSodiumPerServing(e.target.value)}
+                className="input input-bordered w-full"
+                placeholder="120"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium mb-1">Lemak Jenuh per saji (g)</label>
+              <input
+                type="number"
+                step="any"
+                value={saturatedFatPerServing}
+                onChange={(e) => setSaturatedFatPerServing(e.target.value)}
+                className="input input-bordered w-full"
+                placeholder="1.5"
+              />
+            </div>
+          </div>
+
+          {/* Extra nutrition items */}
+          {extraItems.length > 0 && (
+            <div className="space-y-2 mb-2">
+              {extraItems.map((item, i) => (
+                <div key={i} className="flex gap-1.5 items-center">
+                  <input
+                    value={item.label}
+                    onChange={(e) => updateExtraItem(i, { label: e.target.value })}
+                    placeholder="Label (mis. Energi)"
+                    className="input input-bordered flex-1 text-sm"
+                  />
+                  <input
+                    value={item.value}
+                    onChange={(e) => updateExtraItem(i, { value: e.target.value })}
+                    placeholder="Nilai"
+                    className="input input-bordered w-20 text-sm"
+                  />
+                  <input
+                    value={item.unit}
+                    onChange={(e) => updateExtraItem(i, { unit: e.target.value })}
+                    placeholder="Unit"
+                    className="input input-bordered w-16 text-sm"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeExtraItem(i)}
+                    className="text-red-500 hover:text-red-700 text-sm leading-none px-1"
+                    aria-label="Hapus"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          <Button type="button" variant="outline" size="sm" onClick={addExtraItem}>
+            + Tambah info lain
+          </Button>
+        </div>
 
         {scanning && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

@@ -295,6 +295,7 @@ export type ProductWhereInput = {
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   productCategory?: Prisma.ProductCategoryListRelationFilter
   productImages?: Prisma.ProductImageListRelationFilter
+  productNutrition?: Prisma.XOR<Prisma.ProductNutritionNullableScalarRelationFilter, Prisma.ProductNutritionWhereInput> | null
   review?: Prisma.ReviewListRelationFilter
   reports?: Prisma.ReportListRelationFilter
 }
@@ -316,6 +317,7 @@ export type ProductOrderByWithRelationInput = {
   user?: Prisma.UserOrderByWithRelationInput
   productCategory?: Prisma.ProductCategoryOrderByRelationAggregateInput
   productImages?: Prisma.ProductImageOrderByRelationAggregateInput
+  productNutrition?: Prisma.ProductNutritionOrderByWithRelationInput
   review?: Prisma.ReviewOrderByRelationAggregateInput
   reports?: Prisma.ReportOrderByRelationAggregateInput
 }
@@ -340,6 +342,7 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   productCategory?: Prisma.ProductCategoryListRelationFilter
   productImages?: Prisma.ProductImageListRelationFilter
+  productNutrition?: Prisma.XOR<Prisma.ProductNutritionNullableScalarRelationFilter, Prisma.ProductNutritionWhereInput> | null
   review?: Prisma.ReviewListRelationFilter
   reports?: Prisma.ReportListRelationFilter
 }, "id" | "slug">
@@ -400,6 +403,7 @@ export type ProductCreateInput = {
   user?: Prisma.UserCreateNestedOneWithoutProductInput
   productCategory?: Prisma.ProductCategoryCreateNestedManyWithoutProductInput
   productImages?: Prisma.ProductImageCreateNestedManyWithoutProductInput
+  productNutrition?: Prisma.ProductNutritionCreateNestedOneWithoutProductInput
   review?: Prisma.ReviewCreateNestedManyWithoutProductInput
   reports?: Prisma.ReportCreateNestedManyWithoutProductInput
 }
@@ -420,6 +424,7 @@ export type ProductUncheckedCreateInput = {
   embedding?: Prisma.ProductCreateembeddingInput | number[]
   productCategory?: Prisma.ProductCategoryUncheckedCreateNestedManyWithoutProductInput
   productImages?: Prisma.ProductImageUncheckedCreateNestedManyWithoutProductInput
+  productNutrition?: Prisma.ProductNutritionUncheckedCreateNestedOneWithoutProductInput
   review?: Prisma.ReviewUncheckedCreateNestedManyWithoutProductInput
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutProductInput
 }
@@ -440,6 +445,7 @@ export type ProductUpdateInput = {
   user?: Prisma.UserUpdateOneWithoutProductNestedInput
   productCategory?: Prisma.ProductCategoryUpdateManyWithoutProductNestedInput
   productImages?: Prisma.ProductImageUpdateManyWithoutProductNestedInput
+  productNutrition?: Prisma.ProductNutritionUpdateOneWithoutProductNestedInput
   review?: Prisma.ReviewUpdateManyWithoutProductNestedInput
   reports?: Prisma.ReportUpdateManyWithoutProductNestedInput
 }
@@ -460,6 +466,7 @@ export type ProductUncheckedUpdateInput = {
   embedding?: Prisma.ProductUpdateembeddingInput | number[]
   productCategory?: Prisma.ProductCategoryUncheckedUpdateManyWithoutProductNestedInput
   productImages?: Prisma.ProductImageUncheckedUpdateManyWithoutProductNestedInput
+  productNutrition?: Prisma.ProductNutritionUncheckedUpdateOneWithoutProductNestedInput
   review?: Prisma.ReviewUncheckedUpdateManyWithoutProductNestedInput
   reports?: Prisma.ReportUncheckedUpdateManyWithoutProductNestedInput
 }
@@ -662,6 +669,20 @@ export type ProductUpdateOneRequiredWithoutProductImagesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutProductImagesInput, Prisma.ProductUpdateWithoutProductImagesInput>, Prisma.ProductUncheckedUpdateWithoutProductImagesInput>
 }
 
+export type ProductCreateNestedOneWithoutProductNutritionInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutProductNutritionInput, Prisma.ProductUncheckedCreateWithoutProductNutritionInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutProductNutritionInput
+  connect?: Prisma.ProductWhereUniqueInput
+}
+
+export type ProductUpdateOneRequiredWithoutProductNutritionNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutProductNutritionInput, Prisma.ProductUncheckedCreateWithoutProductNutritionInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutProductNutritionInput
+  upsert?: Prisma.ProductUpsertWithoutProductNutritionInput
+  connect?: Prisma.ProductWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutProductNutritionInput, Prisma.ProductUpdateWithoutProductNutritionInput>, Prisma.ProductUncheckedUpdateWithoutProductNutritionInput>
+}
+
 export type ProductCreateNestedOneWithoutReviewInput = {
   create?: Prisma.XOR<Prisma.ProductCreateWithoutReviewInput, Prisma.ProductUncheckedCreateWithoutReviewInput>
   connectOrCreate?: Prisma.ProductCreateOrConnectWithoutReviewInput
@@ -749,6 +770,7 @@ export type ProductCreateWithoutProductCategoryInput = {
   embedding?: Prisma.ProductCreateembeddingInput | number[]
   user?: Prisma.UserCreateNestedOneWithoutProductInput
   productImages?: Prisma.ProductImageCreateNestedManyWithoutProductInput
+  productNutrition?: Prisma.ProductNutritionCreateNestedOneWithoutProductInput
   review?: Prisma.ReviewCreateNestedManyWithoutProductInput
   reports?: Prisma.ReportCreateNestedManyWithoutProductInput
 }
@@ -768,6 +790,7 @@ export type ProductUncheckedCreateWithoutProductCategoryInput = {
   deletedAt?: Date | string | null
   embedding?: Prisma.ProductCreateembeddingInput | number[]
   productImages?: Prisma.ProductImageUncheckedCreateNestedManyWithoutProductInput
+  productNutrition?: Prisma.ProductNutritionUncheckedCreateNestedOneWithoutProductInput
   review?: Prisma.ReviewUncheckedCreateNestedManyWithoutProductInput
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutProductInput
 }
@@ -803,6 +826,7 @@ export type ProductUpdateWithoutProductCategoryInput = {
   embedding?: Prisma.ProductUpdateembeddingInput | number[]
   user?: Prisma.UserUpdateOneWithoutProductNestedInput
   productImages?: Prisma.ProductImageUpdateManyWithoutProductNestedInput
+  productNutrition?: Prisma.ProductNutritionUpdateOneWithoutProductNestedInput
   review?: Prisma.ReviewUpdateManyWithoutProductNestedInput
   reports?: Prisma.ReportUpdateManyWithoutProductNestedInput
 }
@@ -822,6 +846,7 @@ export type ProductUncheckedUpdateWithoutProductCategoryInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   embedding?: Prisma.ProductUpdateembeddingInput | number[]
   productImages?: Prisma.ProductImageUncheckedUpdateManyWithoutProductNestedInput
+  productNutrition?: Prisma.ProductNutritionUncheckedUpdateOneWithoutProductNestedInput
   review?: Prisma.ReviewUncheckedUpdateManyWithoutProductNestedInput
   reports?: Prisma.ReportUncheckedUpdateManyWithoutProductNestedInput
 }
@@ -841,6 +866,7 @@ export type ProductCreateWithoutProductImagesInput = {
   embedding?: Prisma.ProductCreateembeddingInput | number[]
   user?: Prisma.UserCreateNestedOneWithoutProductInput
   productCategory?: Prisma.ProductCategoryCreateNestedManyWithoutProductInput
+  productNutrition?: Prisma.ProductNutritionCreateNestedOneWithoutProductInput
   review?: Prisma.ReviewCreateNestedManyWithoutProductInput
   reports?: Prisma.ReportCreateNestedManyWithoutProductInput
 }
@@ -860,6 +886,7 @@ export type ProductUncheckedCreateWithoutProductImagesInput = {
   deletedAt?: Date | string | null
   embedding?: Prisma.ProductCreateembeddingInput | number[]
   productCategory?: Prisma.ProductCategoryUncheckedCreateNestedManyWithoutProductInput
+  productNutrition?: Prisma.ProductNutritionUncheckedCreateNestedOneWithoutProductInput
   review?: Prisma.ReviewUncheckedCreateNestedManyWithoutProductInput
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutProductInput
 }
@@ -895,6 +922,7 @@ export type ProductUpdateWithoutProductImagesInput = {
   embedding?: Prisma.ProductUpdateembeddingInput | number[]
   user?: Prisma.UserUpdateOneWithoutProductNestedInput
   productCategory?: Prisma.ProductCategoryUpdateManyWithoutProductNestedInput
+  productNutrition?: Prisma.ProductNutritionUpdateOneWithoutProductNestedInput
   review?: Prisma.ReviewUpdateManyWithoutProductNestedInput
   reports?: Prisma.ReportUpdateManyWithoutProductNestedInput
 }
@@ -914,6 +942,103 @@ export type ProductUncheckedUpdateWithoutProductImagesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   embedding?: Prisma.ProductUpdateembeddingInput | number[]
   productCategory?: Prisma.ProductCategoryUncheckedUpdateManyWithoutProductNestedInput
+  productNutrition?: Prisma.ProductNutritionUncheckedUpdateOneWithoutProductNestedInput
+  review?: Prisma.ReviewUncheckedUpdateManyWithoutProductNestedInput
+  reports?: Prisma.ReportUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type ProductCreateWithoutProductNutritionInput = {
+  id?: bigint | number
+  name: string
+  slug: string
+  description?: string | null
+  status?: $Enums.ProductStatus
+  upc?: string | null
+  reviewCount?: number | null
+  ratingSum?: number | null
+  rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string | null
+  deletedAt?: Date | string | null
+  embedding?: Prisma.ProductCreateembeddingInput | number[]
+  user?: Prisma.UserCreateNestedOneWithoutProductInput
+  productCategory?: Prisma.ProductCategoryCreateNestedManyWithoutProductInput
+  productImages?: Prisma.ProductImageCreateNestedManyWithoutProductInput
+  review?: Prisma.ReviewCreateNestedManyWithoutProductInput
+  reports?: Prisma.ReportCreateNestedManyWithoutProductInput
+}
+
+export type ProductUncheckedCreateWithoutProductNutritionInput = {
+  id?: bigint | number
+  name: string
+  slug: string
+  description?: string | null
+  status?: $Enums.ProductStatus
+  upc?: string | null
+  reviewCount?: number | null
+  ratingSum?: number | null
+  rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  userId?: string | null
+  createdAt?: Date | string | null
+  deletedAt?: Date | string | null
+  embedding?: Prisma.ProductCreateembeddingInput | number[]
+  productCategory?: Prisma.ProductCategoryUncheckedCreateNestedManyWithoutProductInput
+  productImages?: Prisma.ProductImageUncheckedCreateNestedManyWithoutProductInput
+  review?: Prisma.ReviewUncheckedCreateNestedManyWithoutProductInput
+  reports?: Prisma.ReportUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type ProductCreateOrConnectWithoutProductNutritionInput = {
+  where: Prisma.ProductWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductCreateWithoutProductNutritionInput, Prisma.ProductUncheckedCreateWithoutProductNutritionInput>
+}
+
+export type ProductUpsertWithoutProductNutritionInput = {
+  update: Prisma.XOR<Prisma.ProductUpdateWithoutProductNutritionInput, Prisma.ProductUncheckedUpdateWithoutProductNutritionInput>
+  create: Prisma.XOR<Prisma.ProductCreateWithoutProductNutritionInput, Prisma.ProductUncheckedCreateWithoutProductNutritionInput>
+  where?: Prisma.ProductWhereInput
+}
+
+export type ProductUpdateToOneWithWhereWithoutProductNutritionInput = {
+  where?: Prisma.ProductWhereInput
+  data: Prisma.XOR<Prisma.ProductUpdateWithoutProductNutritionInput, Prisma.ProductUncheckedUpdateWithoutProductNutritionInput>
+}
+
+export type ProductUpdateWithoutProductNutritionInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+  upc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  embedding?: Prisma.ProductUpdateembeddingInput | number[]
+  user?: Prisma.UserUpdateOneWithoutProductNestedInput
+  productCategory?: Prisma.ProductCategoryUpdateManyWithoutProductNestedInput
+  productImages?: Prisma.ProductImageUpdateManyWithoutProductNestedInput
+  review?: Prisma.ReviewUpdateManyWithoutProductNestedInput
+  reports?: Prisma.ReportUpdateManyWithoutProductNestedInput
+}
+
+export type ProductUncheckedUpdateWithoutProductNutritionInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+  upc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ratingSum?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  embedding?: Prisma.ProductUpdateembeddingInput | number[]
+  productCategory?: Prisma.ProductCategoryUncheckedUpdateManyWithoutProductNestedInput
+  productImages?: Prisma.ProductImageUncheckedUpdateManyWithoutProductNestedInput
   review?: Prisma.ReviewUncheckedUpdateManyWithoutProductNestedInput
   reports?: Prisma.ReportUncheckedUpdateManyWithoutProductNestedInput
 }
@@ -934,6 +1059,7 @@ export type ProductCreateWithoutReviewInput = {
   user?: Prisma.UserCreateNestedOneWithoutProductInput
   productCategory?: Prisma.ProductCategoryCreateNestedManyWithoutProductInput
   productImages?: Prisma.ProductImageCreateNestedManyWithoutProductInput
+  productNutrition?: Prisma.ProductNutritionCreateNestedOneWithoutProductInput
   reports?: Prisma.ReportCreateNestedManyWithoutProductInput
 }
 
@@ -953,6 +1079,7 @@ export type ProductUncheckedCreateWithoutReviewInput = {
   embedding?: Prisma.ProductCreateembeddingInput | number[]
   productCategory?: Prisma.ProductCategoryUncheckedCreateNestedManyWithoutProductInput
   productImages?: Prisma.ProductImageUncheckedCreateNestedManyWithoutProductInput
+  productNutrition?: Prisma.ProductNutritionUncheckedCreateNestedOneWithoutProductInput
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutProductInput
 }
 
@@ -988,6 +1115,7 @@ export type ProductUpdateWithoutReviewInput = {
   user?: Prisma.UserUpdateOneWithoutProductNestedInput
   productCategory?: Prisma.ProductCategoryUpdateManyWithoutProductNestedInput
   productImages?: Prisma.ProductImageUpdateManyWithoutProductNestedInput
+  productNutrition?: Prisma.ProductNutritionUpdateOneWithoutProductNestedInput
   reports?: Prisma.ReportUpdateManyWithoutProductNestedInput
 }
 
@@ -1007,6 +1135,7 @@ export type ProductUncheckedUpdateWithoutReviewInput = {
   embedding?: Prisma.ProductUpdateembeddingInput | number[]
   productCategory?: Prisma.ProductCategoryUncheckedUpdateManyWithoutProductNestedInput
   productImages?: Prisma.ProductImageUncheckedUpdateManyWithoutProductNestedInput
+  productNutrition?: Prisma.ProductNutritionUncheckedUpdateOneWithoutProductNestedInput
   reports?: Prisma.ReportUncheckedUpdateManyWithoutProductNestedInput
 }
 
@@ -1025,6 +1154,7 @@ export type ProductCreateWithoutUserInput = {
   embedding?: Prisma.ProductCreateembeddingInput | number[]
   productCategory?: Prisma.ProductCategoryCreateNestedManyWithoutProductInput
   productImages?: Prisma.ProductImageCreateNestedManyWithoutProductInput
+  productNutrition?: Prisma.ProductNutritionCreateNestedOneWithoutProductInput
   review?: Prisma.ReviewCreateNestedManyWithoutProductInput
   reports?: Prisma.ReportCreateNestedManyWithoutProductInput
 }
@@ -1044,6 +1174,7 @@ export type ProductUncheckedCreateWithoutUserInput = {
   embedding?: Prisma.ProductCreateembeddingInput | number[]
   productCategory?: Prisma.ProductCategoryUncheckedCreateNestedManyWithoutProductInput
   productImages?: Prisma.ProductImageUncheckedCreateNestedManyWithoutProductInput
+  productNutrition?: Prisma.ProductNutritionUncheckedCreateNestedOneWithoutProductInput
   review?: Prisma.ReviewUncheckedCreateNestedManyWithoutProductInput
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutProductInput
 }
@@ -1109,6 +1240,7 @@ export type ProductCreateWithoutReportsInput = {
   user?: Prisma.UserCreateNestedOneWithoutProductInput
   productCategory?: Prisma.ProductCategoryCreateNestedManyWithoutProductInput
   productImages?: Prisma.ProductImageCreateNestedManyWithoutProductInput
+  productNutrition?: Prisma.ProductNutritionCreateNestedOneWithoutProductInput
   review?: Prisma.ReviewCreateNestedManyWithoutProductInput
 }
 
@@ -1128,6 +1260,7 @@ export type ProductUncheckedCreateWithoutReportsInput = {
   embedding?: Prisma.ProductCreateembeddingInput | number[]
   productCategory?: Prisma.ProductCategoryUncheckedCreateNestedManyWithoutProductInput
   productImages?: Prisma.ProductImageUncheckedCreateNestedManyWithoutProductInput
+  productNutrition?: Prisma.ProductNutritionUncheckedCreateNestedOneWithoutProductInput
   review?: Prisma.ReviewUncheckedCreateNestedManyWithoutProductInput
 }
 
@@ -1163,6 +1296,7 @@ export type ProductUpdateWithoutReportsInput = {
   user?: Prisma.UserUpdateOneWithoutProductNestedInput
   productCategory?: Prisma.ProductCategoryUpdateManyWithoutProductNestedInput
   productImages?: Prisma.ProductImageUpdateManyWithoutProductNestedInput
+  productNutrition?: Prisma.ProductNutritionUpdateOneWithoutProductNestedInput
   review?: Prisma.ReviewUpdateManyWithoutProductNestedInput
 }
 
@@ -1182,6 +1316,7 @@ export type ProductUncheckedUpdateWithoutReportsInput = {
   embedding?: Prisma.ProductUpdateembeddingInput | number[]
   productCategory?: Prisma.ProductCategoryUncheckedUpdateManyWithoutProductNestedInput
   productImages?: Prisma.ProductImageUncheckedUpdateManyWithoutProductNestedInput
+  productNutrition?: Prisma.ProductNutritionUncheckedUpdateOneWithoutProductNestedInput
   review?: Prisma.ReviewUncheckedUpdateManyWithoutProductNestedInput
 }
 
@@ -1215,6 +1350,7 @@ export type ProductUpdateWithoutUserInput = {
   embedding?: Prisma.ProductUpdateembeddingInput | number[]
   productCategory?: Prisma.ProductCategoryUpdateManyWithoutProductNestedInput
   productImages?: Prisma.ProductImageUpdateManyWithoutProductNestedInput
+  productNutrition?: Prisma.ProductNutritionUpdateOneWithoutProductNestedInput
   review?: Prisma.ReviewUpdateManyWithoutProductNestedInput
   reports?: Prisma.ReportUpdateManyWithoutProductNestedInput
 }
@@ -1234,6 +1370,7 @@ export type ProductUncheckedUpdateWithoutUserInput = {
   embedding?: Prisma.ProductUpdateembeddingInput | number[]
   productCategory?: Prisma.ProductCategoryUncheckedUpdateManyWithoutProductNestedInput
   productImages?: Prisma.ProductImageUncheckedUpdateManyWithoutProductNestedInput
+  productNutrition?: Prisma.ProductNutritionUncheckedUpdateOneWithoutProductNestedInput
   review?: Prisma.ReviewUncheckedUpdateManyWithoutProductNestedInput
   reports?: Prisma.ReportUncheckedUpdateManyWithoutProductNestedInput
 }
@@ -1328,6 +1465,7 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   user?: boolean | Prisma.Product$userArgs<ExtArgs>
   productCategory?: boolean | Prisma.Product$productCategoryArgs<ExtArgs>
   productImages?: boolean | Prisma.Product$productImagesArgs<ExtArgs>
+  productNutrition?: boolean | Prisma.Product$productNutritionArgs<ExtArgs>
   review?: boolean | Prisma.Product$reviewArgs<ExtArgs>
   reports?: boolean | Prisma.Product$reportsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
@@ -1388,6 +1526,7 @@ export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   user?: boolean | Prisma.Product$userArgs<ExtArgs>
   productCategory?: boolean | Prisma.Product$productCategoryArgs<ExtArgs>
   productImages?: boolean | Prisma.Product$productImagesArgs<ExtArgs>
+  productNutrition?: boolean | Prisma.Product$productNutritionArgs<ExtArgs>
   review?: boolean | Prisma.Product$reviewArgs<ExtArgs>
   reports?: boolean | Prisma.Product$reportsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
@@ -1405,6 +1544,7 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     user: Prisma.$UserPayload<ExtArgs> | null
     productCategory: Prisma.$ProductCategoryPayload<ExtArgs>[]
     productImages: Prisma.$ProductImagePayload<ExtArgs>[]
+    productNutrition: Prisma.$ProductNutritionPayload<ExtArgs> | null
     review: Prisma.$ReviewPayload<ExtArgs>[]
     reports: Prisma.$ReportPayload<ExtArgs>[]
   }
@@ -1819,6 +1959,7 @@ export interface Prisma__ProductClient<T, Null = never, ExtArgs extends runtime.
   user<T extends Prisma.Product$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   productCategory<T extends Prisma.Product$productCategoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$productCategoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   productImages<T extends Prisma.Product$productImagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$productImagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  productNutrition<T extends Prisma.Product$productNutritionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$productNutritionArgs<ExtArgs>>): Prisma.Prisma__ProductNutritionClient<runtime.Types.Result.GetResult<Prisma.$ProductNutritionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   review<T extends Prisma.Product$reviewArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$reviewArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reports<T extends Prisma.Product$reportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$reportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -2323,6 +2464,25 @@ export type Product$productImagesArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.ProductImageScalarFieldEnum | Prisma.ProductImageScalarFieldEnum[]
+}
+
+/**
+ * Product.productNutrition
+ */
+export type Product$productNutritionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProductNutrition
+   */
+  select?: Prisma.ProductNutritionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProductNutrition
+   */
+  omit?: Prisma.ProductNutritionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProductNutritionInclude<ExtArgs> | null
+  where?: Prisma.ProductNutritionWhereInput
 }
 
 /**

@@ -3,6 +3,8 @@ import prisma from "@/lib/prisma";
 import { put } from "@vercel/blob";
 import { auth } from "@/lib/auth";
 import { generateEmbedding } from "@/lib/embeddings";
+import { parseNutritionFormData, hasNutritionData } from "@/lib/nutritionform";
+import { calculateNutriLevel } from "@/lib/nutrigrade";
 
 async function uploadImageToBlob(file: File, productName: string): Promise<string> {
   const timestamp = new Date().toISOString().replace(/[-:.]/g, "_");
@@ -23,12 +25,14 @@ export async function updateProduct(id: BigInt, formData: FormData) {
     const upc = formData.get("upc") as string;
     const description = formData.get("description") as string;
     const newImageFiles = formData.getAll("newImages") as File[];
+    const nutritionImageFile = formData.get("nutritionImage") as File | null;
     // "existing:{id}" | "new:{index}" | null
     const mainImageKey = formData.get("mainImageKey") as string | null;
     const deleteImageIds = (formData.getAll("deleteImageId") as string[]).map((s) => BigInt(s));
     const categoryIds = (formData.getAll("categoryId") as string[])
       .map((s) => BigInt(s))
       .filter(Boolean);
+    const nutrition = parseNutritionFormData(formData);
     const session = await auth();
     const productId = BigInt(String(id));
 
@@ -48,6 +52,15 @@ export async function updateProduct(id: BigInt, formData: FormData) {
       }
     }
 
+    let nutritionImageUrl: string | null = null;
+    if (nutritionImageFile && nutritionImageFile.size > 0) {
+      try {
+        nutritionImageUrl = await uploadImageToBlob(nutritionImageFile, name);
+      } catch {
+        return { success: false, error: "Gagal mengunggah foto label gizi" };
+      }
+    }
+
     const embedding = await generateEmbedding(name, description);
 
     const product = await prisma.$transaction(async (tx) => {
@@ -62,6 +75,17 @@ export async function updateProduct(id: BigInt, formData: FormData) {
       if (newImageUrls.length > 0) {
         await tx.productImage.createMany({
           data: newImageUrls.map((url) => ({ productId, url, isMain: false })),
+        });
+      }
+
+      if (nutritionImageUrl) {
+        await tx.productImage.create({
+          data: {
+            productId,
+            url: nutritionImageUrl,
+            isMain: false,
+            kind: "NUTRITION_LABEL",
+          },
         });
       }
 
@@ -114,6 +138,40 @@ export async function updateProduct(id: BigInt, formData: FormData) {
           data: categoryIds.map((categoryId) => ({ productId, categoryId })),
           skipDuplicates: true,
         });
+      }
+
+      if (hasNutritionData(nutrition)) {
+        const nutriLevel = calculateNutriLevel(nutrition);
+        await tx.productNutrition.upsert({
+          where: { productId },
+          create: {
+            productId,
+            servingSizeValue: nutrition.servingSizeValue,
+            servingSizeUnit: nutrition.servingSizeUnit,
+            sugarPerServing: nutrition.sugarPerServing,
+            sodiumPerServing: nutrition.sodiumPerServing,
+            saturatedFatPerServing: nutrition.saturatedFatPerServing,
+            sugarPer100: nutrition.sugarPer100,
+            sodiumPer100: nutrition.sodiumPer100,
+            saturatedFatPer100: nutrition.saturatedFatPer100,
+            extra: nutrition.extra.length > 0 ? nutrition.extra : undefined,
+            nutriLevel,
+          },
+          update: {
+            servingSizeValue: nutrition.servingSizeValue,
+            servingSizeUnit: nutrition.servingSizeUnit,
+            sugarPerServing: nutrition.sugarPerServing,
+            sodiumPerServing: nutrition.sodiumPerServing,
+            saturatedFatPerServing: nutrition.saturatedFatPerServing,
+            sugarPer100: nutrition.sugarPer100,
+            sodiumPer100: nutrition.sodiumPer100,
+            saturatedFatPer100: nutrition.saturatedFatPer100,
+            extra: nutrition.extra.length > 0 ? nutrition.extra : undefined,
+            nutriLevel,
+          },
+        });
+      } else {
+        await tx.productNutrition.deleteMany({ where: { productId } });
       }
 
       return tx.product.update({

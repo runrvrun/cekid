@@ -23,6 +23,22 @@ type Category = {
   name: string;
 };
 
+type NutritionExtraItem = {
+  label?: string;
+  value?: string | number;
+  unit?: string;
+};
+
+type ProductNutrition = {
+  servingSizeValue?: number | null;
+  servingSizeUnit?: string | null;
+  sugarPerServing?: number | null;
+  sodiumPerServing?: number | null;
+  saturatedFatPerServing?: number | null;
+  extra?: unknown;
+  nutriLevel?: string | null;
+};
+
 type Product = {
   id: bigint;
   name: string;
@@ -33,6 +49,14 @@ type Product = {
   upc?: string | null;
   productImages?: ProductImage[];
   productCategory?: { category: Category }[];
+  productNutrition?: ProductNutrition | null;
+};
+
+const NUTRI_LEVEL_STYLES: Record<string, string> = {
+  A: "bg-green-100 text-green-800 border-green-300",
+  B: "bg-lime-100 text-lime-800 border-lime-300",
+  C: "bg-yellow-100 text-yellow-800 border-yellow-300",
+  D: "bg-red-100 text-red-800 border-red-300",
 };
 
 export default async function ProductDetail({ product }: { product: Product }) {
@@ -144,6 +168,70 @@ export default async function ProductDetail({ product }: { product: Product }) {
                             </div>
                         )}
                     </section>
+
+                    {/* Nutrition info */}
+                    {product.productNutrition && (
+                        <section className="mb-8 bg-base-100 border border-gray-100 rounded-xl p-6">
+                            <div className="flex items-center justify-between mb-3">
+                                <h2 className="text-xl font-bold">Informasi Gizi</h2>
+                                {product.productNutrition.nutriLevel && (
+                                    <span
+                                        className={`inline-flex items-center justify-center w-9 h-9 rounded-full border text-lg font-bold ${
+                                            NUTRI_LEVEL_STYLES[product.productNutrition.nutriLevel] ??
+                                            "bg-gray-100 text-gray-700 border-gray-300"
+                                        }`}
+                                        title="Nutri Level (estimasi otomatis, bukan label regulasi resmi)"
+                                    >
+                                        {product.productNutrition.nutriLevel}
+                                    </span>
+                                )}
+                            </div>
+                            {product.productNutrition.nutriLevel && (
+                                <p className="text-xs text-gray-400 mb-3">
+                                    Nutri Level adalah estimasi otomatis berdasarkan kadar gula, natrium, dan lemak jenuh — bukan label regulasi resmi.
+                                </p>
+                            )}
+                            <dl className="grid grid-cols-2 gap-3 text-sm">
+                                {product.productNutrition.servingSizeValue != null && (
+                                    <div>
+                                        <dt className="text-gray-400">Ukuran Saji</dt>
+                                        <dd className="font-medium">
+                                            {product.productNutrition.servingSizeValue}
+                                            {product.productNutrition.servingSizeUnit}
+                                        </dd>
+                                    </div>
+                                )}
+                                {product.productNutrition.sugarPerServing != null && (
+                                    <div>
+                                        <dt className="text-gray-400">Gula per Saji</dt>
+                                        <dd className="font-medium">{product.productNutrition.sugarPerServing} g</dd>
+                                    </div>
+                                )}
+                                {product.productNutrition.sodiumPerServing != null && (
+                                    <div>
+                                        <dt className="text-gray-400">Natrium per Saji</dt>
+                                        <dd className="font-medium">{product.productNutrition.sodiumPerServing} mg</dd>
+                                    </div>
+                                )}
+                                {product.productNutrition.saturatedFatPerServing != null && (
+                                    <div>
+                                        <dt className="text-gray-400">Lemak Jenuh per Saji</dt>
+                                        <dd className="font-medium">{product.productNutrition.saturatedFatPerServing} g</dd>
+                                    </div>
+                                )}
+                                {Array.isArray(product.productNutrition.extra) &&
+                                    (product.productNutrition.extra as NutritionExtraItem[]).map((item, i) => (
+                                        <div key={i}>
+                                            <dt className="text-gray-400">{item.label}</dt>
+                                            <dd className="font-medium">
+                                                {item.value} {item.unit}
+                                            </dd>
+                                        </div>
+                                    ))}
+                            </dl>
+                        </section>
+                    )}
+
                     {/* Similar Products */}
             <section className="mb-8">
                 <h2 className="text-xl font-bold mb-4">Produk Serupa</h2>

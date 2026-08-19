@@ -10,12 +10,13 @@ const getProductBySlug = async (slug: string) => {
       where: { slug: validatedSlug, status: { in: ["ACTIVE", "PENDING"] }, deletedAt: null },
       include: {
         productImages: {
-          select: { id: true, url: true, isMain: true },
+          select: { id: true, url: true, isMain: true, kind: true },
           orderBy: [{ isMain: "desc" }, { id: "asc" }],
         },
         productCategory: {
           select: { category: { select: { id: true, name: true } } },
         },
+        productNutrition: true,
       },
     });
     return product;

@@ -68,3 +68,11 @@ export const UlasanStatus = {
 } as const
 
 export type UlasanStatus = (typeof UlasanStatus)[keyof typeof UlasanStatus]
+
+
+export const ProductImageKind = {
+  PHOTO: 'PHOTO',
+  NUTRITION_LABEL: 'NUTRITION_LABEL'
+} as const
+
+export type ProductImageKind = (typeof ProductImageKind)[keyof typeof ProductImageKind]

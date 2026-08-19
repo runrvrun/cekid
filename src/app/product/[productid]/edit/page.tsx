@@ -21,12 +21,13 @@ const Page = async ({ params }: { params: { productid: bigint } }) => {
         description: true,
         upc: true,
         productImages: {
-          select: { id: true, url: true, isMain: true },
+          select: { id: true, url: true, isMain: true, kind: true },
           orderBy: { id: "asc" },
         },
         productCategory: {
           select: { categoryId: true },
         },
+        productNutrition: true,
       },
       where: { id },
     }),
@@ -48,6 +49,7 @@ const Page = async ({ params }: { params: { productid: bigint } }) => {
     upc: product.upc,
     images: product.productImages,
     categoryIds: product.productCategory.map((pc) => String(pc.categoryId)),
+    nutrition: product.productNutrition,
   };
 
   return (

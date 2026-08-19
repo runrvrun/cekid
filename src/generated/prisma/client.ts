@@ -62,6 +62,11 @@ export type Product = Prisma.ProductModel
  */
 export type ProductImage = Prisma.ProductImageModel
 /**
+ * Model ProductNutrition
+ * 
+ */
+export type ProductNutrition = Prisma.ProductNutritionModel
+/**
  * Model Review
  * 
  */

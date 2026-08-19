@@ -4,6 +4,8 @@ import { auth } from "@/lib/auth";
 import { generateEmbedding } from "@/lib/embeddings";
 import { sendAdminNotification } from "@/lib/sendadminnotif";
 import { uploadImageToBlob } from "@/lib/blob";
+import { parseNutritionFormData, hasNutritionData } from "@/lib/nutritionform";
+import { calculateNutriLevel } from "@/lib/nutrigrade";
 
 export async function createProduct(formData: FormData) {
   try {
@@ -13,9 +15,11 @@ export async function createProduct(formData: FormData) {
     const description = formData.get("description") as string;
     const imageFiles = formData.getAll("images") as File[];
     const mainImageIndex = parseInt((formData.get("mainImageIndex") as string) ?? "0") || 0;
+    const nutritionImageFile = formData.get("nutritionImage") as File | null;
     const categoryIds = (formData.getAll("categoryId") as string[])
       .map((s) => BigInt(s))
       .filter(Boolean);
+    const nutrition = parseNutritionFormData(formData);
     const session = await auth();
 
     if (!name) {
@@ -31,6 +35,15 @@ export async function createProduct(formData: FormData) {
         } catch {
           return { success: false, error: "Gagal mengunggah gambar" };
         }
+      }
+    }
+
+    let nutritionImageUrl: string | null = null;
+    if (nutritionImageFile && nutritionImageFile.size > 0) {
+      try {
+        nutritionImageUrl = await uploadImageToBlob(nutritionImageFile, name);
+      } catch {
+        return { success: false, error: "Gagal mengunggah foto label gizi" };
       }
     }
 
@@ -64,10 +77,39 @@ export async function createProduct(formData: FormData) {
         });
       }
 
+      if (nutritionImageUrl) {
+        await tx.productImage.create({
+          data: {
+            productId: p.id,
+            url: nutritionImageUrl,
+            isMain: false,
+            kind: "NUTRITION_LABEL",
+          },
+        });
+      }
+
       if (categoryIds.length > 0) {
         await tx.productCategory.createMany({
           data: categoryIds.map((categoryId) => ({ productId: p.id, categoryId })),
           skipDuplicates: true,
+        });
+      }
+
+      if (hasNutritionData(nutrition)) {
+        await tx.productNutrition.create({
+          data: {
+            productId: p.id,
+            servingSizeValue: nutrition.servingSizeValue,
+            servingSizeUnit: nutrition.servingSizeUnit,
+            sugarPerServing: nutrition.sugarPerServing,
+            sodiumPerServing: nutrition.sodiumPerServing,
+            saturatedFatPerServing: nutrition.saturatedFatPerServing,
+            sugarPer100: nutrition.sugarPer100,
+            sodiumPer100: nutrition.sodiumPer100,
+            saturatedFatPer100: nutrition.saturatedFatPer100,
+            extra: nutrition.extra.length > 0 ? nutrition.extra : undefined,
+            nutriLevel: calculateNutriLevel(nutrition),
+          },
         });
       }
 
