@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { executeAction } from "@/lib/executeAction";
 import Link from "next/link";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 
 const Page = async ({
@@ -20,19 +21,14 @@ const Page = async ({
 
   return (
     <div className="text-center max-w-sm mx-auto w-full p-10 border rounded-lg shadow">
-      <Link
-        href="/"
-        style={{
-          fontFamily: "'Plus Jakarta Sans', sans-serif",
-          fontWeight: 700,
-          fontSize: "1.5rem",
-          textDecoration: "none",
-          display: "inline-block",
-        }}
-      >
-        <span style={{ color: "#16a34a" }}>enak</span>
-        <span style={{ color: "#666666" }}>/</span>
-        <span style={{ color: "#f97316" }}>ga</span>
+      <Link href="/" className="inline-block">
+        <Image
+          src="/logo.png"
+          alt="beliga.id"
+          width={767}
+          height={379}
+          className="h-9 w-auto mx-auto"
+        />
       </Link>
 
       {error && (
