@@ -13,6 +13,7 @@ export type DetectedNutritionExtra = {
 export type DetectedNutrition = {
   servingSizeValue: number | null;
   servingSizeUnit: string | null;
+  caloriesPerServing: number | null;
   sugarPerServing: number | null;
   sodiumPerServing: number | null;
   saturatedFatPerServing: number | null;
@@ -38,28 +39,30 @@ export async function detectNutritionFromImage(
 
 Return JSON with:
 - servingSize: { "value": number, "unit": string } from "Takaran saji" / "Sajian per kemasan", or null if not visible
+- caloriesPerServing: energy/calories ("Energi") per serving in kcal, or null
 - sugarPerServing: grams of sugar ("Gula") per serving, or null
 - sodiumPerServing: milligrams of sodium ("Natrium") per serving, or null
 - saturatedFatPerServing: grams of saturated fat ("Lemak Jenuh") per serving, or null
 - sugarPer100 / sodiumPer100 / saturatedFatPer100: the same three nutrients but read from the "per 100 g" or "per 100 ml" reference column, if the label prints one (many Indonesian BPOM labels show both a per-serving and a per-100 column) — null if there is no such column
-- other: an array of { "label": string, "value": number | string, "unit": string } for any other nutrition facts visible (e.g. energy/energi, protein, total fat/lemak total, carbohydrate/karbohidrat, fiber/serat), using the label text as printed in Indonesian
+- other: an array of { "label": string, "value": number | string, "unit": string } for any other nutrition facts visible (e.g. protein, total fat/lemak total, carbohydrate/karbohidrat, fiber/serat), using the label text as printed in Indonesian. Do NOT include energy/calories/energi here — that already goes in caloriesPerServing.
 
 Rules:
 - Only report values actually printed/visible in the image — never estimate or invent numbers
 - Sodium/natrium must be in milligrams (mg); convert from grams if that's how it's printed
-- Sugar and saturated fat must be in grams
+- Sugar, saturated fat, and calories must be in grams / kcal respectively
 - Return null for any field that isn't present on the label
 
 Example:
 {
 "servingSize": { "value": 30, "unit": "g" },
+"caloriesPerServing": 150,
 "sugarPerServing": 5,
 "sodiumPerServing": 120,
 "saturatedFatPerServing": 1.5,
 "sugarPer100": 16.7,
 "sodiumPer100": 400,
 "saturatedFatPer100": 5,
-"other": [{ "label": "Energi", "value": 150, "unit": "kkal" }]
+"other": [{ "label": "Protein", "value": 2, "unit": "g" }]
 }
 
 Return ONLY valid JSON. Do not include explanations or extra text.`,
@@ -78,6 +81,7 @@ Return ONLY valid JSON. Do not include explanations or extra text.`,
 
   let parsed: {
     servingSize?: { value?: number; unit?: string } | null;
+    caloriesPerServing?: number | null;
     sugarPerServing?: number | null;
     sodiumPerServing?: number | null;
     saturatedFatPerServing?: number | null;
@@ -97,6 +101,7 @@ Return ONLY valid JSON. Do not include explanations or extra text.`,
   return {
     servingSizeValue: parsed.servingSize?.value ?? null,
     servingSizeUnit: parsed.servingSize?.unit ?? null,
+    caloriesPerServing: parsed.caloriesPerServing ?? null,
     sugarPerServing: parsed.sugarPerServing ?? null,
     sodiumPerServing: parsed.sodiumPerServing ?? null,
     saturatedFatPerServing: parsed.saturatedFatPerServing ?? null,

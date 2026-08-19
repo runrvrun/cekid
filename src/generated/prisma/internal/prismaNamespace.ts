@@ -1395,6 +1395,7 @@ export const ProductNutritionScalarFieldEnum = {
   productId: 'productId',
   servingSizeValue: 'servingSizeValue',
   servingSizeUnit: 'servingSizeUnit',
+  caloriesPerServing: 'caloriesPerServing',
   sugarPerServing: 'sugarPerServing',
   sodiumPerServing: 'sodiumPerServing',
   saturatedFatPerServing: 'saturatedFatPerServing',

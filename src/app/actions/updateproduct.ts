@@ -147,6 +147,7 @@ export async function updateProduct(id: BigInt, formData: FormData) {
           create: {
             productId,
             servingSizeValue: nutrition.servingSizeValue,
+            caloriesPerServing: nutrition.caloriesPerServing,
             servingSizeUnit: nutrition.servingSizeUnit,
             sugarPerServing: nutrition.sugarPerServing,
             sodiumPerServing: nutrition.sodiumPerServing,
@@ -159,6 +160,7 @@ export async function updateProduct(id: BigInt, formData: FormData) {
           },
           update: {
             servingSizeValue: nutrition.servingSizeValue,
+            caloriesPerServing: nutrition.caloriesPerServing,
             servingSizeUnit: nutrition.servingSizeUnit,
             sugarPerServing: nutrition.sugarPerServing,
             sodiumPerServing: nutrition.sodiumPerServing,

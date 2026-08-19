@@ -11,6 +11,7 @@ import ProductBarcode from '@/components/productbarcode';
 import { getUlasanForProduct } from '@/lib/prisma/products';
 import { Decimal } from "@prisma/client/runtime/client";
 import { BookOpen } from "lucide-react";
+import { gradeEachNutrient } from "@/lib/nutrigrade";
 
 type ProductImage = {
   id: bigint;
@@ -32,9 +33,13 @@ type NutritionExtraItem = {
 type ProductNutrition = {
   servingSizeValue?: number | null;
   servingSizeUnit?: string | null;
+  caloriesPerServing?: number | null;
   sugarPerServing?: number | null;
   sodiumPerServing?: number | null;
   saturatedFatPerServing?: number | null;
+  sugarPer100?: number | null;
+  sodiumPer100?: number | null;
+  saturatedFatPer100?: number | null;
   extra?: unknown;
   nutriLevel?: string | null;
 };
@@ -120,6 +125,18 @@ export default async function ProductDetail({ product }: { product: Product }) {
 
     const article = await getUlasanForProduct(product.slug);
 
+    const perNutrientGrades = product.productNutrition
+        ? gradeEachNutrient({
+              servingSizeValue: product.productNutrition.servingSizeValue,
+              sugarPerServing: product.productNutrition.sugarPerServing,
+              sodiumPerServing: product.productNutrition.sodiumPerServing,
+              saturatedFatPerServing: product.productNutrition.saturatedFatPerServing,
+              sugarPer100: product.productNutrition.sugarPer100,
+              sodiumPer100: product.productNutrition.sodiumPer100,
+              saturatedFatPer100: product.productNutrition.saturatedFatPer100,
+          })
+        : { sugar: null, sodium: null, saturatedFat: null };
+
   return (
     <main className="max-w-3xl mx-auto p-6">
         {/* Product detail */}
@@ -201,22 +218,61 @@ export default async function ProductDetail({ product }: { product: Product }) {
                                         </dd>
                                     </div>
                                 )}
+                                {product.productNutrition.caloriesPerServing != null && (
+                                    <div>
+                                        <dt className="text-gray-400">Kalori</dt>
+                                        <dd className="font-medium">{product.productNutrition.caloriesPerServing} kkal</dd>
+                                    </div>
+                                )}
                                 {product.productNutrition.sugarPerServing != null && (
                                     <div>
                                         <dt className="text-gray-400">Gula per Saji</dt>
-                                        <dd className="font-medium">{product.productNutrition.sugarPerServing} g</dd>
+                                        <dd className="font-medium flex items-center gap-1.5">
+                                            {product.productNutrition.sugarPerServing} g
+                                            {perNutrientGrades.sugar && (
+                                                <span
+                                                    className={`inline-flex items-center justify-center w-5 h-5 rounded-full border text-xs font-bold ${
+                                                        NUTRI_LEVEL_STYLES[perNutrientGrades.sugar] ?? "bg-gray-100 text-gray-700 border-gray-300"
+                                                    }`}
+                                                >
+                                                    {perNutrientGrades.sugar}
+                                                </span>
+                                            )}
+                                        </dd>
                                     </div>
                                 )}
                                 {product.productNutrition.sodiumPerServing != null && (
                                     <div>
                                         <dt className="text-gray-400">Natrium per Saji</dt>
-                                        <dd className="font-medium">{product.productNutrition.sodiumPerServing} mg</dd>
+                                        <dd className="font-medium flex items-center gap-1.5">
+                                            {product.productNutrition.sodiumPerServing} mg
+                                            {perNutrientGrades.sodium && (
+                                                <span
+                                                    className={`inline-flex items-center justify-center w-5 h-5 rounded-full border text-xs font-bold ${
+                                                        NUTRI_LEVEL_STYLES[perNutrientGrades.sodium] ?? "bg-gray-100 text-gray-700 border-gray-300"
+                                                    }`}
+                                                >
+                                                    {perNutrientGrades.sodium}
+                                                </span>
+                                            )}
+                                        </dd>
                                     </div>
                                 )}
                                 {product.productNutrition.saturatedFatPerServing != null && (
                                     <div>
                                         <dt className="text-gray-400">Lemak Jenuh per Saji</dt>
-                                        <dd className="font-medium">{product.productNutrition.saturatedFatPerServing} g</dd>
+                                        <dd className="font-medium flex items-center gap-1.5">
+                                            {product.productNutrition.saturatedFatPerServing} g
+                                            {perNutrientGrades.saturatedFat && (
+                                                <span
+                                                    className={`inline-flex items-center justify-center w-5 h-5 rounded-full border text-xs font-bold ${
+                                                        NUTRI_LEVEL_STYLES[perNutrientGrades.saturatedFat] ?? "bg-gray-100 text-gray-700 border-gray-300"
+                                                    }`}
+                                                >
+                                                    {perNutrientGrades.saturatedFat}
+                                                </span>
+                                            )}
+                                        </dd>
                                     </div>
                                 )}
                                 {Array.isArray(product.productNutrition.extra) &&

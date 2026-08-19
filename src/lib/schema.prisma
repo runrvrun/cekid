@@ -60,6 +60,7 @@ model ProductNutrition {
   productId              BigInt    @unique
   servingSizeValue       Float?
   servingSizeUnit        String?   @db.VarChar(10)
+  caloriesPerServing     Float?
   sugarPerServing        Float?
   sodiumPerServing       Float?
   saturatedFatPerServing Float?

@@ -7,6 +7,7 @@ export type NutritionExtraItem = {
 export type NutritionFormInput = {
   servingSizeValue: number | null;
   servingSizeUnit: string | null;
+  caloriesPerServing: number | null;
   sugarPerServing: number | null;
   sodiumPerServing: number | null;
   saturatedFatPerServing: number | null;
@@ -37,6 +38,7 @@ export function parseNutritionFormData(formData: FormData): NutritionFormInput {
   return {
     servingSizeValue: parseFloatOrNull(formData.get("nutritionServingSizeValue")),
     servingSizeUnit: (formData.get("nutritionServingSizeUnit") as string) || null,
+    caloriesPerServing: parseFloatOrNull(formData.get("nutritionCaloriesPerServing")),
     sugarPerServing: parseFloatOrNull(formData.get("nutritionSugarPerServing")),
     sodiumPerServing: parseFloatOrNull(formData.get("nutritionSodiumPerServing")),
     saturatedFatPerServing: parseFloatOrNull(formData.get("nutritionSaturatedFatPerServing")),
@@ -50,6 +52,7 @@ export function parseNutritionFormData(formData: FormData): NutritionFormInput {
 export function hasNutritionData(input: NutritionFormInput): boolean {
   return (
     input.servingSizeValue != null ||
+    input.caloriesPerServing != null ||
     input.sugarPerServing != null ||
     input.sodiumPerServing != null ||
     input.saturatedFatPerServing != null ||

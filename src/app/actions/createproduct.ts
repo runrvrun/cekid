@@ -100,6 +100,7 @@ export async function createProduct(formData: FormData) {
           data: {
             productId: p.id,
             servingSizeValue: nutrition.servingSizeValue,
+            caloriesPerServing: nutrition.caloriesPerServing,
             servingSizeUnit: nutrition.servingSizeUnit,
             sugarPerServing: nutrition.sugarPerServing,
             sodiumPerServing: nutrition.sodiumPerServing,

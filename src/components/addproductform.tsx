@@ -36,6 +36,7 @@ type ExtraNutritionItem = {
 type NutritionData = {
   servingSizeValue?: number | null;
   servingSizeUnit?: string | null;
+  caloriesPerServing?: number | null;
   sugarPerServing?: number | null;
   sodiumPerServing?: number | null;
   saturatedFatPerServing?: number | null;
@@ -140,6 +141,11 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
   const [servingSizeUnit, setServingSizeUnit] = useState(
     initialData?.nutrition?.servingSizeUnit ?? "g"
   );
+  const [caloriesPerServing, setCaloriesPerServing] = useState(
+    initialData?.nutrition?.caloriesPerServing != null
+      ? String(initialData.nutrition.caloriesPerServing)
+      : ""
+  );
   const [sugarPerServing, setSugarPerServing] = useState(
     initialData?.nutrition?.sugarPerServing != null
       ? String(initialData.nutrition.sugarPerServing)
@@ -215,6 +221,7 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
       const data = await res.json();
       if (data?.servingSizeValue != null) setServingSizeValue(String(data.servingSizeValue));
       if (data?.servingSizeUnit) setServingSizeUnit(data.servingSizeUnit);
+      if (data?.caloriesPerServing != null) setCaloriesPerServing(String(data.caloriesPerServing));
       if (data?.sugarPerServing != null) setSugarPerServing(String(data.sugarPerServing));
       if (data?.sodiumPerServing != null) setSodiumPerServing(String(data.sodiumPerServing));
       if (data?.saturatedFatPerServing != null)
@@ -473,6 +480,8 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
       }
       if (servingSizeValue.trim()) fd.append("nutritionServingSizeValue", servingSizeValue.trim());
       if (servingSizeUnit) fd.append("nutritionServingSizeUnit", servingSizeUnit);
+      if (caloriesPerServing.trim())
+        fd.append("nutritionCaloriesPerServing", caloriesPerServing.trim());
       if (sugarPerServing.trim()) fd.append("nutritionSugarPerServing", sugarPerServing.trim());
       if (sodiumPerServing.trim()) fd.append("nutritionSodiumPerServing", sodiumPerServing.trim());
       if (saturatedFatPerServing.trim())
@@ -1040,6 +1049,16 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
                   <option value="ml">ml</option>
                 </select>
               </div>
+            </div>
+            <div>
+              <label className="block text-xs font-medium mb-1">Kalori (kkal)</label>
+              <input
+                type="number"
+                step="any"
+                value={caloriesPerServing}
+                onChange={(e) => setCaloriesPerServing(e.target.value)}
+                className="input input-bordered w-full"
+              />
             </div>
             <div>
               <label className="block text-xs font-medium mb-1">Gula per saji (g)</label>

@@ -30,6 +30,7 @@ export type ProductNutritionAvgAggregateOutputType = {
   id: number | null
   productId: number | null
   servingSizeValue: number | null
+  caloriesPerServing: number | null
   sugarPerServing: number | null
   sodiumPerServing: number | null
   saturatedFatPerServing: number | null
@@ -42,6 +43,7 @@ export type ProductNutritionSumAggregateOutputType = {
   id: bigint | null
   productId: bigint | null
   servingSizeValue: number | null
+  caloriesPerServing: number | null
   sugarPerServing: number | null
   sodiumPerServing: number | null
   saturatedFatPerServing: number | null
@@ -55,6 +57,7 @@ export type ProductNutritionMinAggregateOutputType = {
   productId: bigint | null
   servingSizeValue: number | null
   servingSizeUnit: string | null
+  caloriesPerServing: number | null
   sugarPerServing: number | null
   sodiumPerServing: number | null
   saturatedFatPerServing: number | null
@@ -71,6 +74,7 @@ export type ProductNutritionMaxAggregateOutputType = {
   productId: bigint | null
   servingSizeValue: number | null
   servingSizeUnit: string | null
+  caloriesPerServing: number | null
   sugarPerServing: number | null
   sodiumPerServing: number | null
   saturatedFatPerServing: number | null
@@ -87,6 +91,7 @@ export type ProductNutritionCountAggregateOutputType = {
   productId: number
   servingSizeValue: number
   servingSizeUnit: number
+  caloriesPerServing: number
   sugarPerServing: number
   sodiumPerServing: number
   saturatedFatPerServing: number
@@ -105,6 +110,7 @@ export type ProductNutritionAvgAggregateInputType = {
   id?: true
   productId?: true
   servingSizeValue?: true
+  caloriesPerServing?: true
   sugarPerServing?: true
   sodiumPerServing?: true
   saturatedFatPerServing?: true
@@ -117,6 +123,7 @@ export type ProductNutritionSumAggregateInputType = {
   id?: true
   productId?: true
   servingSizeValue?: true
+  caloriesPerServing?: true
   sugarPerServing?: true
   sodiumPerServing?: true
   saturatedFatPerServing?: true
@@ -130,6 +137,7 @@ export type ProductNutritionMinAggregateInputType = {
   productId?: true
   servingSizeValue?: true
   servingSizeUnit?: true
+  caloriesPerServing?: true
   sugarPerServing?: true
   sodiumPerServing?: true
   saturatedFatPerServing?: true
@@ -146,6 +154,7 @@ export type ProductNutritionMaxAggregateInputType = {
   productId?: true
   servingSizeValue?: true
   servingSizeUnit?: true
+  caloriesPerServing?: true
   sugarPerServing?: true
   sodiumPerServing?: true
   saturatedFatPerServing?: true
@@ -162,6 +171,7 @@ export type ProductNutritionCountAggregateInputType = {
   productId?: true
   servingSizeValue?: true
   servingSizeUnit?: true
+  caloriesPerServing?: true
   sugarPerServing?: true
   sodiumPerServing?: true
   saturatedFatPerServing?: true
@@ -266,6 +276,7 @@ export type ProductNutritionGroupByOutputType = {
   productId: bigint
   servingSizeValue: number | null
   servingSizeUnit: string | null
+  caloriesPerServing: number | null
   sugarPerServing: number | null
   sodiumPerServing: number | null
   saturatedFatPerServing: number | null
@@ -306,6 +317,7 @@ export type ProductNutritionWhereInput = {
   productId?: Prisma.BigIntFilter<"ProductNutrition"> | bigint | number
   servingSizeValue?: Prisma.FloatNullableFilter<"ProductNutrition"> | number | null
   servingSizeUnit?: Prisma.StringNullableFilter<"ProductNutrition"> | string | null
+  caloriesPerServing?: Prisma.FloatNullableFilter<"ProductNutrition"> | number | null
   sugarPerServing?: Prisma.FloatNullableFilter<"ProductNutrition"> | number | null
   sodiumPerServing?: Prisma.FloatNullableFilter<"ProductNutrition"> | number | null
   saturatedFatPerServing?: Prisma.FloatNullableFilter<"ProductNutrition"> | number | null
@@ -324,6 +336,7 @@ export type ProductNutritionOrderByWithRelationInput = {
   productId?: Prisma.SortOrder
   servingSizeValue?: Prisma.SortOrderInput | Prisma.SortOrder
   servingSizeUnit?: Prisma.SortOrderInput | Prisma.SortOrder
+  caloriesPerServing?: Prisma.SortOrderInput | Prisma.SortOrder
   sugarPerServing?: Prisma.SortOrderInput | Prisma.SortOrder
   sodiumPerServing?: Prisma.SortOrderInput | Prisma.SortOrder
   saturatedFatPerServing?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -345,6 +358,7 @@ export type ProductNutritionWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ProductNutritionWhereInput | Prisma.ProductNutritionWhereInput[]
   servingSizeValue?: Prisma.FloatNullableFilter<"ProductNutrition"> | number | null
   servingSizeUnit?: Prisma.StringNullableFilter<"ProductNutrition"> | string | null
+  caloriesPerServing?: Prisma.FloatNullableFilter<"ProductNutrition"> | number | null
   sugarPerServing?: Prisma.FloatNullableFilter<"ProductNutrition"> | number | null
   sodiumPerServing?: Prisma.FloatNullableFilter<"ProductNutrition"> | number | null
   saturatedFatPerServing?: Prisma.FloatNullableFilter<"ProductNutrition"> | number | null
@@ -363,6 +377,7 @@ export type ProductNutritionOrderByWithAggregationInput = {
   productId?: Prisma.SortOrder
   servingSizeValue?: Prisma.SortOrderInput | Prisma.SortOrder
   servingSizeUnit?: Prisma.SortOrderInput | Prisma.SortOrder
+  caloriesPerServing?: Prisma.SortOrderInput | Prisma.SortOrder
   sugarPerServing?: Prisma.SortOrderInput | Prisma.SortOrder
   sodiumPerServing?: Prisma.SortOrderInput | Prisma.SortOrder
   saturatedFatPerServing?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -388,6 +403,7 @@ export type ProductNutritionScalarWhereWithAggregatesInput = {
   productId?: Prisma.BigIntWithAggregatesFilter<"ProductNutrition"> | bigint | number
   servingSizeValue?: Prisma.FloatNullableWithAggregatesFilter<"ProductNutrition"> | number | null
   servingSizeUnit?: Prisma.StringNullableWithAggregatesFilter<"ProductNutrition"> | string | null
+  caloriesPerServing?: Prisma.FloatNullableWithAggregatesFilter<"ProductNutrition"> | number | null
   sugarPerServing?: Prisma.FloatNullableWithAggregatesFilter<"ProductNutrition"> | number | null
   sodiumPerServing?: Prisma.FloatNullableWithAggregatesFilter<"ProductNutrition"> | number | null
   saturatedFatPerServing?: Prisma.FloatNullableWithAggregatesFilter<"ProductNutrition"> | number | null
@@ -404,6 +420,7 @@ export type ProductNutritionCreateInput = {
   id?: bigint | number
   servingSizeValue?: number | null
   servingSizeUnit?: string | null
+  caloriesPerServing?: number | null
   sugarPerServing?: number | null
   sodiumPerServing?: number | null
   saturatedFatPerServing?: number | null
@@ -422,6 +439,7 @@ export type ProductNutritionUncheckedCreateInput = {
   productId: bigint | number
   servingSizeValue?: number | null
   servingSizeUnit?: string | null
+  caloriesPerServing?: number | null
   sugarPerServing?: number | null
   sodiumPerServing?: number | null
   saturatedFatPerServing?: number | null
@@ -438,6 +456,7 @@ export type ProductNutritionUpdateInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   servingSizeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   servingSizeUnit?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caloriesPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   sugarPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   sodiumPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   saturatedFatPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -456,6 +475,7 @@ export type ProductNutritionUncheckedUpdateInput = {
   productId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   servingSizeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   servingSizeUnit?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caloriesPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   sugarPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   sodiumPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   saturatedFatPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -473,6 +493,7 @@ export type ProductNutritionCreateManyInput = {
   productId: bigint | number
   servingSizeValue?: number | null
   servingSizeUnit?: string | null
+  caloriesPerServing?: number | null
   sugarPerServing?: number | null
   sodiumPerServing?: number | null
   saturatedFatPerServing?: number | null
@@ -489,6 +510,7 @@ export type ProductNutritionUpdateManyMutationInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   servingSizeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   servingSizeUnit?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caloriesPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   sugarPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   sodiumPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   saturatedFatPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -506,6 +528,7 @@ export type ProductNutritionUncheckedUpdateManyInput = {
   productId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   servingSizeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   servingSizeUnit?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caloriesPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   sugarPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   sodiumPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   saturatedFatPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -528,6 +551,7 @@ export type ProductNutritionCountOrderByAggregateInput = {
   productId?: Prisma.SortOrder
   servingSizeValue?: Prisma.SortOrder
   servingSizeUnit?: Prisma.SortOrder
+  caloriesPerServing?: Prisma.SortOrder
   sugarPerServing?: Prisma.SortOrder
   sodiumPerServing?: Prisma.SortOrder
   saturatedFatPerServing?: Prisma.SortOrder
@@ -544,6 +568,7 @@ export type ProductNutritionAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   servingSizeValue?: Prisma.SortOrder
+  caloriesPerServing?: Prisma.SortOrder
   sugarPerServing?: Prisma.SortOrder
   sodiumPerServing?: Prisma.SortOrder
   saturatedFatPerServing?: Prisma.SortOrder
@@ -557,6 +582,7 @@ export type ProductNutritionMaxOrderByAggregateInput = {
   productId?: Prisma.SortOrder
   servingSizeValue?: Prisma.SortOrder
   servingSizeUnit?: Prisma.SortOrder
+  caloriesPerServing?: Prisma.SortOrder
   sugarPerServing?: Prisma.SortOrder
   sodiumPerServing?: Prisma.SortOrder
   saturatedFatPerServing?: Prisma.SortOrder
@@ -573,6 +599,7 @@ export type ProductNutritionMinOrderByAggregateInput = {
   productId?: Prisma.SortOrder
   servingSizeValue?: Prisma.SortOrder
   servingSizeUnit?: Prisma.SortOrder
+  caloriesPerServing?: Prisma.SortOrder
   sugarPerServing?: Prisma.SortOrder
   sodiumPerServing?: Prisma.SortOrder
   saturatedFatPerServing?: Prisma.SortOrder
@@ -588,6 +615,7 @@ export type ProductNutritionSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   servingSizeValue?: Prisma.SortOrder
+  caloriesPerServing?: Prisma.SortOrder
   sugarPerServing?: Prisma.SortOrder
   sodiumPerServing?: Prisma.SortOrder
   saturatedFatPerServing?: Prisma.SortOrder
@@ -640,6 +668,7 @@ export type ProductNutritionCreateWithoutProductInput = {
   id?: bigint | number
   servingSizeValue?: number | null
   servingSizeUnit?: string | null
+  caloriesPerServing?: number | null
   sugarPerServing?: number | null
   sodiumPerServing?: number | null
   saturatedFatPerServing?: number | null
@@ -656,6 +685,7 @@ export type ProductNutritionUncheckedCreateWithoutProductInput = {
   id?: bigint | number
   servingSizeValue?: number | null
   servingSizeUnit?: string | null
+  caloriesPerServing?: number | null
   sugarPerServing?: number | null
   sodiumPerServing?: number | null
   saturatedFatPerServing?: number | null
@@ -688,6 +718,7 @@ export type ProductNutritionUpdateWithoutProductInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   servingSizeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   servingSizeUnit?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caloriesPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   sugarPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   sodiumPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   saturatedFatPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -704,6 +735,7 @@ export type ProductNutritionUncheckedUpdateWithoutProductInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   servingSizeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   servingSizeUnit?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caloriesPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   sugarPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   sodiumPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   saturatedFatPerServing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -723,6 +755,7 @@ export type ProductNutritionSelect<ExtArgs extends runtime.Types.Extensions.Inte
   productId?: boolean
   servingSizeValue?: boolean
   servingSizeUnit?: boolean
+  caloriesPerServing?: boolean
   sugarPerServing?: boolean
   sodiumPerServing?: boolean
   saturatedFatPerServing?: boolean
@@ -741,6 +774,7 @@ export type ProductNutritionSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   productId?: boolean
   servingSizeValue?: boolean
   servingSizeUnit?: boolean
+  caloriesPerServing?: boolean
   sugarPerServing?: boolean
   sodiumPerServing?: boolean
   saturatedFatPerServing?: boolean
@@ -759,6 +793,7 @@ export type ProductNutritionSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   productId?: boolean
   servingSizeValue?: boolean
   servingSizeUnit?: boolean
+  caloriesPerServing?: boolean
   sugarPerServing?: boolean
   sodiumPerServing?: boolean
   saturatedFatPerServing?: boolean
@@ -777,6 +812,7 @@ export type ProductNutritionSelectScalar = {
   productId?: boolean
   servingSizeValue?: boolean
   servingSizeUnit?: boolean
+  caloriesPerServing?: boolean
   sugarPerServing?: boolean
   sodiumPerServing?: boolean
   saturatedFatPerServing?: boolean
@@ -789,7 +825,7 @@ export type ProductNutritionSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ProductNutritionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productId" | "servingSizeValue" | "servingSizeUnit" | "sugarPerServing" | "sodiumPerServing" | "saturatedFatPerServing" | "sugarPer100" | "sodiumPer100" | "saturatedFatPer100" | "extra" | "nutriLevel" | "createdAt" | "updatedAt", ExtArgs["result"]["productNutrition"]>
+export type ProductNutritionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productId" | "servingSizeValue" | "servingSizeUnit" | "caloriesPerServing" | "sugarPerServing" | "sodiumPerServing" | "saturatedFatPerServing" | "sugarPer100" | "sodiumPer100" | "saturatedFatPer100" | "extra" | "nutriLevel" | "createdAt" | "updatedAt", ExtArgs["result"]["productNutrition"]>
 export type ProductNutritionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
 }
@@ -810,6 +846,7 @@ export type $ProductNutritionPayload<ExtArgs extends runtime.Types.Extensions.In
     productId: bigint
     servingSizeValue: number | null
     servingSizeUnit: string | null
+    caloriesPerServing: number | null
     sugarPerServing: number | null
     sodiumPerServing: number | null
     saturatedFatPerServing: number | null
@@ -1248,6 +1285,7 @@ export interface ProductNutritionFieldRefs {
   readonly productId: Prisma.FieldRef<"ProductNutrition", 'BigInt'>
   readonly servingSizeValue: Prisma.FieldRef<"ProductNutrition", 'Float'>
   readonly servingSizeUnit: Prisma.FieldRef<"ProductNutrition", 'String'>
+  readonly caloriesPerServing: Prisma.FieldRef<"ProductNutrition", 'Float'>
   readonly sugarPerServing: Prisma.FieldRef<"ProductNutrition", 'Float'>
   readonly sodiumPerServing: Prisma.FieldRef<"ProductNutrition", 'Float'>
   readonly saturatedFatPerServing: Prisma.FieldRef<"ProductNutrition", 'Float'>

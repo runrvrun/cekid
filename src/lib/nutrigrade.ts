@@ -85,3 +85,23 @@ export function calculateNutriLevel(input: NutritionInput): NutriLevel | null {
     gradeSodium(sodiumPer100),
   ]);
 }
+
+export type PerNutrientGrades = {
+  sugar: NutriLevel | null;
+  sodium: NutriLevel | null;
+  saturatedFat: NutriLevel | null;
+};
+
+/**
+ * Individual A-D grade per nutrient, shown next to each value on the detail
+ * page — independent of whether the combined overall grade can be computed.
+ */
+export function gradeEachNutrient(input: NutritionInput): PerNutrientGrades {
+  const { sugarPer100, sodiumPer100, saturatedFatPer100 } = normalizeToPer100(input);
+
+  return {
+    sugar: sugarPer100 != null ? gradeSugar(sugarPer100) : null,
+    sodium: sodiumPer100 != null ? gradeSodium(sodiumPer100) : null,
+    saturatedFat: saturatedFatPer100 != null ? gradeSaturatedFat(saturatedFatPer100) : null,
+  };
+}
