@@ -126,7 +126,8 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
   const existingNutritionImage =
     (initialData?.images ?? []).find((img) => img.kind === "NUTRITION_LABEL") ?? null;
 
-  const nutritionImageInputRef = useRef<HTMLInputElement>(null);
+  const nutritionCameraInputRef = useRef<HTMLInputElement>(null);
+  const nutritionGalleryInputRef = useRef<HTMLInputElement>(null);
   const [nutritionImage, setNutritionImage] = useState<NewImage | null>(null);
   const [removedNutritionImageId, setRemovedNutritionImageId] = useState<bigint | null>(null);
   const [detectingNutrition, setDetectingNutrition] = useState(false);
@@ -979,16 +980,33 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
                 </button>
               </div>
             ) : (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => nutritionImageInputRef.current?.click()}
-              >
-                🏷️ Foto Label Gizi
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => nutritionCameraInputRef.current?.click()}
+                >
+                  📷 Ambil Foto
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => nutritionGalleryInputRef.current?.click()}
+                >
+                  🖼️ Galeri
+                </Button>
+              </div>
             )}
             <input
-              ref={nutritionImageInputRef}
+              ref={nutritionCameraInputRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={onNutritionImageChange}
+              className="hidden"
+            />
+            <input
+              ref={nutritionGalleryInputRef}
               type="file"
               accept="image/*"
               onChange={onNutritionImageChange}
