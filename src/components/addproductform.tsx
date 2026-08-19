@@ -1030,7 +1030,6 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
                   value={servingSizeValue}
                   onChange={(e) => setServingSizeValue(e.target.value)}
                   className="input input-bordered w-full"
-                  placeholder="30"
                 />
                 <select
                   value={servingSizeUnit}
@@ -1050,7 +1049,6 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
                 value={sugarPerServing}
                 onChange={(e) => setSugarPerServing(e.target.value)}
                 className="input input-bordered w-full"
-                placeholder="5"
               />
             </div>
             <div>
@@ -1061,7 +1059,6 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
                 value={sodiumPerServing}
                 onChange={(e) => setSodiumPerServing(e.target.value)}
                 className="input input-bordered w-full"
-                placeholder="120"
               />
             </div>
             <div>
@@ -1072,7 +1069,6 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
                 value={saturatedFatPerServing}
                 onChange={(e) => setSaturatedFatPerServing(e.target.value)}
                 className="input input-bordered w-full"
-                placeholder="1.5"
               />
             </div>
           </div>
