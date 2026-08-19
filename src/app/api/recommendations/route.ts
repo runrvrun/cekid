@@ -36,6 +36,7 @@ export async function GET(req: Request) {
       select: {
         id: true,
         name: true,
+        slug: true,
         rating: true,
         embedding: true,
         productImages: {
@@ -59,6 +60,7 @@ export async function GET(req: Request) {
         return {
           id: Number(p.id),
           name: p.name,
+          slug: p.slug,
           image: p.productImages[0]?.url ?? null,
           rating: p.rating ? Number(p.rating) : null,
           score,

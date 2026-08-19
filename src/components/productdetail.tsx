@@ -293,7 +293,7 @@ export default async function ProductDetail({ product }: { product: Product }) {
                 <h2 className="text-xl font-bold mb-4">Produk Serupa</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
                     {similarProducts.map((p: any) => (
-                        <Link key={p.id} href={`/product/${p.id}`}>
+                        <Link key={p.id} href={`/${p.slug}`}>
                             <div className="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
                                 <div className="card-body">
                                     <Image

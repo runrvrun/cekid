@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Prisma } from "@/generated/prisma/client";
 import ProductStatusButton from "./statusbtn";
+import DeleteProductButton from "./deletebtn";
 import { Upload } from "lucide-react";
 
 const STATUS_OPTIONS = [
@@ -247,12 +248,15 @@ export default async function AdminProductsPage({
                       />
                     </td>
                     <td className="px-4 py-3">
-                      <Link
-                        href={`/product/${p.id}/edit`}
-                        className="text-xs text-blue-600 hover:underline whitespace-nowrap"
-                      >
-                        Edit
-                      </Link>
+                      <div className="flex items-center gap-2 whitespace-nowrap">
+                        <Link
+                          href={`/product/${p.id}/edit`}
+                          className="text-xs text-blue-600 hover:underline"
+                        >
+                          Edit
+                        </Link>
+                        <DeleteProductButton productId={String(p.id)} />
+                      </div>
                     </td>
                   </tr>
                 );
