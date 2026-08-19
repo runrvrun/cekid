@@ -268,7 +268,7 @@ export default function SearchProduct({
         {/* Submit button */}
         <button
           type="submit"
-          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-5 py-3.5 text-sm font-semibold shrink-0 hover:opacity-90 transition-opacity"
+          className="bg-[#E11B22] text-white px-5 py-3.5 text-sm font-semibold shrink-0 hover:bg-[#c0161c] transition-colors"
         >
           Cari
         </button>

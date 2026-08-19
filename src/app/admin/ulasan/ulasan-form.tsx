@@ -110,7 +110,7 @@ export default function UlasanForm({ initial }: { initial?: UlasanData }) {
             Permalink <span className="text-red-500">*</span>
           </label>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-400 shrink-0">enakga.com/r/</span>
+            <span className="text-sm text-gray-400 shrink-0">beliga.id/r/</span>
             <input
               type="text"
               value={permalink}

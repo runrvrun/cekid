@@ -38,7 +38,7 @@ const signUp = async (formData: FormData) => {
 
         // send email notification to admin
          await sendAdminNotification({
-          subject: "New user registered on enakga",
+          subject: "New user registered on beliga.id",
           message: `
             User: ${name}<br/>
             Email: ${normalizedEmail}

@@ -1,5 +1,6 @@
 // components/Header.tsx
 import Link from "next/link";
+import Image from "next/image";
 import Nav from "./nav";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
@@ -13,10 +14,15 @@ export default function Header() {
     <header
       className={`${plusJakarta.className} flex items-center justify-between px-8 border-b border-gray-100`}
     >
-      <Link href="/" className="font-bold text-2xl shrink-0 no-underline">
-        <span className="text-green-600">enak</span>
-        <span className="text-gray-400">/</span>
-        <span className="text-orange-500">ga</span>
+      <Link href="/" className="shrink-0 no-underline">
+        <Image
+          src="/logo.png"
+          alt="beliga.id"
+          width={767}
+          height={379}
+          className="h-9 w-auto"
+          priority
+        />
       </Link>
 
       <Nav />

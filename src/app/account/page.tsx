@@ -36,7 +36,7 @@ export default async function AccountPage() {
                 className={`mt-1 inline-block text-xs font-semibold px-2 py-0.5 rounded-full ${
                   user.role === "ADMIN"
                     ? "bg-red-100 text-red-600"
-                    : "bg-orange-100 text-orange-600"
+                    : "bg-yellow-100 text-yellow-800"
                 }`}
               >
                 {roleLabelMap[user.role]}

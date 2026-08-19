@@ -15,7 +15,7 @@ export default async function Home({ searchParams }: HomeProps) {
   return (
     <main className="pb-8">
       {/* Hero + search section */}
-      <div className="bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 px-4 pt-12 pb-16">
+      <div className="bg-gradient-to-br from-[#005091] via-[#003D73] to-[#002544] px-4 pt-12 pb-16">
         <div className="max-w-xl mx-auto text-center">
           <Hero />
           <div className="mt-7">

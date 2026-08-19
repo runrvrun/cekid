@@ -50,7 +50,7 @@ export default function NavShell({ user }: Props) {
             {user ? (
               <UserDropdown name={user.name} email={user.email} role={user.role} />
             ) : (
-              <Link href="/signin" className="px-3 py-1.5 text-sm font-medium bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+              <Link href="/signin" className="px-3 py-1.5 text-sm font-medium bg-blue-800 text-white rounded-lg hover:bg-blue-900 transition-colors">
                 Login
               </Link>
             )}
@@ -137,7 +137,7 @@ export default function NavShell({ user }: Props) {
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>
                     {user.role === "ADMIN" || user.role === "MODERATOR" ? (
-                      <span className={`inline-block text-xs font-semibold px-1.5 py-0.5 rounded-full mt-0.5 ${user.role === "ADMIN" ? "bg-red-100 text-red-600" : "bg-orange-100 text-orange-600"}`}>
+                      <span className={`inline-block text-xs font-semibold px-1.5 py-0.5 rounded-full mt-0.5 ${user.role === "ADMIN" ? "bg-red-100 text-red-600" : "bg-yellow-100 text-yellow-800"}`}>
                         {user.role === "ADMIN" ? "Admin" : "Moderator"}
                       </span>
                     ) : (
@@ -196,7 +196,7 @@ export default function NavShell({ user }: Props) {
               <Link
                 href="/signin"
                 onClick={() => setDrawerOpen(false)}
-                className="w-full text-center px-3 py-2 text-sm font-medium bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                className="w-full text-center px-3 py-2 text-sm font-medium bg-blue-800 text-white rounded-lg hover:bg-blue-900 transition-colors"
               >
                 Login
               </Link>

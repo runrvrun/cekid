@@ -44,7 +44,7 @@ export default function UserDropdown({ name, email, role }: Props) {
           {(isAdmin || isModerator) && (
             <span
               className={`text-xs font-semibold ${
-                isAdmin ? "text-red-500" : "text-orange-500"
+                isAdmin ? "text-red-600" : "text-yellow-600"
               }`}
             >
               {isAdmin ? "Admin" : "Moderator"}
@@ -77,7 +77,7 @@ export default function UserDropdown({ name, email, role }: Props) {
                   className={`inline-block text-xs font-semibold px-1.5 py-0.5 rounded-full mt-0.5 ${
                     isAdmin
                       ? "bg-red-100 text-red-600"
-                      : "bg-orange-100 text-orange-600"
+                      : "bg-yellow-100 text-yellow-800"
                   }`}
                 >
                   {isAdmin ? "Admin" : "Moderator"}

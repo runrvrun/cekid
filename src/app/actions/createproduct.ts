@@ -75,7 +75,7 @@ export async function createProduct(formData: FormData) {
     });
 
     await sendAdminNotification({
-      subject: "New product created on enakga",
+      subject: "New product created on beliga.id",
       message: `Product: ${name}<br/>Description: ${description}`,
     });
 

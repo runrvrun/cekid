@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-enakga — a community-driven product review platform for Indonesian consumers ("Barang beneran, review beneran"). Next.js App Router + TypeScript, PostgreSQL via Prisma, NextAuth v5, OpenAI (vision + embeddings), Vercel Blob for images, Resend for email.
+beliga.id — a community-driven product review platform for Indonesian consumers ("Barang beneran, review beneran"). Next.js App Router + TypeScript, PostgreSQL via Prisma, NextAuth v5, OpenAI (vision + embeddings), Vercel Blob for images, Resend for email.
 
 ## Commands
 

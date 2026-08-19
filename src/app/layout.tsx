@@ -7,8 +7,8 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
     title: {
-        default: 'Enak Ga? Cek review sebelum beli',
-        template: '%s - Enak Ga?',
+        default: 'beliga.id - Cek review sebelum beli',
+        template: '%s - beliga.id',
     },
     description: 'Mau beli snack atau minuman di minimarket tapi ragu enak apa nggak? Cek dulu reviewnya di sini.',
 };
@@ -38,7 +38,7 @@ export default function RootLayout({
                         color: '#666',
                     }}
                 >
-                    <p>&copy; {new Date().getFullYear()} enakga. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} beliga.id. All rights reserved.</p>
                 </footer>
             </body>
         </html>

@@ -1,10 +1,10 @@
-# enakga
+# beliga.id
 
 **Barang beneran, review beneran** — A community-driven product review platform for Indonesian consumers.
 
 ## Overview
 
-enakga is a web application where users can discover, share, and review real products. It features AI-powered product detection, barcode scanning, semantic search, and a recommendation engine — all built for the Indonesian market.
+beliga.id is a web application where users can discover, share, and review real products. It features AI-powered product detection, barcode scanning, semantic search, and a recommendation engine — all built for the Indonesian market.
 
 ## Features
 
