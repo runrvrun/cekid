@@ -17,30 +17,365 @@ function slugify(name: string): string {
 
 // ─── Categories ────────────────────────────────────────────────────────────────
 
-// Categories support 2 levels: a top-level entry with `children` becomes a
-// parent (organizational only, never assigned to a product directly); an
-// entry with no `children` (or an empty array) is a top-level category that
-// is itself assignable, exactly like today's flat list. Products in the
-// PRODUCTS list below reference categories by name regardless of level.
-const CATEGORY_TREE: { name: string; children?: string[] }[] = [
-  { name: "Mie Instan" },
-  { name: "Minuman Air & Isotonik" },
-  { name: "Minuman Teh & Jus RTD" },
-  { name: "Minuman Kopi RTD" },
-  { name: "Minuman Susu RTD" },
-  { name: "Minuman Bersoda" },
-  { name: "Kopi & Teh Sachet" },
-  { name: "Susu & Produk Susu" },
-  { name: "Snack Keripik" },
-  { name: "Snack Puff & Balls" },
-  { name: "Wafer & Biskuit" },
-  { name: "Cokelat & Permen" },
-  { name: "Makanan Kaleng" },
-  { name: "Bumbu & Saus" },
-  { name: "Minyak Goreng" },
-  { name: "Es Krim" },
-  { name: "Roti & Bakeri" },
-  { name: "Perawatan Diri" },
+// Up to 3 levels (root > child > grandchild). Products can be tagged at any
+// level, not just leaves. Sourced from klikindomaret.com/xpress/category,
+// excluding its "Produk Supermarket" group.
+type CategoryNode = { name: string; children?: CategoryNode[] };
+
+const CATEGORY_TREE: CategoryNode[] = [
+  {
+    name: "Perawatan Diri",
+    children: [
+      { name: "Mata" },
+      { name: "Alat Kecantikan", children: [{ name: "Kuku" }, { name: "Pouch" }] },
+      { name: "Bibir" },
+      { name: "Kapas" },
+      { name: "Serum" },
+      {
+        name: "Wajah",
+        children: [
+          { name: "Pembersih Wajah" },
+          { name: "Bedak" },
+          { name: "Krim Wajah" },
+          { name: "Masker Wajah" },
+          { name: "Riasan Wajah" },
+        ],
+      },
+    ],
+  },
+  {
+    name: "Makanan",
+    children: [
+      { name: "Dessert", children: [{ name: "Buah untuk Dessert" }] },
+      {
+        name: "Aneka Roti & Kue",
+        children: [{ name: "Roti Manis" }, { name: "Kue" }, { name: "Roti Tawar" }],
+      },
+      {
+        name: "Cemilan & Biskuit",
+        children: [
+          { name: "Biskuit" },
+          { name: "Cemilan Tradisional" },
+          { name: "Cookies" },
+          { name: "Kacang" },
+          { name: "Keripik" },
+          { name: "Wafer" },
+        ],
+      },
+      { name: "Coklat & Permen", children: [{ name: "Permen" }, { name: "Coklat" }] },
+      {
+        name: "Es Krim",
+        children: [{ name: "Es Krim Family Size" }, { name: "Es Krim Stick & Cup" }],
+      },
+      {
+        name: "Makanan Instan",
+        children: [
+          { name: "Makanan Siap Saji" },
+          { name: "Mie Instan Cup" },
+          { name: "Mie Instan Pack" },
+        ],
+      },
+      {
+        name: "Sarapan & Selai",
+        children: [
+          { name: "Madu" },
+          { name: "Makanan Diet" },
+          { name: "Selai" },
+          { name: "Sereal" },
+        ],
+      },
+    ],
+  },
+  {
+    name: "Dapur & Bahan Masakan",
+    children: [
+      {
+        name: "Minyak",
+        children: [{ name: "Minyak Sawit" }, { name: "Minyak Biji" }, { name: "Minyak Kelapa" }],
+      },
+      { name: "Gula" },
+      { name: "Tepung", children: [{ name: "Tepung Bumbu" }] },
+      {
+        name: "Bahan Masakan",
+        children: [
+          { name: "Bahan Kue" },
+          { name: "Bumbu Instan" },
+          { name: "Bumbu Masak" },
+          { name: "Bumbu Tradisional" },
+        ],
+      },
+      { name: "Beras & Biji-Bijian", children: [{ name: "Beras" }, { name: "Biji-bijian" }] },
+      {
+        name: "Kecap & Saus",
+        children: [
+          { name: "Kecap" },
+          { name: "Mayones" },
+          { name: "Sambal & Saus Tomat" },
+          { name: "Saus Masakan" },
+        ],
+      },
+      {
+        name: "Keju & Mentega",
+        children: [{ name: "Keju" }, { name: "Keju & Mentega Dingin" }, { name: "Mentega" }],
+      },
+      {
+        name: "Makanan Beku",
+        children: [{ name: "Daging Beku" }, { name: "Olahan Beku" }, { name: "Sayuran Beku" }],
+      },
+      { name: "Makanan Kaleng" },
+      { name: "Makanan Kering", children: [{ name: "Pasta" }, { name: "Mie Kering" }] },
+      { name: "Telur" },
+    ],
+  },
+  {
+    name: "Produk Segar",
+    children: [{ name: "Buah" }, { name: "Sayur" }],
+  },
+  {
+    name: "Minuman",
+    children: [
+      {
+        name: "Minuman Ringan",
+        children: [
+          { name: "Minuman Isotonik" },
+          { name: "Larutan Penyegar" },
+          { name: "Minuman Energi" },
+          { name: "Minuman Soda" },
+        ],
+      },
+      {
+        name: "Minuman Instan",
+        children: [{ name: "Sirup" }, { name: "Minuman Tradisional" }],
+      },
+      { name: "Air Mineral" },
+      { name: "Jus" },
+      {
+        name: "Kopi",
+        children: [
+          { name: "Kopi Ready to Drink" },
+          { name: "Kopi Instan" },
+          { name: "Kopi Bubuk / Biji" },
+        ],
+      },
+      {
+        name: "Susu & Olahan",
+        children: [
+          { name: "Kental Manis" },
+          { name: "Susu Evaporasi" },
+          { name: "Susu Bubuk" },
+          { name: "Susu Cair" },
+          { name: "Susu Segar" },
+          { name: "Susu Sehat" },
+          { name: "Yogurt" },
+        ],
+      },
+      {
+        name: "Teh",
+        children: [{ name: "Teh Ready to Drink" }, { name: "Teh Bubuk" }, { name: "Teh Celup" }],
+      },
+    ],
+  },
+  {
+    name: "Ibu & Anak",
+    children: [
+      { name: "Susu & Keperluan Ibu Hamil/Menyusui" },
+      { name: "Popok Bayi", children: [{ name: "Popok Celana" }, { name: "Popok Perekat" }] },
+      {
+        name: "Makanan & Susu Bayi",
+        children: [
+          { name: "Biskuit Bayi" },
+          { name: "Sereal Bayi" },
+          { name: "Susu Balita" },
+          { name: "Susu Bayi" },
+        ],
+      },
+      {
+        name: "Perlengkapan Anak",
+        children: [
+          { name: "Kids Skin Care" },
+          { name: "Kids Hair & Body Wash" },
+          { name: "Perawatan Mulut Anak" },
+        ],
+      },
+      {
+        name: "Perlengkapan Bayi",
+        children: [
+          { name: "Alat makan & minum" },
+          { name: "Baby Gift Set" },
+          { name: "Baby Hair & Body Wash" },
+          { name: "Bedak Bayi" },
+          { name: "Health & Cleansing" },
+        ],
+      },
+    ],
+  },
+  {
+    name: "Kesehatan & Kebersihan",
+    children: [
+      { name: "Deodoran", children: [{ name: "Deodoran Pria" }, { name: "Deodoran Wanita" }] },
+      { name: "Obat & Suplemen" },
+      {
+        name: "Minyak & Balsem",
+        children: [{ name: "Obat Luar" }, { name: "Obat Minum" }, { name: "Suplemen & Vitamin" }],
+      },
+      { name: "Parfum", children: [{ name: "Parfum Pria" }, { name: "Parfum Wanita" }] },
+      { name: "Peralatan Kesehatan", children: [{ name: "Masker" }] },
+      {
+        name: "Perawatan Badan",
+        children: [
+          { name: "Sunscreen" },
+          { name: "Lotion" },
+          { name: "Lulur" },
+          { name: "Peralatan Cukur" },
+          { name: "Perawatan Kaki" },
+          { name: "Sabun & Pembersih Tangan" },
+          { name: "Sabun Batang" },
+          { name: "Sabun Cair" },
+        ],
+      },
+      {
+        name: "Perawatan Kewanitaan",
+        children: [{ name: "Panty liner" }, { name: "Pembalut" }, { name: "Pembersih Kewanitaan" }],
+      },
+      {
+        name: "Perawatan Mulut",
+        children: [
+          { name: "Obat Kumur & Pembersih Gigi" },
+          { name: "Pasta Gigi" },
+          { name: "Sikat Gigi" },
+        ],
+      },
+      {
+        name: "Perawatan Rambut",
+        children: [
+          { name: "Kondisioner" },
+          { name: "Penataan & Vitamin Rambut" },
+          { name: "Peralatan Rambut" },
+          { name: "Pewarna Rambut" },
+          { name: "Shampoo" },
+        ],
+      },
+      { name: "Popok Dewasa" },
+    ],
+  },
+  {
+    name: "Kebutuhan Rumah",
+    children: [
+      { name: "Air Galon" },
+      { name: "Gas", children: [{ name: "Kompor & Aksesoris Gas" }] },
+      {
+        name: "Deterjen",
+        children: [
+          { name: "Deterjen Matic" },
+          { name: "Deterjen Bubuk" },
+          { name: "Deterjen Cair" },
+          { name: "Deterjen Krim" },
+        ],
+      },
+      { name: "Jas Hujan & Payung" },
+      {
+        name: "Mekanik & Elektrik",
+        children: [
+          { name: "Alat Perkebunan" },
+          { name: "Lampu" },
+          { name: "Perawatan Kendaraan" },
+          { name: "Perkakas Bengkel dan Listrik" },
+        ],
+      },
+      {
+        name: "Pembasmi Kuman & Pewangi",
+        children: [
+          { name: "Kamper" },
+          { name: "Pembasmi Serangga" },
+          { name: "Pengharum Mobil" },
+          { name: "Pengharum Ruangan" },
+        ],
+      },
+      {
+        name: "Pembersih",
+        children: [
+          { name: "Pelicin & Pewangi Pakaian" },
+          { name: "Pembersih Dapur" },
+          { name: "Pembersih Kaca" },
+          { name: "Pembersih Lantai & Toilet" },
+          { name: "Pemutih Pakaian" },
+          { name: "Sabun Cuci Piring" },
+          { name: "Semir Sepatu" },
+        ],
+      },
+      {
+        name: "Perlengkapan Rumah Tangga",
+        children: [
+          { name: "Alat Kebersihan Rumah Tangga" },
+          { name: "Baterai" },
+          { name: "Peralatan Dapur" },
+          { name: "Perlengkapan Mandi" },
+          { name: "Perlengkapan Pesta" },
+        ],
+      },
+      {
+        name: "Tisu",
+        children: [
+          { name: "Tisu Wajah" },
+          { name: "Tisu Basah" },
+          { name: "Tisu Makan" },
+          { name: "Tisu Toilet" },
+        ],
+      },
+    ],
+  },
+  {
+    name: "Makanan Hewan",
+    children: [
+      { name: "Peralatan Peliharaan" },
+      {
+        name: "Makanan Kucing",
+        children: [
+          { name: "Makanan Kucing Dewasa" },
+          { name: "Makanan Kucing Basah" },
+          { name: "Makanan Kucing Kering" },
+          { name: "Makanan Anak Kucing" },
+          { name: "Snack Kucing" },
+        ],
+      },
+    ],
+  },
+  {
+    name: "Lainnya",
+    children: [
+      {
+        name: "Fashion",
+        children: [
+          { name: "Atasan & Bawahan" },
+          { name: "Kaos Kaki & Sandal" },
+          { name: "Pakaian Dalam" },
+          { name: "Tas & Aksesoris" },
+        ],
+      },
+      {
+        name: "Alat Tulis & Perlengkapan Kantor",
+        children: [
+          { name: "Alat Tulis" },
+          { name: "Buku & Kertas" },
+          { name: "Hadiah" },
+          { name: "Peralatan Kantor" },
+        ],
+      },
+      { name: "Mainan", children: [{ name: "Mainan Anak" }] },
+      { name: "Gadget & Elektronik" },
+      {
+        name: "Produk Lainnya",
+        children: [
+          { name: "Rokok Kretek" },
+          { name: "Rokok Elektrik" },
+          { name: "Alat Kontrasepsi" },
+          { name: "Rokok Filter" },
+        ],
+      },
+      { name: "Materai" },
+      { name: "Voucher Fisik" },
+    ],
+  },
 ];
 
 // ─── Products ──────────────────────────────────────────────────────────────────
@@ -397,35 +732,36 @@ const PRODUCTS: {
 
 // ─── Seed ──────────────────────────────────────────────────────────────────────
 
+// Duplicate names across different branches (e.g. "Buah" under both
+// "Dessert" and "Produk Segar") are last-write-wins in this map — it only
+// exists to let the PRODUCTS list below tag a product by name, and none of
+// those entries currently reference this tree's names anyway.
+async function seedCategoryTree(
+  nodes: CategoryNode[],
+  parentId: bigint | null,
+  categoryMap: Map<string, bigint>
+): Promise<number> {
+  let count = 0;
+  for (const node of nodes) {
+    let cat = await prisma.category.findFirst({ where: { name: node.name, parentId } });
+    if (!cat) {
+      cat = await prisma.category.create({ data: { name: node.name, parentId } });
+    }
+    categoryMap.set(node.name, cat.id);
+    count += 1;
+
+    if (node.children?.length) {
+      count += await seedCategoryTree(node.children, cat.id, categoryMap);
+    }
+  }
+  return count;
+}
+
 async function main() {
   console.log("🌱 Seeding categories...");
 
   const categoryMap = new Map<string, bigint>();
-  let categoryCount = 0;
-
-  for (const parent of CATEGORY_TREE) {
-    let parentCat = await prisma.category.findFirst({
-      where: { name: parent.name, parentId: null },
-    });
-    if (!parentCat) {
-      parentCat = await prisma.category.create({ data: { name: parent.name } });
-    }
-    categoryMap.set(parent.name, parentCat.id);
-    categoryCount += 1;
-
-    for (const childName of parent.children ?? []) {
-      let childCat = await prisma.category.findFirst({
-        where: { name: childName, parentId: parentCat.id },
-      });
-      if (!childCat) {
-        childCat = await prisma.category.create({
-          data: { name: childName, parentId: parentCat.id },
-        });
-      }
-      categoryMap.set(childName, childCat.id);
-      categoryCount += 1;
-    }
-  }
+  const categoryCount = await seedCategoryTree(CATEGORY_TREE, null, categoryMap);
 
   console.log(`   ✓ ${categoryCount} categories ready`);
   console.log("🌱 Seeding products...");
