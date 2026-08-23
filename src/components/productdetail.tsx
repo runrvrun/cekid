@@ -306,7 +306,7 @@ export default async function ProductDetail({ product }: { product: Product }) {
                                     <Image
                                         src={p.image ?? "/product-placeholder.svg"}
                                         alt={p.name}
-                                        className="w-full h-48 object-cover rounded"
+                                        className="w-full aspect-square object-cover rounded"
                                         width={400}
                                         height={400}
                                     />

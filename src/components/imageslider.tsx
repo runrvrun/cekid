@@ -40,7 +40,7 @@ export default function ImageSlider({
       <Image
         src="/product-placeholder.svg"
         alt={alt}
-        className="w-full h-96 object-cover rounded"
+        className="w-full aspect-square object-cover rounded"
         width={800}
         height={800}
       />
@@ -52,7 +52,7 @@ export default function ImageSlider({
       <Image
         src={images[0].url}
         alt={alt}
-        className="w-full h-96 object-cover rounded"
+        className="w-full aspect-square object-cover rounded"
         width={800}
         height={800}
       />
@@ -63,7 +63,7 @@ export default function ImageSlider({
     <div className="relative w-full">
       {/* Main image */}
       <div
-        className="relative w-full h-96"
+        className="relative w-full aspect-square"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >

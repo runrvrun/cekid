@@ -130,7 +130,7 @@ if (query && productsFromDb.length === 0) {
             <Image
               src={p.mainImageUrl ?? "/product-placeholder.svg"}
               alt={p.name}
-              className="h-40 w-full object-cover"
+              className="aspect-square w-full object-cover"
               width={160}
               height={160}
             />
