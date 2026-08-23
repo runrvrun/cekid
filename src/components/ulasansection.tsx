@@ -1,6 +1,5 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
-import { BookOpen } from "lucide-react";
 
 export default async function UlasanSection() {
   const all = await prisma.ulasan.findMany({
@@ -38,9 +37,6 @@ export default async function UlasanSection() {
             href={`/r/${post.permalink}`}
             className="group flex flex-col gap-2 bg-white border border-gray-100 rounded-xl p-4 hover:border-gray-300 hover:shadow-sm transition-all"
           >
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center shrink-0">
-              <BookOpen className="w-4 h-4 text-indigo-500" />
-            </div>
             <h3 className="font-semibold text-sm text-gray-900 leading-snug group-hover:text-indigo-600 transition-colors line-clamp-2">
               {post.title}
             </h3>

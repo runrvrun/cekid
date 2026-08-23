@@ -4,15 +4,17 @@ import SearchProduct from "@/components/searchproduct";
 import StickySearchBar from "@/components/stickysearchbar";
 import ProductList from "@/components/productlist";
 import ProductCarouselRow from "@/components/productcarouselrow";
+import CategoryPillsRow from "@/components/categorypillsrow";
 import AddProductLink from "@/components/addproductlink";
 import UlasanSection from "@/components/ulasansection";
 import {
   getMostReviewedProducts,
   getNewestProducts,
   getProductsByCategoryName,
+  getTopLevelCategories,
 } from "@/lib/prisma/homepage";
 
-const CATEGORY_ROWS = ["Minuman Bersoda", "Mie Instan"];
+const CATEGORY_ROWS = ["Minuman", "Makanan", "Lainnya"];
 
 type HomeProps = {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -21,12 +23,13 @@ type HomeProps = {
 export default async function Home({ searchParams }: HomeProps) {
   const query = (await searchParams)?.q as string;
 
-  const [mostReviewed, newest, categoryRows] = query
-    ? [[], [], []]
+  const [mostReviewed, newest, categoryRows, topLevelCategories] = query
+    ? [[], [], [], []]
     : await Promise.all([
         getMostReviewedProducts(10),
         getNewestProducts(10),
         Promise.all(CATEGORY_ROWS.map((name) => getProductsByCategoryName(name, 10))),
+        getTopLevelCategories(),
       ]);
 
   return (
@@ -52,6 +55,7 @@ export default async function Home({ searchParams }: HomeProps) {
       ) : (
         /* Default browsing rows */
         <div className="mt-10 max-w-screen-xl mx-auto">
+          <CategoryPillsRow categories={topLevelCategories} seeAllHref="/kategori" />
           <ProductCarouselRow title="Paling Banyak Direview" products={mostReviewed} />
           <ProductCarouselRow title="Produk Terbaru" products={newest} />
           {categoryRows.map(
