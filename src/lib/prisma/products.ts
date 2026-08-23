@@ -82,7 +82,7 @@ const getReviewPromptData = async (userId: string) => {
   const [product, existingReview] = await Promise.all([
     prisma.product.findFirst({
       where: { id: user.lastViewedProductId, deletedAt: null },
-      select: { slug: true, name: true },
+      select: { id: true, slug: true, name: true },
     }),
     prisma.review.findUnique({
       where: {
@@ -96,7 +96,7 @@ const getReviewPromptData = async (userId: string) => {
     return null;
   }
 
-  return product;
+  return { id: String(product.id), slug: product.slug, name: product.name };
 };
 
 export { getProductBySlug, getUlasanForProduct, getReviewPromptData };
