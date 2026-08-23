@@ -65,15 +65,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return token;
     },
-    // Explicit whitelist: the adapter's raw User row (passed in as `user` for
-    // database sessions) may carry columns that aren't JSON-serializable
-    // (e.g. BigInt) — never spread it wholesale onto session.user.
+    // For database sessions, Auth.js pre-populates session.user with the
+    // ENTIRE raw adapter User row before this callback runs — including any
+    // column that isn't JSON-serializable (e.g. BigInt). Replace it wholesale
+    // with an explicit whitelist rather than mutating fields on top of it.
     async session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
-        session.user.role = user.role ?? "USER";
-      }
-      return session;
+      return {
+        ...session,
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          role: user.role ?? "USER",
+        },
+      };
     },
   },
   jwt: {
