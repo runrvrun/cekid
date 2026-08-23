@@ -578,14 +578,6 @@ export type EnumRoleFieldUpdateOperationsInput = {
   set?: $Enums.Role
 }
 
-export type NullableBigIntFieldUpdateOperationsInput = {
-  set?: bigint | number | null
-  increment?: bigint | number
-  decrement?: bigint | number
-  multiply?: bigint | number
-  divide?: bigint | number
-}
-
 export type UserCreateNestedOneWithoutUlasanInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutUlasanInput, Prisma.UserUncheckedCreateWithoutUlasanInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutUlasanInput

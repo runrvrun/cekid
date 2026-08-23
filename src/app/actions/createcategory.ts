@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
-export async function createCategory(name: string) {
+export async function createCategory(name: string, parentId?: string | null) {
   const session = await auth();
   if (session?.user?.role !== "ADMIN" && session?.user?.role !== "MODERATOR") {
     return { success: false, error: "Unauthorized" };
@@ -17,8 +17,18 @@ export async function createCategory(name: string) {
   });
   if (existing) return { success: false, error: "Kategori sudah ada" };
 
+  let parentIdBigInt: bigint | null = null;
+  if (parentId) {
+    const parent = await prisma.category.findUnique({ where: { id: BigInt(parentId) } });
+    if (!parent) return { success: false, error: "Kategori induk tidak ditemukan" };
+    if (parent.parentId) {
+      return { success: false, error: "Kategori induk tidak boleh punya induk lagi (maks. 2 tingkat)" };
+    }
+    parentIdBigInt = parent.id;
+  }
+
   const category = await prisma.category.create({
-    data: { name: trimmed },
+    data: { name: trimmed, parentId: parentIdBigInt },
     select: { id: true, name: true },
   });
 

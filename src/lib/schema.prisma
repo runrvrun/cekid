@@ -10,6 +10,9 @@ datasource db {
 model Category {
   id              BigInt            @id @default(autoincrement())
   name            String            @db.VarChar(255)
+  parentId        BigInt?
+  parent          Category?         @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children        Category[]        @relation("CategoryHierarchy")
   createdAt       DateTime?         @default(now()) @db.Timestamptz(6)
   productCategory ProductCategory[]
 }

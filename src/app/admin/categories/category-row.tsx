@@ -9,20 +9,34 @@ type Props = {
   id: string;
   name: string;
   productCount: number;
+  hasChildren: boolean;
+  parentId: string | null;
+  parentOptions: { id: string; name: string }[];
 };
 
-export default function CategoryRow({ id, name, productCount }: Props) {
+export default function CategoryRow({
+  id,
+  name,
+  productCount,
+  hasChildren,
+  parentId,
+  parentOptions,
+}: Props) {
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(name);
+  const [selectedParentId, setSelectedParentId] = useState(parentId ?? "");
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState("");
 
   const handleSave = async () => {
-    if (value.trim() === name) { setEditing(false); return; }
+    if (value.trim() === name && selectedParentId === (parentId ?? "")) {
+      setEditing(false);
+      return;
+    }
     setSaving(true);
     setError("");
-    const result = await updateCategory(id, value);
+    const result = await updateCategory(id, value, selectedParentId || null);
     setSaving(false);
     if (result.success) {
       setEditing(false);
@@ -31,10 +45,21 @@ export default function CategoryRow({ id, name, productCount }: Props) {
     }
   };
 
+  const handleCancel = () => {
+    setValue(name);
+    setSelectedParentId(parentId ?? "");
+    setEditing(false);
+    setError("");
+  };
+
   const handleDelete = async () => {
-    const msg = productCount > 0
-      ? `Kategori "${name}" digunakan oleh ${productCount} produk. Menghapus kategori akan melepas asosiasi dari produk-produk tersebut. Lanjutkan?`
-      : `Hapus kategori "${name}"?`;
+    const parts = [];
+    if (productCount > 0) parts.push(`digunakan oleh ${productCount} produk`);
+    if (hasChildren) parts.push("punya subkategori yang akan menjadi kategori utama");
+    const msg =
+      parts.length > 0
+        ? `Kategori "${name}" ${parts.join(" dan ")}. Lanjutkan hapus?`
+        : `Hapus kategori "${name}"?`;
     if (!confirm(msg)) return;
     setDeleting(true);
     const result = await deleteCategory(id);
@@ -46,7 +71,7 @@ export default function CategoryRow({ id, name, productCount }: Props) {
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") handleSave();
-    if (e.key === "Escape") { setValue(name); setEditing(false); setError(""); }
+    if (e.key === "Escape") handleCancel();
   };
 
   return (
@@ -54,14 +79,30 @@ export default function CategoryRow({ id, name, productCount }: Props) {
       <div className="flex-1 min-w-0">
         {editing ? (
           <div className="flex flex-col gap-1">
-            <input
-              type="text"
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              onKeyDown={handleKeyDown}
-              autoFocus
-              className="input py-1 text-sm h-8 max-w-xs"
-            />
+            <div className="flex gap-1.5">
+              <input
+                type="text"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                autoFocus
+                className="input py-1 text-sm h-8 max-w-xs"
+              />
+              {(!hasChildren || parentId) && (
+                <select
+                  value={selectedParentId}
+                  onChange={(e) => setSelectedParentId(e.target.value)}
+                  className="input py-1 text-sm h-8 w-36"
+                >
+                  <option value="">Kategori utama</option>
+                  {parentOptions.map((o) => (
+                    <option key={o.id} value={o.id}>
+                      di bawah: {o.name}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
             {error && <p className="text-xs text-red-500">{error}</p>}
           </div>
         ) : (
@@ -85,7 +126,7 @@ export default function CategoryRow({ id, name, productCount }: Props) {
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
             </button>
             <button
-              onClick={() => { setValue(name); setEditing(false); setError(""); }}
+              onClick={handleCancel}
               className="p-1.5 text-gray-400 hover:bg-gray-100 rounded-lg transition-colors"
               title="Batal"
             >

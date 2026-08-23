@@ -47,7 +47,10 @@ export async function bulkCreateProducts(formData: FormData) {
     return { error: "Tidak ada gambar yang diunggah." };
   }
 
+  // Only leaf categories are ever assigned to products — parent categories
+  // (e.g. "Minuman") are purely organizational.
   const categories = await prisma.category.findMany({
+    where: { children: { none: {} } },
     select: { id: true, name: true },
   });
   const categoryNames = categories.map((c) => c.name);

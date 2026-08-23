@@ -1,6 +1,7 @@
 import AddProductForm from "@/components/addproductform";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { getLeafCategoriesForSelect } from "@/lib/prisma/categories";
 import { redirect } from "next/navigation";
 
 const Page = async ({ params }: { params: { productid: bigint } }) => {
@@ -12,7 +13,7 @@ const Page = async ({ params }: { params: { productid: bigint } }) => {
   const role = session.user?.role;
   if (role !== "ADMIN" && role !== "MODERATOR") redirect("/");
 
-  const [product, rawCategories] = await Promise.all([
+  const [product, categories] = await Promise.all([
     prisma.product.findUnique({
       select: {
         id: true,
@@ -31,15 +32,10 @@ const Page = async ({ params }: { params: { productid: bigint } }) => {
       },
       where: { id },
     }),
-    prisma.category.findMany({
-      orderBy: { name: "asc" },
-      select: { id: true, name: true },
-    }),
+    getLeafCategoriesForSelect(),
   ]);
 
   if (!product) redirect("/");
-
-  const categories = rawCategories.map((c) => ({ id: String(c.id), name: c.name }));
 
   const productForForm = {
     id: product.id,

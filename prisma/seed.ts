@@ -17,25 +17,30 @@ function slugify(name: string): string {
 
 // ─── Categories ────────────────────────────────────────────────────────────────
 
-const CATEGORIES = [
-  "Mie Instan",
-  "Minuman Air & Isotonik",
-  "Minuman Teh & Jus RTD",
-  "Minuman Kopi RTD",
-  "Minuman Susu RTD",
-  "Minuman Bersoda",
-  "Kopi & Teh Sachet",
-  "Susu & Produk Susu",
-  "Snack Keripik",
-  "Snack Puff & Balls",
-  "Wafer & Biskuit",
-  "Cokelat & Permen",
-  "Makanan Kaleng",
-  "Bumbu & Saus",
-  "Minyak Goreng",
-  "Es Krim",
-  "Roti & Bakeri",
-  "Perawatan Diri",
+// Categories support 2 levels: a top-level entry with `children` becomes a
+// parent (organizational only, never assigned to a product directly); an
+// entry with no `children` (or an empty array) is a top-level category that
+// is itself assignable, exactly like today's flat list. Products in the
+// PRODUCTS list below reference categories by name regardless of level.
+const CATEGORY_TREE: { name: string; children?: string[] }[] = [
+  { name: "Mie Instan" },
+  { name: "Minuman Air & Isotonik" },
+  { name: "Minuman Teh & Jus RTD" },
+  { name: "Minuman Kopi RTD" },
+  { name: "Minuman Susu RTD" },
+  { name: "Minuman Bersoda" },
+  { name: "Kopi & Teh Sachet" },
+  { name: "Susu & Produk Susu" },
+  { name: "Snack Keripik" },
+  { name: "Snack Puff & Balls" },
+  { name: "Wafer & Biskuit" },
+  { name: "Cokelat & Permen" },
+  { name: "Makanan Kaleng" },
+  { name: "Bumbu & Saus" },
+  { name: "Minyak Goreng" },
+  { name: "Es Krim" },
+  { name: "Roti & Bakeri" },
+  { name: "Perawatan Diri" },
 ];
 
 // ─── Products ──────────────────────────────────────────────────────────────────
@@ -396,16 +401,33 @@ async function main() {
   console.log("🌱 Seeding categories...");
 
   const categoryMap = new Map<string, bigint>();
+  let categoryCount = 0;
 
-  for (const name of CATEGORIES) {
-    let cat = await prisma.category.findFirst({ where: { name } });
-    if (!cat) {
-      cat = await prisma.category.create({ data: { name } });
+  for (const parent of CATEGORY_TREE) {
+    let parentCat = await prisma.category.findFirst({
+      where: { name: parent.name, parentId: null },
+    });
+    if (!parentCat) {
+      parentCat = await prisma.category.create({ data: { name: parent.name } });
     }
-    categoryMap.set(name, cat.id);
+    categoryMap.set(parent.name, parentCat.id);
+    categoryCount += 1;
+
+    for (const childName of parent.children ?? []) {
+      let childCat = await prisma.category.findFirst({
+        where: { name: childName, parentId: parentCat.id },
+      });
+      if (!childCat) {
+        childCat = await prisma.category.create({
+          data: { name: childName, parentId: parentCat.id },
+        });
+      }
+      categoryMap.set(childName, childCat.id);
+      categoryCount += 1;
+    }
   }
 
-  console.log(`   ✓ ${CATEGORIES.length} categories ready`);
+  console.log(`   ✓ ${categoryCount} categories ready`);
   console.log("🌱 Seeding products...");
 
   let created = 0;

@@ -4,8 +4,13 @@ import { useState } from "react";
 import { Plus, Loader2 } from "lucide-react";
 import { createCategory } from "@/app/actions/createcategory";
 
-export default function AddCategoryForm() {
+type Props = {
+  parentOptions: { id: string; name: string }[];
+};
+
+export default function AddCategoryForm({ parentOptions }: Props) {
   const [value, setValue] = useState("");
+  const [parentId, setParentId] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -14,10 +19,11 @@ export default function AddCategoryForm() {
     if (!value.trim()) return;
     setLoading(true);
     setError("");
-    const result = await createCategory(value);
+    const result = await createCategory(value, parentId || null);
     setLoading(false);
     if (result.success) {
       setValue("");
+      setParentId("");
     } else {
       setError(result.error ?? "Gagal menambah kategori");
     }
@@ -33,6 +39,18 @@ export default function AddCategoryForm() {
           placeholder="Nama kategori baru"
           className="input flex-1"
         />
+        <select
+          value={parentId}
+          onChange={(e) => setParentId(e.target.value)}
+          className="input w-40 shrink-0"
+        >
+          <option value="">Kategori utama</option>
+          {parentOptions.map((o) => (
+            <option key={o.id} value={o.id}>
+              di bawah: {o.name}
+            </option>
+          ))}
+        </select>
         <button
           type="submit"
           disabled={loading || !value.trim()}

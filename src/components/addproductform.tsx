@@ -64,6 +64,13 @@ type Props = {
   categories?: Category[];
 };
 
+// category.name may be a "Parent > Child" display label; the AI (and its
+// suggestion matching) should only ever deal with the plain leaf name.
+function plainCategoryName(name: string): string {
+  const idx = name.lastIndexOf(" > ");
+  return idx === -1 ? name : name.slice(idx + 3);
+}
+
 export default function ProductForm({ mode, initialData, canEditMain = true, categories = [] }: Props) {
   const router = useRouter();
 
@@ -365,7 +372,9 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
       const fd = new FormData();
       fd.append("image", compressed);
       if (categories.length > 0) {
-        fd.append("categoryNames", categories.map((c) => c.name).join(","));
+        // categories[].name may carry a "Parent > Child" display prefix —
+        // the AI should only ever see/return the plain leaf name.
+        fd.append("categoryNames", categories.map((c) => plainCategoryName(c.name)).join(","));
       }
       const res = await fetch("/api/product-detect", {
         method: "POST",
@@ -378,7 +387,7 @@ export default function ProductForm({ mode, initialData, canEditMain = true, cat
         const matched = (data.categories as string[])
           .map((suggested: string) =>
             categories.find(
-              (c) => c.name.toLowerCase() === suggested.toLowerCase()
+              (c) => plainCategoryName(c.name).toLowerCase() === suggested.toLowerCase()
             )
           )
           .filter((c): c is Category => c !== undefined)
