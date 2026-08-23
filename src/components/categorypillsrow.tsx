@@ -23,10 +23,12 @@ export default function CategoryPillsRow({
           <Link
             key={c.id}
             href={`/kategori/${c.id}`}
-            className="flex-none w-[23%] snap-start px-3 py-2 rounded-full border border-gray-200 text-sm font-medium text-gray-700 text-center truncate hover:border-primary hover:text-primary transition-colors"
+            className="group flex-none w-[31%] snap-start px-3 py-2.5 rounded-xl border border-gray-200 flex items-center justify-center text-center hover:border-primary transition-colors"
             title={c.name}
           >
-            {c.name}
+            <span className="text-xs font-light text-gray-700 leading-snug line-clamp-2 group-hover:text-primary">
+              {c.name}
+            </span>
           </Link>
         ))}
       </div>
