@@ -147,6 +147,7 @@ const CATEGORY_TREE: CategoryNode[] = [
         name: "Minuman Instan",
         children: [{ name: "Sirup" }, { name: "Minuman Tradisional" }],
       },
+      { name: "Minuman Beralkohol" },
       { name: "Air Mineral" },
       { name: "Jus" },
       {

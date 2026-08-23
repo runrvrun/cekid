@@ -132,3 +132,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
 });
+
+/**
+ * `auth()` with one short retry if no session is found. Database sessions
+ * require a DB round-trip (via the adapter) on every call; a momentary
+ * connection hiccup on the shared Postgres instance gets silently treated
+ * as "no session" rather than surfaced as an error, which can make a
+ * logged-in user's action fail once with "you must log in" and then
+ * immediately succeed on retry. This masks that class of transient blip
+ * without weakening the actual auth check for genuinely logged-out users.
+ */
+export async function authRetrying(retries = 1, delayMs = 300) {
+  let session = await auth();
+  for (let i = 0; i < retries && !session?.user?.id; i++) {
+    await new Promise((resolve) => setTimeout(resolve, delayMs));
+    session = await auth();
+  }
+  return session;
+}

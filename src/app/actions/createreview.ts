@@ -1,6 +1,6 @@
 "use server";
 import prisma from "@/lib/prisma";
-import { auth } from "@/lib/auth";
+import { authRetrying } from "@/lib/auth";
 
 /**
  * Add a review for a product.
@@ -23,7 +23,7 @@ export async function createReview(formData: FormData) {
     const reviewComment = (formData.get("review") as string) ?? null;
     const anonymous = formData.get("anonymous") === "true" ? true : false;
 
-    const session = await auth();
+    const session = await authRetrying();
     if (!session?.user?.id) {
       return { success: false, error: "Anda harus login sebelum memberi review." };
     }

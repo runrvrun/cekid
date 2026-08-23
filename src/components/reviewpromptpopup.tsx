@@ -20,7 +20,7 @@ export default function ReviewPromptPopup({ product }: Props) {
   const [error, setError] = useState<string | null>(null);
 
   if (!product || hidden) return null;
-  if (pathname === `/${product.slug}`) return null;
+  if (pathname !== "/") return null;
 
   const handleDismiss = () => {
     setHidden(true);
