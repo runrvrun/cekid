@@ -11,6 +11,30 @@ import { schema } from "@/lib/schema";
 
 const adapter = PrismaAdapter(prisma);
 
+/**
+ * Defensive final safety net: recursively converts any stray `bigint` to a
+ * string before a callback return value can reach Auth.js's internal
+ * JSON.stringify (which throws on BigInt, e.g. "Do not know how to
+ * serialize a BigInt"). Covers any future column added to a model that
+ * flows through these callbacks, not just the ones we know about today.
+ */
+function stripBigInt<T>(value: T): T {
+  if (typeof value === "bigint") {
+    return value.toString() as unknown as T;
+  }
+  if (value === null || typeof value !== "object" || value instanceof Date) {
+    return value;
+  }
+  if (Array.isArray(value)) {
+    return value.map((v) => stripBigInt(v)) as unknown as T;
+  }
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
+    out[k] = stripBigInt(v);
+  }
+  return out as T;
+}
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter,
   providers: [
@@ -63,14 +87,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (account?.provider === "credentials") {
         token.credentials = true;
       }
-      return token;
+      return stripBigInt(token);
     },
     // For database sessions, Auth.js pre-populates session.user with the
     // ENTIRE raw adapter User row before this callback runs — including any
     // column that isn't JSON-serializable (e.g. BigInt). Replace it wholesale
-    // with an explicit whitelist rather than mutating fields on top of it.
+    // with an explicit whitelist rather than mutating fields on top of it,
+    // then run it through stripBigInt as a final safety net regardless.
     async session({ session, user }) {
-      return {
+      return stripBigInt({
         ...session,
         user: {
           id: user.id,
@@ -79,7 +104,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           image: user.image,
           role: user.role ?? "USER",
         },
-      };
+      });
     },
   },
   jwt: {
