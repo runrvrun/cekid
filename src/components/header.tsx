@@ -18,8 +18,8 @@ export default function Header() {
         <Image
           src="/logo.png"
           alt="beliga.id"
-          width={767}
-          height={379}
+          width={824}
+          height={341}
           className="h-9 w-auto"
           priority
         />
