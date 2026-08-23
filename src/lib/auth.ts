@@ -37,7 +37,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!user) return null;
         if (user.status === "SUSPENDED") return null;
 
-        return user;
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          role: user.role,
+        };
       },
     }),
   ],
@@ -58,6 +64,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.credentials = true;
       }
       return token;
+    },
+    // Explicit whitelist: the adapter's raw User row (passed in as `user` for
+    // database sessions) may carry columns that aren't JSON-serializable
+    // (e.g. BigInt) — never spread it wholesale onto session.user.
+    async session({ session, user }) {
+      if (session.user) {
+        session.user.id = user.id;
+        session.user.role = user.role ?? "USER";
+      }
+      return session;
     },
   },
   jwt: {

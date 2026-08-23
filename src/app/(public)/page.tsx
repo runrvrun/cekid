@@ -1,6 +1,7 @@
 export const runtime = "nodejs";
 import Hero from "@/components/hero";
 import SearchProduct from "@/components/searchproduct";
+import StickySearchBar from "@/components/stickysearchbar";
 import ProductList from "@/components/productlist";
 import AddProductLink from "@/components/addproductlink";
 import UlasanSection from "@/components/ulasansection";
@@ -24,6 +25,8 @@ export default async function Home({ searchParams }: HomeProps) {
           <AddProductLink />
         </div>
       </div>
+
+      <StickySearchBar initial={query} />
 
       {/* Product list */}
       <div className="px-4 mt-10 max-w-screen-xl mx-auto">
