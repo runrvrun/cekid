@@ -19,10 +19,13 @@ export async function createCategory(name: string, parentId?: string | null) {
 
   let parentIdBigInt: bigint | null = null;
   if (parentId) {
-    const parent = await prisma.category.findUnique({ where: { id: BigInt(parentId) } });
+    const parent = await prisma.category.findUnique({
+      where: { id: BigInt(parentId) },
+      include: { parent: { select: { parentId: true } } },
+    });
     if (!parent) return { success: false, error: "Kategori induk tidak ditemukan" };
-    if (parent.parentId) {
-      return { success: false, error: "Kategori induk tidak boleh punya induk lagi (maks. 2 tingkat)" };
+    if (parent.parent?.parentId) {
+      return { success: false, error: "Kategori induk sudah di tingkat terdalam (maks. 3 tingkat)" };
     }
     parentIdBigInt = parent.id;
   }

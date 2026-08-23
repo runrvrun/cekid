@@ -5,7 +5,6 @@ import { Tag } from "lucide-react";
 
 export default async function AdminCategoriesPage() {
   const categories = await prisma.category.findMany({
-    orderBy: [{ name: "asc" }],
     select: {
       id: true,
       name: true,
@@ -14,9 +13,35 @@ export default async function AdminCategoriesPage() {
     },
   });
 
-  const topLevel = categories
-    .filter((c) => !c.parentId)
+  const byId = new Map(categories.map((c) => [String(c.id), c]));
+
+  function ancestorPath(id: string): string {
+    const parts: string[] = [];
+    let current = byId.get(id);
+    while (current) {
+      parts.unshift(current.name);
+      current = current.parentId ? byId.get(String(current.parentId)) : undefined;
+    }
+    return parts.join(" > ");
+  }
+
+  function depthOf(id: string): number {
+    let depth = 1;
+    let current = byId.get(id);
+    while (current?.parentId) {
+      depth += 1;
+      current = byId.get(String(current.parentId));
+    }
+    return depth;
+  }
+
+  // A category can be a parent target only if it isn't already at the
+  // deepest level (3) — its children would otherwise exceed 3 levels.
+  const parentOptions = categories
+    .filter((c) => depthOf(String(c.id)) <= 2)
+    .map((c) => ({ id: String(c.id), name: ancestorPath(String(c.id)) }))
     .sort((a, b) => a.name.localeCompare(b.name));
+
   const childrenByParent = new Map<string, typeof categories>();
   for (const c of categories) {
     if (!c.parentId) continue;
@@ -24,7 +49,30 @@ export default async function AdminCategoriesPage() {
     childrenByParent.set(key, [...(childrenByParent.get(key) ?? []), c]);
   }
 
-  const topLevelOptions = topLevel.map((c) => ({ id: String(c.id), name: c.name }));
+  const topLevel = categories
+    .filter((c) => !c.parentId)
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  function renderRow(cat: (typeof categories)[number], depth: number) {
+    const children = (childrenByParent.get(String(cat.id)) ?? []).sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+    return (
+      <div key={String(cat.id)}>
+        <div style={{ paddingLeft: `${depth * 1.5}rem` }} className={depth > 0 ? "border-t border-gray-50" : ""}>
+          <CategoryRow
+            id={String(cat.id)}
+            name={cat.name}
+            productCount={cat._count.productCategory}
+            hasChildren={cat._count.children > 0}
+            parentId={cat.parentId ? String(cat.parentId) : null}
+            parentOptions={parentOptions.filter((o) => o.id !== String(cat.id))}
+          />
+        </div>
+        {children.map((child) => renderRow(child, depth + 1))}
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-xl">
@@ -37,7 +85,7 @@ export default async function AdminCategoriesPage() {
 
       {/* Add form */}
       <div className="bg-white rounded-xl border border-gray-100 p-4 mb-4">
-        <AddCategoryForm parentOptions={topLevelOptions} />
+        <AddCategoryForm parentOptions={parentOptions} />
       </div>
 
       {/* List */}
@@ -49,35 +97,7 @@ export default async function AdminCategoriesPage() {
           </div>
         ) : (
           <div className="divide-y divide-gray-50">
-            {topLevel.map((cat) => {
-              const children = (childrenByParent.get(String(cat.id)) ?? []).sort((a, b) =>
-                a.name.localeCompare(b.name)
-              );
-              return (
-                <div key={String(cat.id)}>
-                  <CategoryRow
-                    id={String(cat.id)}
-                    name={cat.name}
-                    productCount={cat._count.productCategory}
-                    hasChildren={cat._count.children > 0}
-                    parentId={null}
-                    parentOptions={topLevelOptions.filter((o) => o.id !== String(cat.id))}
-                  />
-                  {children.map((child) => (
-                    <div key={String(child.id)} className="pl-8 border-t border-gray-50">
-                      <CategoryRow
-                        id={String(child.id)}
-                        name={child.name}
-                        productCount={child._count.productCategory}
-                        hasChildren={child._count.children > 0}
-                        parentId={String(child.parentId)}
-                        parentOptions={topLevelOptions.filter((o) => o.id !== String(child.id))}
-                      />
-                    </div>
-                  ))}
-                </div>
-              );
-            })}
+            {topLevel.map((cat) => renderRow(cat, 0))}
           </div>
         )}
       </div>

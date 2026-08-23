@@ -29,12 +29,15 @@ export async function updateCategory(
       return { success: false, error: "Kategori tidak boleh menjadi induk dirinya sendiri" };
     }
     const [parent, childCount] = await Promise.all([
-      prisma.category.findUnique({ where: { id: BigInt(parentId) } }),
+      prisma.category.findUnique({
+        where: { id: BigInt(parentId) },
+        include: { parent: { select: { parentId: true } } },
+      }),
       prisma.category.count({ where: { parentId: categoryId } }),
     ]);
     if (!parent) return { success: false, error: "Kategori induk tidak ditemukan" };
-    if (parent.parentId) {
-      return { success: false, error: "Kategori induk tidak boleh punya induk lagi (maks. 2 tingkat)" };
+    if (parent.parent?.parentId) {
+      return { success: false, error: "Kategori induk sudah di tingkat terdalam (maks. 3 tingkat)" };
     }
     if (childCount > 0) {
       return {

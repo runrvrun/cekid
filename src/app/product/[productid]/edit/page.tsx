@@ -1,7 +1,7 @@
 import AddProductForm from "@/components/addproductform";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { getLeafCategoriesForSelect } from "@/lib/prisma/categories";
+import { getCategoriesForSelect } from "@/lib/prisma/categories";
 import { redirect } from "next/navigation";
 
 const Page = async ({ params }: { params: { productid: bigint } }) => {
@@ -32,7 +32,7 @@ const Page = async ({ params }: { params: { productid: bigint } }) => {
       },
       where: { id },
     }),
-    getLeafCategoriesForSelect(),
+    getCategoriesForSelect(),
   ]);
 
   if (!product) redirect("/");
