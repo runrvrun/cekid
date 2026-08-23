@@ -665,14 +665,6 @@ export type EnumReportStatusFieldUpdateOperationsInput = {
   set?: $Enums.ReportStatus
 }
 
-export type NullableBigIntFieldUpdateOperationsInput = {
-  set?: bigint | number | null
-  increment?: bigint | number
-  decrement?: bigint | number
-  multiply?: bigint | number
-  divide?: bigint | number
-}
-
 export type ReportCreateWithoutProductInput = {
   id?: bigint | number
   type: $Enums.ReportType

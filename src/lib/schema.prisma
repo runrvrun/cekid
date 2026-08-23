@@ -100,6 +100,8 @@ model User {
   createdAt     DateTime?  @default(now()) @db.Timestamptz(6)
   status        UserStatus @default(ACTIVE)
   role          Role       @default(USER)
+  lastViewedProductId        BigInt?
+  lastViewedProductDismissed Boolean  @default(false)
   account       Account[]
   product       Product[]
   review        Review[]

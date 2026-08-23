@@ -79,7 +79,14 @@ export default async function ProductDetail({ product }: { product: Product }) {
                 </main>
             );
         }
-    
+
+        if (session?.user?.id) {
+            await prisma.user.update({
+                where: { id: session.user.id },
+                data: { lastViewedProductId: product.id, lastViewedProductDismissed: false },
+            });
+        }
+
         const baseUrl =
         process.env.NEXT_PUBLIC_BASE_URL ??
         "http://localhost:3000";
@@ -328,7 +335,9 @@ export default async function ProductDetail({ product }: { product: Product }) {
                     ))}
                 </div>
             </section>
-             <AddReviewForm productId={product.id} slug={product.slug} name={product.name} />
+             <div id="tulis-review">
+                 <AddReviewForm productId={product.id} slug={product.slug} name={product.name} />
+             </div>
 
                         {/* Related Article */}
                         {article && (

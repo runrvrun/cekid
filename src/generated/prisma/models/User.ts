@@ -20,8 +20,18 @@ export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayloa
 
 export type AggregateUser = {
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
+}
+
+export type UserAvgAggregateOutputType = {
+  lastViewedProductId: number | null
+}
+
+export type UserSumAggregateOutputType = {
+  lastViewedProductId: bigint | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -34,6 +44,8 @@ export type UserMinAggregateOutputType = {
   createdAt: Date | null
   status: $Enums.UserStatus | null
   role: $Enums.Role | null
+  lastViewedProductId: bigint | null
+  lastViewedProductDismissed: boolean | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -46,6 +58,8 @@ export type UserMaxAggregateOutputType = {
   createdAt: Date | null
   status: $Enums.UserStatus | null
   role: $Enums.Role | null
+  lastViewedProductId: bigint | null
+  lastViewedProductDismissed: boolean | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -58,9 +72,19 @@ export type UserCountAggregateOutputType = {
   createdAt: number
   status: number
   role: number
+  lastViewedProductId: number
+  lastViewedProductDismissed: number
   _all: number
 }
 
+
+export type UserAvgAggregateInputType = {
+  lastViewedProductId?: true
+}
+
+export type UserSumAggregateInputType = {
+  lastViewedProductId?: true
+}
 
 export type UserMinAggregateInputType = {
   id?: true
@@ -72,6 +96,8 @@ export type UserMinAggregateInputType = {
   createdAt?: true
   status?: true
   role?: true
+  lastViewedProductId?: true
+  lastViewedProductDismissed?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -84,6 +110,8 @@ export type UserMaxAggregateInputType = {
   createdAt?: true
   status?: true
   role?: true
+  lastViewedProductId?: true
+  lastViewedProductDismissed?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -96,6 +124,8 @@ export type UserCountAggregateInputType = {
   createdAt?: true
   status?: true
   role?: true
+  lastViewedProductId?: true
+  lastViewedProductDismissed?: true
   _all?: true
 }
 
@@ -137,6 +167,18 @@ export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: UserAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: UserSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserMinAggregateInputType
@@ -167,6 +209,8 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: UserCountAggregateInputType | true
+  _avg?: UserAvgAggregateInputType
+  _sum?: UserSumAggregateInputType
   _min?: UserMinAggregateInputType
   _max?: UserMaxAggregateInputType
 }
@@ -181,7 +225,11 @@ export type UserGroupByOutputType = {
   createdAt: Date | null
   status: $Enums.UserStatus
   role: $Enums.Role
+  lastViewedProductId: bigint | null
+  lastViewedProductDismissed: boolean
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
@@ -214,6 +262,8 @@ export type UserWhereInput = {
   createdAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
+  lastViewedProductId?: Prisma.BigIntNullableFilter<"User"> | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFilter<"User"> | boolean
   account?: Prisma.AccountListRelationFilter
   product?: Prisma.ProductListRelationFilter
   review?: Prisma.ReviewListRelationFilter
@@ -233,6 +283,8 @@ export type UserOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  lastViewedProductId?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastViewedProductDismissed?: Prisma.SortOrder
   account?: Prisma.AccountOrderByRelationAggregateInput
   product?: Prisma.ProductOrderByRelationAggregateInput
   review?: Prisma.ReviewOrderByRelationAggregateInput
@@ -255,6 +307,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
+  lastViewedProductId?: Prisma.BigIntNullableFilter<"User"> | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFilter<"User"> | boolean
   account?: Prisma.AccountListRelationFilter
   product?: Prisma.ProductListRelationFilter
   review?: Prisma.ReviewListRelationFilter
@@ -274,9 +328,13 @@ export type UserOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  lastViewedProductId?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastViewedProductDismissed?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
+  _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
+  _sum?: Prisma.UserSumOrderByAggregateInput
 }
 
 export type UserScalarWhereWithAggregatesInput = {
@@ -292,6 +350,8 @@ export type UserScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   status?: Prisma.EnumUserStatusWithAggregatesFilter<"User"> | $Enums.UserStatus
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
+  lastViewedProductId?: Prisma.BigIntNullableWithAggregatesFilter<"User"> | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
 }
 
 export type UserCreateInput = {
@@ -304,6 +364,8 @@ export type UserCreateInput = {
   createdAt?: Date | string | null
   status?: $Enums.UserStatus
   role?: $Enums.Role
+  lastViewedProductId?: bigint | number | null
+  lastViewedProductDismissed?: boolean
   account?: Prisma.AccountCreateNestedManyWithoutUserInput
   product?: Prisma.ProductCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewCreateNestedManyWithoutUserInput
@@ -323,6 +385,8 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string | null
   status?: $Enums.UserStatus
   role?: $Enums.Role
+  lastViewedProductId?: bigint | number | null
+  lastViewedProductDismissed?: boolean
   account?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   product?: Prisma.ProductUncheckedCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
@@ -342,6 +406,8 @@ export type UserUpdateInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  lastViewedProductId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   account?: Prisma.AccountUpdateManyWithoutUserNestedInput
   product?: Prisma.ProductUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUpdateManyWithoutUserNestedInput
@@ -361,6 +427,8 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  lastViewedProductId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   account?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   product?: Prisma.ProductUncheckedUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
@@ -380,6 +448,8 @@ export type UserCreateManyInput = {
   createdAt?: Date | string | null
   status?: $Enums.UserStatus
   role?: $Enums.Role
+  lastViewedProductId?: bigint | number | null
+  lastViewedProductDismissed?: boolean
 }
 
 export type UserUpdateManyMutationInput = {
@@ -392,6 +462,8 @@ export type UserUpdateManyMutationInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  lastViewedProductId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -404,6 +476,8 @@ export type UserUncheckedUpdateManyInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  lastViewedProductId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type UserNullableScalarRelationFilter = {
@@ -426,6 +500,12 @@ export type UserCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  lastViewedProductId?: Prisma.SortOrder
+  lastViewedProductDismissed?: Prisma.SortOrder
+}
+
+export type UserAvgOrderByAggregateInput = {
+  lastViewedProductId?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -438,6 +518,8 @@ export type UserMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  lastViewedProductId?: Prisma.SortOrder
+  lastViewedProductDismissed?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -450,6 +532,12 @@ export type UserMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  lastViewedProductId?: Prisma.SortOrder
+  lastViewedProductDismissed?: Prisma.SortOrder
+}
+
+export type UserSumOrderByAggregateInput = {
+  lastViewedProductId?: Prisma.SortOrder
 }
 
 export type UserCreateNestedOneWithoutProductInput = {
@@ -488,6 +576,14 @@ export type EnumUserStatusFieldUpdateOperationsInput = {
 
 export type EnumRoleFieldUpdateOperationsInput = {
   set?: $Enums.Role
+}
+
+export type NullableBigIntFieldUpdateOperationsInput = {
+  set?: bigint | number | null
+  increment?: bigint | number
+  decrement?: bigint | number
+  multiply?: bigint | number
+  divide?: bigint | number
 }
 
 export type UserCreateNestedOneWithoutUlasanInput = {
@@ -572,6 +668,8 @@ export type UserCreateWithoutProductInput = {
   createdAt?: Date | string | null
   status?: $Enums.UserStatus
   role?: $Enums.Role
+  lastViewedProductId?: bigint | number | null
+  lastViewedProductDismissed?: boolean
   account?: Prisma.AccountCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewCreateNestedManyWithoutUserInput
   session?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -590,6 +688,8 @@ export type UserUncheckedCreateWithoutProductInput = {
   createdAt?: Date | string | null
   status?: $Enums.UserStatus
   role?: $Enums.Role
+  lastViewedProductId?: bigint | number | null
+  lastViewedProductDismissed?: boolean
   account?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   session?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -624,6 +724,8 @@ export type UserUpdateWithoutProductInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  lastViewedProductId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   account?: Prisma.AccountUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   session?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -642,6 +744,8 @@ export type UserUncheckedUpdateWithoutProductInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  lastViewedProductId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   account?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   session?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -660,6 +764,8 @@ export type UserCreateWithoutReviewInput = {
   createdAt?: Date | string | null
   status?: $Enums.UserStatus
   role?: $Enums.Role
+  lastViewedProductId?: bigint | number | null
+  lastViewedProductDismissed?: boolean
   account?: Prisma.AccountCreateNestedManyWithoutUserInput
   product?: Prisma.ProductCreateNestedManyWithoutUserInput
   session?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -678,6 +784,8 @@ export type UserUncheckedCreateWithoutReviewInput = {
   createdAt?: Date | string | null
   status?: $Enums.UserStatus
   role?: $Enums.Role
+  lastViewedProductId?: bigint | number | null
+  lastViewedProductDismissed?: boolean
   account?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   product?: Prisma.ProductUncheckedCreateNestedManyWithoutUserInput
   session?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -712,6 +820,8 @@ export type UserUpdateWithoutReviewInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  lastViewedProductId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   account?: Prisma.AccountUpdateManyWithoutUserNestedInput
   product?: Prisma.ProductUpdateManyWithoutUserNestedInput
   session?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -730,6 +840,8 @@ export type UserUncheckedUpdateWithoutReviewInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  lastViewedProductId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   account?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   product?: Prisma.ProductUncheckedUpdateManyWithoutUserNestedInput
   session?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -748,6 +860,8 @@ export type UserCreateWithoutUlasanInput = {
   createdAt?: Date | string | null
   status?: $Enums.UserStatus
   role?: $Enums.Role
+  lastViewedProductId?: bigint | number | null
+  lastViewedProductDismissed?: boolean
   account?: Prisma.AccountCreateNestedManyWithoutUserInput
   product?: Prisma.ProductCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewCreateNestedManyWithoutUserInput
@@ -766,6 +880,8 @@ export type UserUncheckedCreateWithoutUlasanInput = {
   createdAt?: Date | string | null
   status?: $Enums.UserStatus
   role?: $Enums.Role
+  lastViewedProductId?: bigint | number | null
+  lastViewedProductDismissed?: boolean
   account?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   product?: Prisma.ProductUncheckedCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
@@ -800,6 +916,8 @@ export type UserUpdateWithoutUlasanInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  lastViewedProductId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   account?: Prisma.AccountUpdateManyWithoutUserNestedInput
   product?: Prisma.ProductUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUpdateManyWithoutUserNestedInput
@@ -818,6 +936,8 @@ export type UserUncheckedUpdateWithoutUlasanInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  lastViewedProductId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   account?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   product?: Prisma.ProductUncheckedUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
@@ -836,6 +956,8 @@ export type UserCreateWithoutReportsSubmittedInput = {
   createdAt?: Date | string | null
   status?: $Enums.UserStatus
   role?: $Enums.Role
+  lastViewedProductId?: bigint | number | null
+  lastViewedProductDismissed?: boolean
   account?: Prisma.AccountCreateNestedManyWithoutUserInput
   product?: Prisma.ProductCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewCreateNestedManyWithoutUserInput
@@ -854,6 +976,8 @@ export type UserUncheckedCreateWithoutReportsSubmittedInput = {
   createdAt?: Date | string | null
   status?: $Enums.UserStatus
   role?: $Enums.Role
+  lastViewedProductId?: bigint | number | null
+  lastViewedProductDismissed?: boolean
   account?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   product?: Prisma.ProductUncheckedCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
@@ -877,6 +1001,8 @@ export type UserCreateWithoutReportsResolvedInput = {
   createdAt?: Date | string | null
   status?: $Enums.UserStatus
   role?: $Enums.Role
+  lastViewedProductId?: bigint | number | null
+  lastViewedProductDismissed?: boolean
   account?: Prisma.AccountCreateNestedManyWithoutUserInput
   product?: Prisma.ProductCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewCreateNestedManyWithoutUserInput
@@ -895,6 +1021,8 @@ export type UserUncheckedCreateWithoutReportsResolvedInput = {
   createdAt?: Date | string | null
   status?: $Enums.UserStatus
   role?: $Enums.Role
+  lastViewedProductId?: bigint | number | null
+  lastViewedProductDismissed?: boolean
   account?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   product?: Prisma.ProductUncheckedCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
@@ -929,6 +1057,8 @@ export type UserUpdateWithoutReportsSubmittedInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  lastViewedProductId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   account?: Prisma.AccountUpdateManyWithoutUserNestedInput
   product?: Prisma.ProductUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUpdateManyWithoutUserNestedInput
@@ -947,6 +1077,8 @@ export type UserUncheckedUpdateWithoutReportsSubmittedInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  lastViewedProductId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   account?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   product?: Prisma.ProductUncheckedUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
@@ -976,6 +1108,8 @@ export type UserUpdateWithoutReportsResolvedInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  lastViewedProductId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   account?: Prisma.AccountUpdateManyWithoutUserNestedInput
   product?: Prisma.ProductUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUpdateManyWithoutUserNestedInput
@@ -994,6 +1128,8 @@ export type UserUncheckedUpdateWithoutReportsResolvedInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  lastViewedProductId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   account?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   product?: Prisma.ProductUncheckedUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
@@ -1012,6 +1148,8 @@ export type UserCreateWithoutAccountInput = {
   createdAt?: Date | string | null
   status?: $Enums.UserStatus
   role?: $Enums.Role
+  lastViewedProductId?: bigint | number | null
+  lastViewedProductDismissed?: boolean
   product?: Prisma.ProductCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewCreateNestedManyWithoutUserInput
   session?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -1030,6 +1168,8 @@ export type UserUncheckedCreateWithoutAccountInput = {
   createdAt?: Date | string | null
   status?: $Enums.UserStatus
   role?: $Enums.Role
+  lastViewedProductId?: bigint | number | null
+  lastViewedProductDismissed?: boolean
   product?: Prisma.ProductUncheckedCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   session?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -1064,6 +1204,8 @@ export type UserUpdateWithoutAccountInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  lastViewedProductId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   product?: Prisma.ProductUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   session?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -1082,6 +1224,8 @@ export type UserUncheckedUpdateWithoutAccountInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  lastViewedProductId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   product?: Prisma.ProductUncheckedUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   session?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1100,6 +1244,8 @@ export type UserCreateWithoutSessionInput = {
   createdAt?: Date | string | null
   status?: $Enums.UserStatus
   role?: $Enums.Role
+  lastViewedProductId?: bigint | number | null
+  lastViewedProductDismissed?: boolean
   account?: Prisma.AccountCreateNestedManyWithoutUserInput
   product?: Prisma.ProductCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewCreateNestedManyWithoutUserInput
@@ -1118,6 +1264,8 @@ export type UserUncheckedCreateWithoutSessionInput = {
   createdAt?: Date | string | null
   status?: $Enums.UserStatus
   role?: $Enums.Role
+  lastViewedProductId?: bigint | number | null
+  lastViewedProductDismissed?: boolean
   account?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   product?: Prisma.ProductUncheckedCreateNestedManyWithoutUserInput
   review?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
@@ -1152,6 +1300,8 @@ export type UserUpdateWithoutSessionInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  lastViewedProductId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   account?: Prisma.AccountUpdateManyWithoutUserNestedInput
   product?: Prisma.ProductUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUpdateManyWithoutUserNestedInput
@@ -1170,6 +1320,8 @@ export type UserUncheckedUpdateWithoutSessionInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  lastViewedProductId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  lastViewedProductDismissed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   account?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   product?: Prisma.ProductUncheckedUpdateManyWithoutUserNestedInput
   review?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
@@ -1273,6 +1425,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   status?: boolean
   role?: boolean
+  lastViewedProductId?: boolean
+  lastViewedProductDismissed?: boolean
   account?: boolean | Prisma.User$accountArgs<ExtArgs>
   product?: boolean | Prisma.User$productArgs<ExtArgs>
   review?: boolean | Prisma.User$reviewArgs<ExtArgs>
@@ -1293,6 +1447,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   createdAt?: boolean
   status?: boolean
   role?: boolean
+  lastViewedProductId?: boolean
+  lastViewedProductDismissed?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1305,6 +1461,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   createdAt?: boolean
   status?: boolean
   role?: boolean
+  lastViewedProductId?: boolean
+  lastViewedProductDismissed?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -1317,9 +1475,11 @@ export type UserSelectScalar = {
   createdAt?: boolean
   status?: boolean
   role?: boolean
+  lastViewedProductId?: boolean
+  lastViewedProductDismissed?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "name" | "image" | "emailVerified" | "createdAt" | "status" | "role", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "name" | "image" | "emailVerified" | "createdAt" | "status" | "role" | "lastViewedProductId" | "lastViewedProductDismissed", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   account?: boolean | Prisma.User$accountArgs<ExtArgs>
   product?: boolean | Prisma.User$productArgs<ExtArgs>
@@ -1354,6 +1514,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     createdAt: Date | null
     status: $Enums.UserStatus
     role: $Enums.Role
+    lastViewedProductId: bigint | null
+    lastViewedProductDismissed: boolean
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1793,6 +1955,8 @@ export interface UserFieldRefs {
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly status: Prisma.FieldRef<"User", 'UserStatus'>
   readonly role: Prisma.FieldRef<"User", 'Role'>
+  readonly lastViewedProductId: Prisma.FieldRef<"User", 'BigInt'>
+  readonly lastViewedProductDismissed: Prisma.FieldRef<"User", 'Boolean'>
 }
     
 

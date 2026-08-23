@@ -69,4 +69,34 @@ const getUlasanForProduct = async (productSlug: string) => {
   return null;
 };
 
-export { getProductBySlug, getUlasanForProduct };
+const getReviewPromptData = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { lastViewedProductId: true, lastViewedProductDismissed: true },
+  });
+
+  if (!user?.lastViewedProductId || user.lastViewedProductDismissed) {
+    return null;
+  }
+
+  const [product, existingReview] = await Promise.all([
+    prisma.product.findFirst({
+      where: { id: user.lastViewedProductId, deletedAt: null },
+      select: { slug: true, name: true },
+    }),
+    prisma.review.findUnique({
+      where: {
+        userId_productId: { userId, productId: user.lastViewedProductId },
+      },
+      select: { id: true },
+    }),
+  ]);
+
+  if (!product || existingReview) {
+    return null;
+  }
+
+  return product;
+};
+
+export { getProductBySlug, getUlasanForProduct, getReviewPromptData };
